@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'com.gcs'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(path: ":monolith", configuration: 'default')
+    implementation project(path: ":mav-core", configuration: 'default')
+}
+
+test {
+    useJUnitPlatform()
+}

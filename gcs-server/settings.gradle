@@ -1,0 +1,9 @@
+rootProject.name = 'gcs-server'
+include 'supporter'
+include 'monolith'
+include 'mav-core'
+include 'mavlink'
+include 'mavlink-tester'
+include 'mavlink-monolith'
+include 'domain'
+

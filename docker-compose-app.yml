@@ -1,0 +1,54 @@
+version: '2'
+
+services:
+  mysql:
+    container_name: mysql
+    image: dltmd202/gcs_mysql:latest
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  mav-core:
+    container_name: mav-core
+    image: dltmd202/mav-core:latest
+    environment:
+      spring.datasource.url: jdbc:mysql://mysql:3306/gcs
+      spring.datasource.username: root
+      spring.datasource.password: 1234
+      gcs.address.agent.ip: 127.0.0.1
+      gcs.address.agent.port: 9751
+      logging.file: /api-logs/orders-ws.log
+      file.dir: /files
+    volumes:
+      - ./conf_files:/files
+
+  gcs:
+    container_name: gcs
+    image: dltmd202/monolith:latest
+    ports:
+      - 8080:8080
+    environment:
+      server.port: 8080
+      spring.datasource.url: jdbc:mysql://mysql:3306/gcs
+      spring.datasource.username: root
+      spring.datasource.password: 1234
+      logging.file: /api-logs/orders-ws.log
+      file.dir: /files
+    volumes:
+      - ./conf_files:/files
+    depends_on:
+      - mysql
+
+
+  client:
+    container_name: gcs_client
+    image: dltmd202/client:latest
+    ports:
+      - 10082:3000
+    environment:
+      REACT_APP_API_END_POINT: http://gcs:8080
+      REACT_APP_REALTIME_END_POINT: ws://gcs:8080
+      REACT_APP_GOOGLE_MAP_KEY: AIzaSyDJVwYS6Jf_KFZA_x1Qhoo2D5FzBsN9Fmk
+    depends_on:
+      - gcs
