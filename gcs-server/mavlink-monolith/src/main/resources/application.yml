@@ -2,27 +2,17 @@ spring:
   profiles:
     include:
       - gcs
+      - db
+      - file
+      - jwt
   kafka:
     bootstrap-servers: 127.0.0.1:9092
   consumer:
     properties:
       enable.idempotence: true
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/gcs
-    username: root
-    password: 1234
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-
 
 google-map:
   key: AIzaSyDJVwYS6Jf_KFZA_x1Qhoo2D5FzBsN9Fmk
-
 
 ros2:
   ros2-web-bridge:
@@ -36,19 +26,6 @@ coordinate:
     lat: 36.766689
     lng: 127.281952
     alt: 95.75
-
-jwt:
-  token:
-    header: Authorization
-    issuer: gcs
-    client-secret: Rel3Bjce2MajBo09qgkNgYaTuzvJe8iwnBFhsDS5
-    expiry-seconds: 0
-
-file:
-  dir: /Users/mac/Documents/LECTURE/graduation/graduation/gcs/files/
-
-session:
-  fileLoader: conf_load
 
 gcs:
   kafka:

@@ -1,0 +1,5 @@
+file:
+  dir: /Users/mac/Documents/LECTURE/graduation/graduation/gcs/files/
+
+session:
+  fileLoader: conf_load
