@@ -9,8 +9,6 @@ import static java.lang.Integer.*;
 
 @Configuration
 public class CoreConstants {
-    public static String AGENT_IP = "";
-    public static int AGENT_PORT = 0;
     public static String GCS_IP = "";
     public static int GCS_PORT = 0;
     public static String BOOTSTRAP_SERVER = "";
@@ -20,8 +18,6 @@ public class CoreConstants {
     public static int KAFKA_POLLING_PERIOD = 0;
 
     public CoreConstants(Environment env) {
-        AGENT_IP = env.getProperty("gcs.address.agent.ip");
-        AGENT_PORT = parseInt(Objects.requireNonNull(env.getProperty("gcs.address.agent.port")));
         GCS_IP = env.getProperty("gcs.address.gcs.ip");
         GCS_PORT = parseInt(Objects.requireNonNull(env.getProperty("gcs.address.gcs.port")));
         BOOTSTRAP_SERVER = env.getProperty("spring.kafka.bootstrap-servers");

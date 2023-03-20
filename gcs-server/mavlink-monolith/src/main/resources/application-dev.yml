@@ -1,0 +1,51 @@
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+  consumer:
+    properties:
+      enable.idempotence: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/gcs
+    username: root
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+
+google-map:
+  key: AIzaSyDJVwYS6Jf_KFZA_x1Qhoo2D5FzBsN9Fmk
+
+ros2:
+  ros2-web-bridge:
+    web-socket:
+      schema: ws
+      ip: 218.150.182.119
+      port: 10081
+
+
+file:
+  dir: /home/dltmd202/documents/gcs/files/
+
+gcs:
+  kafka:
+    topics:
+      serverToAgent: serverToAgent
+      agentToServer: agentToServer
+    polling:
+      period: 100
+    consumer:
+      group: agentToServer
+
+session:
+  fileLoader: conf_load
+
+jwt:
+  token:
+    header: Authorization
+    issuer: gcs
+    client-secret: 1Relad3Bjce23dMajBaso09qdg13kNgvasYaTuzvd22vsdfa3Je8iwnBFdhsDS5
+    expiry-seconds: 0

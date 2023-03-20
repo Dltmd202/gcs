@@ -16,3 +16,15 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = false
+}
+
+springBoot {
+    mainClass = "com.gcs.tester.mavlink.Receiver"
+}

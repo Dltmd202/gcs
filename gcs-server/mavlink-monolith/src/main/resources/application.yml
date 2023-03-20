@@ -1,25 +1,3 @@
-spring:
-  profiles:
-    include:
-      - gcs
-      - db
-      - file
-      - jwt
-  kafka:
-    bootstrap-servers: 127.0.0.1:9092
-  consumer:
-    properties:
-      enable.idempotence: true
-
-google-map:
-  key: AIzaSyDJVwYS6Jf_KFZA_x1Qhoo2D5FzBsN9Fmk
-
-ros2:
-  ros2-web-bridge:
-    web-socket:
-      schema: ws
-      ip: 218.150.182.119
-      port: 10081
 
 coordinate:
   initial:
@@ -27,13 +5,5 @@ coordinate:
     lng: 127.281952
     alt: 95.75
 
-gcs:
-  kafka:
-    topics:
-      serverToAgent: serverToAgent
-      agentToServer: agentToServer
-    polling:
-      period: 100
-    consumer:
-      group: agentToServer
-
+session:
+  fileLoader: conf_load

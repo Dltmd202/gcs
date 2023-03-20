@@ -29,14 +29,4 @@ public @interface Units {
 	 */
 	String value();
 
-	class Test {
-		@Units("m/s")
-		public float speed;
-
-		public static void main(String[] args) throws Exception {
-			Field field = Test.class.getField("speed");
-			Units annotation = (Units) field.getAnnotation(Units.class);
-			System.out.println(UnitsEnum.fromName(annotation.value()));
-		}
-	}
 }
