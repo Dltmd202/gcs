@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Header from "./Header";
 import React, {useEffect, useState} from "react";
-import {NavLink} from "react-router-dom";
 import {FontSize, FontWeight} from "../../../styles/font";
 import Colors from "../../../styles/colors";
 import {useSelector} from "react-redux";
@@ -117,7 +116,7 @@ const GcsHeader = () => {
 
 export default React.memo(GcsHeader);
 
-const GcsOrderButton = styled(HeaderButton)`
+const GcsOrderButton = React.memo(styled(HeaderButton)`
   padding: 0 1em;
   :hover {
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
@@ -128,9 +127,9 @@ const GcsOrderButton = styled(HeaderButton)`
   :active{
     color: ${Colors.textTertiary};
   }
-`
+`)
 
-const GcsAlertModal = styled.div`
+const GcsAlertModal = React.memo(styled.div`
   width: 50vh;
   min-height: 20vh;
   position: absolute;
@@ -145,9 +144,9 @@ const GcsAlertModal = styled.div`
   @media ${Media.sm} {
     max-width: 25vh;
   }
-`
+`)
 
-const AlertButton = styled(HeaderButton)`
+const AlertButton = React.memo(styled(HeaderButton)`
   display: flex;
   align-items: center;
   border-radius: 0.3em;
@@ -157,25 +156,25 @@ const AlertButton = styled(HeaderButton)`
   :hover {
     background: rgba(255, 255, 255, 0.2);
   }
-`
+`)
 
-const AlertIcon = styled(FontAwesomeIcon)`
+const AlertIcon = React.memo(styled(FontAwesomeIcon)`
   margin-right: 1em;
   margin-left: 1em;
-`
+`)
 
 
-const GcsAlertModalBody = styled.div`
+const GcsAlertModalBody = React.memo(styled.div`
   margin-top: 0.5em;
-`
+`)
 
-const GcsAlertClearButton = styled.div`
-  color: #11ae79;
+const GcsAlertClearButton = React.memo(styled.div`
+  color: ${Colors.functionConfirm};
   
   :hover {
     text-decoration: underline;
   }
-`
+`)
 
 const GcsAlertModalHeaderName = styled.div`
   font-weight: ${FontWeight.bold};
@@ -217,7 +216,7 @@ const GcsHeaderUserInfo = styled.div`
 
 const StyledGcsHeader = styled(Header)`
   justify-content: space-between;
-  padding: 1vh 3vh 1vh 1vh;
+  padding: 0 1% 0 1%;
 `
 
 const StyledGcsOrderContainer = styled.div`
@@ -229,28 +228,3 @@ const StyledGcsUser = styled.div`
   margin: 0.5em;
   align-items: center;
 `
-
-const StyledNavLink = styled(NavLink)`
-  &:visited {
-    color: black;
-  }
-  
-  &:link {
-    color: black;
-  }
-
-  &.active {
-    display: inline-block;
-    box-sizing: border-box;
-    font-weight: ${FontWeight.bold};
-  }
-`;
-
-const Place = styled.span`
-  display: inline-block;
-  margin: 0.5vh 1vh;
-  :hover {
-    cursor: pointer;
-    color: ${Colors.textSecondary}
-  }
-`;

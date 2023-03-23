@@ -93,15 +93,15 @@ const AgentInfo = ({
   )
 }
 
-const AgentBodyContainer = styled.div`
-`
+const AgentBodyContainer = React.memo(styled.div`
+`)
 
-const AgentOrderContainer = styled.div`
+const AgentOrderContainer = React.memo(styled.div`
   padding: 0.5em 0;
-`
+`)
 
 
-const AgentOrderButton = styled(Button)`
+const AgentOrderButton = React.memo(styled(Button)`
   font-weight: ${FontWeight.regular};
   font-size: ${FontSize.small};
   border-radius: 5px;
@@ -120,7 +120,7 @@ const AgentOrderButton = styled(Button)`
     min-height: 30px;
     font-size: ${FontSize.medium};
   }
-`
+`)
 
 const AgentInfoContainer = React.memo(styled.div`
   background: ${Colors.background};
@@ -129,10 +129,10 @@ const AgentInfoContainer = React.memo(styled.div`
   margin: 0.8em;
   padding: 0.5em 1em;
 
-  :active{
-    cursor: pointer;
-    background: ${Colors.backgroundMenu};
-  }
+  // :active{
+  //   cursor: pointer;
+  //   background: ${Colors.backgroundMenu};
+  // }
 `)
 
 
@@ -149,18 +149,16 @@ const AgentHeadName = React.memo(styled.p`
   color: ${props => props.color};
   text-align: left;
 `)
+
 const AgentHeadBatteryContainer = React.memo(styled.div`
   
 `)
 
 const AgentInfoTable = React.memo(styled.table`
   display: flex;
-  display: -webkit-box;
-  display: -ms-flexbox;
   overflow-x: auto;
   overflow-y: hidden;
 
-  //padding: 0.5em 1em;
 `)
 
 const AgentInfoThead = React.memo(styled.thead`
@@ -186,10 +184,6 @@ const AgentInfoTh = React.memo(styled.th`
 const AgentInfoTd = styled.td`
   display: block;
   padding: 0.2em;
-`
-
-const AgentHiddenInfoTd = styled(AgentInfoTd)`
-  
 `
 
 

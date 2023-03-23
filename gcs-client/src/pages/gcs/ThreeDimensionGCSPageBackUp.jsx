@@ -10,7 +10,7 @@ import {context as contextStore, fetchContext} from "../../store/context";
 import { Physics } from "@react-three/cannon";
 import * as StompJs from '@stomp/stompjs';
 import SockJs from "sockjs-client";
-import GcsInfo from "../../components/molecules/GcsInfo/GcsInfo";
+import GcsInfo from "../../components/molecules/SideController/GcsInfo";
 import SimpleDrone from "../../components/atoms/three/SimpleDrone";
 import { Vector3 } from "three";
 import Sidebar from "../../components/templates/Sidebar/Sidebar";
@@ -128,8 +128,7 @@ const ThreeDimensionGCSPage = () => {
             </GcsSidebarAgentListContainer>
             <GcsInfo
               position={center}
-              onCenterChange={handleCenterChange}
-            />
+              onCenterChange={handleCenterChange}/>
           </>
         )}
       </MapSidebar>

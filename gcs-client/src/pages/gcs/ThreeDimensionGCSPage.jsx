@@ -6,17 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {context as contextStore, fetchContext} from "../../store/context";
 import * as StompJs from '@stomp/stompjs';
 import SockJs from "sockjs-client";
-import GcsInfo from "../../components/molecules/GcsInfo/GcsInfo";
 import { Vector3 } from "three";
 import Sidebar from "../../components/templates/Sidebar/Sidebar";
 import Colors from "../../styles/colors";
 import GcsHeader from "../../components/templates/Header/GcsHeader";
 import Spinner from "../../components/atoms/Spinner/Spinner";
 import CanvasContainer from "../../components/templates/Container/CanvasContainer";
-import SimpleDrone from "../../components/atoms/three/SimpleDrone";
 import Swal from "sweetalert2";
 import {useNavigate} from "react-router-dom";
 import SimpleDrone2 from "../../components/atoms/three/SimpleDrone2";
+import Logger from "../../components/molecules/logger/Logger";
 
 const ThreeDimensionGCSPage = () => {
   const navigate = useNavigate();
@@ -141,23 +140,28 @@ const ThreeDimensionGCSPage = () => {
                 <AgentInfo key={i} agentObject={agent} />
               ))}
             </GcsSidebarAgentListContainer>
-            <GcsInfo position={center} onCenterChange={handleCenterChange}
-            />
+            {/*<GcsInfo position={center} onCenterChange={handleCenterChange}/>*/}
           </>
         )}
       </MapSidebar>
       <GcsHeader/>
       <MainContainer>
         {(contextLoading || socketLoading) ? null : (
-          <CanvasContainer cameraRef={cameraRef} controlRef={controlRef}>
-            {context.agents && Object.values(context.agents)?.map((agent, i) => (
-              <SimpleDrone2
-                key={i}
-                agentObj={agent}
-                onClick={handleMeshClick}
-              />
-            ))}
-          </CanvasContainer>
+          <MainGcsContainer>
+            <CanvasContainer cameraRef={cameraRef} controlRef={controlRef}>
+              {context.agents && Object.values(context.agents)?.map((agent, i) => (
+                <SimpleDrone2
+                  key={i}
+                  agentObj={agent}
+                  onClick={handleMeshClick}
+                />
+              ))}
+            </CanvasContainer>
+            <Logger
+              category={"ERROR"}
+              content={"[SYSID - 1] Battery Problem"}
+            />
+          </MainGcsContainer>
         )}
       </MainContainer>
     </ApplicationContainer>
@@ -173,9 +177,16 @@ const GcsSidebarAgentListContainer = styled.div`
   }
 `
 
+const MainGcsContainer = styled.div`
+  height: 100%;
+  width: 100%;
+`
+
 const MainContainer = styled.div`
   align-items: center;
-  height: 93vh;
+  height: 95%;
+  display: -webkit-box;
+  display: -webkit-flex;
 `;
 
 const MapSidebar = styled(Sidebar)`

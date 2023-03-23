@@ -21,14 +21,14 @@ export default Object.freeze({
   backgroundMenu: '#E5E5E5',
   backgroundButton: '#F3F4F8',
   backgroundModal: '#F9F9F9',
-  backgroundSidebar: '#f6f7fb',
+  backgroundSidebar: '#5A5A5A',
 
   textPrimary: '#373737',
   textSecondary: '#5A5A5A',
   textTertiary: '#797B83',
   textQuaternary: '#FFFFFF',
 
-  functionConfirm: '#39DBB2',
+  functionConfirm: '#11ae79',
   functionPositive: '#395DDB',
   functionNegative: '#E93550',
 

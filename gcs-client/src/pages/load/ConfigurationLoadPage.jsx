@@ -52,7 +52,10 @@ const ConfigurationLoadPage = () => {
   }
 
   const onClickContextFile = (e, id) => {
+    console.log("fuck");
+    console.log(id);
     dispatch(holdContext(id));
+
     navigate(`/gcs/three`)
   }
 

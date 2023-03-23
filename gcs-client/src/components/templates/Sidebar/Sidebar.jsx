@@ -6,7 +6,7 @@ const StyledSidebarContainer = styled.div`
   text-align: center;
   box-sizing: border-box;
   width: 20%;
-  height: 100vh;
+  height: 100%;
   min-width: 300px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   resize: horizontal;

@@ -9,9 +9,9 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   box-sizing: border-box;
-  height: 7vh;
+  height: 5%;
   display: flex;
-  padding: 1vh;
+  padding: 1%;
   align-items: center;
 
   .active span {

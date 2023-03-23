@@ -10,8 +10,8 @@ import java.net.*;
 
 public class Sender {
     public static void main(String[] args) throws IOException, InterruptedException {
-        SocketAddress me = new InetSocketAddress("192.168.35.37", 9751);
-        SocketAddress server = new InetSocketAddress("192.168.35.37", 9750);
+        SocketAddress me = new InetSocketAddress("127.0.0.1", 9751);
+        SocketAddress server = new InetSocketAddress("127.0.0.1", 9750);
 
         DatagramSocket socket = new DatagramSocket(me);
         StringBuilder sb = new StringBuilder();
@@ -23,7 +23,7 @@ public class Sender {
                     2,
                     1.0F + 0.1F,
                     2.0F + 0.1F,
-                    -2.0F + 0.1F * i,
+                    -2.0F - 0.1F * i,
                     0.0F,
                     0.0F + 0.05F,
                     0F
