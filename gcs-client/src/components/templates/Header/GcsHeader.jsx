@@ -7,14 +7,20 @@ import {useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBell} from "@fortawesome/free-regular-svg-icons";
 import {Media} from "../../../styles/media";
-import {faCircleInfo, faTriangleExclamation, faCircleXmark} from "@fortawesome/free-solid-svg-icons";
+import {faCircleInfo, faTriangleExclamation, faCircleXmark, faChevronDown} from "@fortawesome/free-solid-svg-icons";
 import agentApi from "../../../api/agent";
 import HeaderButton from "../../atoms/Button/HeaderButton";
+import {ChevronRight} from "@mui/icons-material";
 
 const GcsHeader = () => {
 
   const {loading, data: user} = useSelector((state) => state.user);
   const [showAlert, setShowAlert] = useState(false);
+  const [showController, setShowController] = useState(false);
+
+  const handleControllerToggle = () => {
+    setShowController(!showController)
+  }
 
   const handleModalToggle = () => {
     setShowAlert(!showAlert);
@@ -53,6 +59,12 @@ const GcsHeader = () => {
   return (
     <StyledGcsHeader>
       <StyledGcsOrderContainer>
+        <GcsDropDownNavigator onClick={handleControllerToggle} >
+          <GcsDropDownName>
+            Control
+          </GcsDropDownName>
+          <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
+        </GcsDropDownNavigator>
         <GcsOrderButton onClick={handleArmButton}>
           ARM
         </GcsOrderButton>
@@ -115,6 +127,25 @@ const GcsHeader = () => {
 }
 
 export default React.memo(GcsHeader);
+
+const GcsDropDownIcon = React.memo(styled(FontAwesomeIcon)`
+  
+`)
+
+const GcsDropDownName = React.memo(styled.div`
+  margin-right: 0.5em;
+`)
+
+const GcsDropDownNavigator = React.memo(styled.div`
+  display: flex;
+  align-items: center;
+  font-size: ${FontSize.micro};
+  padding: 0.5em 0;
+  
+  &:hover {
+    background-color: ${Colors.backgroundHover};
+  }
+`)
 
 const GcsOrderButton = React.memo(styled(HeaderButton)`
   padding: 0 1em;
@@ -200,13 +231,12 @@ const GcsHeaderUserAlert = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 1vh;
-  
   position: relative;
 
   :hover {
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.2);
+    background: ${Colors.backgroundModal};
   }
 `
 
@@ -215,6 +245,9 @@ const GcsHeaderUserInfo = styled.div`
 `
 
 const StyledGcsHeader = styled(Header)`
+  background-color: ${Colors.background};
+  color: ${Colors.textPrimary};
+  
   justify-content: space-between;
   padding: 0 1% 0 1%;
 `

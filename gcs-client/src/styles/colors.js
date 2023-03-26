@@ -1,5 +1,5 @@
 export default Object.freeze({
-  point: '#FF6078',
+  point: '#50c2f7',
   pointLight: '#BEC6E4',
 
   red: '#E8587B',
@@ -17,16 +17,18 @@ export default Object.freeze({
   brown: '#CDAD7A',
   grey: '#9EABB6',
 
-  background: '#FFFFFF',
+  background: '#253238',
+  backgroundPointed: '#1e272b',
+  backgroundModal: 'rgba(0, 0, 0, 0.2)',
   backgroundMenu: '#E5E5E5',
   backgroundButton: '#F3F4F8',
-  backgroundModal: '#F9F9F9',
-  backgroundSidebar: '#5A5A5A',
+  backgroundDisabled: "#2e3b43",
+  backgroundHover: "#425b67",
 
-  textPrimary: '#373737',
+  textPrimary: '#b0bec5',
   textSecondary: '#5A5A5A',
   textTertiary: '#797B83',
-  textQuaternary: '#FFFFFF',
+  textQuaternary: '#607d8b', //disabled
 
   functionConfirm: '#11ae79',
   functionPositive: '#395DDB',
@@ -48,5 +50,8 @@ export default Object.freeze({
 
   info: "#719fff",
   warning: "#f8bc5f",
-  error: "#f4385d"
+  error: "#f4385d",
+
+  backgroundColor: "#",
+  activeColor: "#415b67",
 })

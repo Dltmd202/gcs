@@ -4,6 +4,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.common.msg_command_int;
 import com.MAVLink.common.msg_command_long;
 import com.MAVLink.common.msg_set_position_target_local_ned;
+import com.MAVLink.minimal.msg_heartbeat;
 
 import static com.MAVLink.enums.MAV_CMD.*;
 import static com.MAVLink.enums.MAV_COMPONENT.*;
@@ -23,6 +24,8 @@ public class MavLinkMessageFactory {
 
     private static final int OFFBOARD_MODE = MAV_MODE_FLAG_SAFETY_ARMED |
             MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
+
+    public static final int MAVLINK_MSG_ID_HEARTBEAT = 0;
 
     public static MAVLinkMessage armMessage(int sysid){
         msg_command_long msg = new msg_command_long();
@@ -132,6 +135,16 @@ public class MavLinkMessageFactory {
 
         msg.yaw = 0.F;
         msg.yaw_rate = 0;
+
+        return msg;
+    }
+
+    public static MAVLinkMessage hearBeat(int sysid){
+        msg_heartbeat msg = new msg_heartbeat();
+
+        msg.msgid = MAVLINK_MSG_ID_HEARTBEAT;
+        msg.sysid = sysid;
+        msg.isMavlink2 = true;
 
         return msg;
     }

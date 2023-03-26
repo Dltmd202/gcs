@@ -190,7 +190,7 @@ const MainContainer = styled.div`
 `;
 
 const MapSidebar = styled(Sidebar)`
-  background: ${Colors.backgroundSidebar}
+  background: ${Colors.background}
 `
 
 

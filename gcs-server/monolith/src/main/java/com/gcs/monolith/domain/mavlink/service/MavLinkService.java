@@ -7,6 +7,7 @@ import com.gcs.monolith.domain.context.service.AgentContextService;
 import com.gcs.monolith.socket.messagequeue.sender.MavLinkOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -104,6 +105,19 @@ public class MavLinkService {
     public Collection<MAVLinkMessage> reboot(){
         return contextService.getRunningContext().stream()
                 .map(a -> MavLinkMessageFactory.rebootMessage(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+    @Scheduled(fixedRate = 400)
+    public void scheduledHeartbeat(){
+        if(contextService.isRunningContext())
+            heartBeat();
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> heartBeat(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.hearBeat(a.getSysid()))
                 .collect(Collectors.toList());
     }
 

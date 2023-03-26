@@ -73,6 +73,10 @@ public class AgentContextService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NO_RUNNING_CONTEXT_CONF));
     }
 
+    public boolean isRunningContext(){
+        return agentContextHolder.getRunningContext().isPresent();
+    }
+
     private AgentContext getContextDtoByContextFile(AgentContextEntity context){
         InputStream stream = null;
         AgentContext scenarioDto = null;

@@ -1,11 +1,14 @@
 import styled from "styled-components";
-import radianToDegree from "../../../module/coordinate/RadToDgreeConverter";
 import React, {useState} from "react";
 import Colors from "../../../styles/colors";
 import Button from "../../atoms/Button/Button";
 import {FontSize, FontWeight} from "../../../styles/font";
 import {Media} from "../../../styles/media";
 import agentApi from "../../../api/agent";
+import {TreeView} from "@mui/lab";
+import {ExpandMoreSharp} from "@mui/icons-material";
+import {ChevronRight} from "@mui/icons-material";
+import StyledTreeItem from "../../atoms/ThreeView/StyledTreeItem";
 
 const AgentInfo = ({
                      agentObject,
@@ -23,7 +26,7 @@ const AgentInfo = ({
     angle
   } = agentObject;
 
-  const [drop, isDrop] = useState(false);
+  const [drop, isDrop] = useState(true);
 
   const handleDropDown = () => {
     isDrop(!drop);
@@ -44,52 +47,129 @@ const AgentInfo = ({
 
   return (
     <AgentInfoContainer
-      color={complementaryColor}
+      active={active}
+      color={color}
       {...props}
     >
       <AgentHeadContainer>
-        <AgentHeadName color={active ? color : Colors.grey}>SYSID - {sysid}</AgentHeadName>
+        <AgentHeadName>SYSID - {sysid}</AgentHeadName>
         <AgentHeadBatteryContainer>
           {battery.toString().padStart(2, '0')}%
         </AgentHeadBatteryContainer>
       </AgentHeadContainer>
       {active && (
         <AgentBodyContainer>
-          <AgentInfoTable
-            onClick={handleDropDown}
+          <TreeView
+            aria-label="file system navigator"
+            defaultCollapseIcon={<ExpandMoreSharp />}
+            defaultExpandIcon={<ChevronRight />}
+            sx={{maxWidth: 200, padding: 0}}
           >
-            <AgentInfoThead>
-              <AgentInfoTr>
-                <AgentInfoTd>POS - X</AgentInfoTd>
-                <AgentInfoTd>POS - Y</AgentInfoTd>
-                <AgentInfoTd>POS - Z</AgentInfoTd>
-                {drop && (
-                  <>
-                    <AgentInfoTd>ROLL</AgentInfoTd>
-                    <AgentInfoTd>PITCH</AgentInfoTd>
-                    <AgentInfoTd>YAW</AgentInfoTd>
-                  </>
-                )}
-              </AgentInfoTr>
-            </AgentInfoThead>
-            <AgentInfoTBody>
-              <AgentInfoTr>
-                <AgentInfoTd>{ned.x.toFixed(6)}</AgentInfoTd>
-                <AgentInfoTd>{ned.y.toFixed(6)}</AgentInfoTd>
-                <AgentInfoTd>{ned.z.toFixed(6)}</AgentInfoTd>
-                {drop && (
-                  <>
-                    <AgentInfoTd>{radianToDegree(angle.roll).toFixed(6)}°</AgentInfoTd>
-                    <AgentInfoTd>{radianToDegree(angle.pitch).toFixed(6)}°</AgentInfoTd>
-                    <AgentInfoTd>{radianToDegree(angle.yaw).toFixed(6)}°</AgentInfoTd>
-                  </>
-                )}
-              </AgentInfoTr>
-            </AgentInfoTBody>
-          </AgentInfoTable>
+            <StyledTreeItem nodeId={"1"} labelText={"Configuration"}>
+              <StyledTreeItem
+                nodeId={"2"} labelText={"IP"}
+                labelInfo={agentObject.ip}
+              />
+              <StyledTreeItem
+                nodeId={"3"} labelText={"MODE"}
+                labelInfo={agentObject.mode}
+              />
+              <StyledTreeItem
+                nodeId={"4"} labelText={"VEHICLE"}
+                labelInfo={agentObject.vehicle}
+              />
+            </StyledTreeItem>
+
+            <StyledTreeItem nodeId={"5"} labelText="Status">
+              <StyledTreeItem
+                nodeId={"6"}
+                labelText={"NED Coordinate"}
+              >
+                <StyledTreeItem
+                  nodeId={"7"} labelText={"X"}
+                  labelInfo={agentObject.ned.x}
+                />
+                <StyledTreeItem
+                  nodeId={"8"} labelText={"Y"}
+                  labelInfo={agentObject.ned.y}
+                />
+                <StyledTreeItem
+                  nodeId={"9"} labelText={"Z"}
+                  labelInfo={agentObject.ned.z}
+                />
+              </StyledTreeItem>
+
+              {/*<StyledTreeItem*/}
+              {/*  nodeId={10}*/}
+              {/*  labelText={"LLH Coordinate"}*/}
+              {/*>*/}
+              {/*  <StyledTreeItem*/}
+              {/*    nodeId={11} labelText={"Latitude"}*/}
+              {/*    labelInfo={agentObject.llh.lat}*/}
+              {/*  />*/}
+              {/*  <StyledTreeItem*/}
+              {/*    nodeId={12} labelText={"Longitude"}*/}
+              {/*    labelInfo={agentObject.llh.lng}*/}
+              {/*  />*/}
+              {/*  <StyledTreeItem*/}
+              {/*    nodeId={13} labelText={"Altitude"}*/}
+              {/*    labelInfo={agentObject.llh.alt}*/}
+              {/*  />*/}
+              {/*</StyledTreeItem>*/}
+
+              <StyledTreeItem
+                nodeId={"14"}
+                labelText={"Velocity"}
+              >
+                <StyledTreeItem
+                  nodeId={"15"} labelText={"VX"}
+                  labelInfo={agentObject.velocity.vx}
+                />
+                <StyledTreeItem
+                  nodeId={"16"} labelText={"VY"}
+                  labelInfo={agentObject.velocity.vy}
+                />
+                <StyledTreeItem
+                  nodeId={"17"} labelText={"VZ"}
+                  labelInfo={agentObject.velocity.vz}
+                />
+              </StyledTreeItem>
+
+              <StyledTreeItem
+                nodeId={"18"}
+                labelText={"Angle"}
+              >
+                <StyledTreeItem
+                  nodeId={"19"} labelText={"ROLL"}
+                  labelInfo={agentObject.angle.roll}
+                />
+                <StyledTreeItem
+                  nodeId={"20"} labelText={"PITCH"}
+                  labelInfo={agentObject.angle.pitch}
+                />
+                <StyledTreeItem
+                  nodeId={"21"} labelText={"YAW"}
+                  labelInfo={agentObject.angle.yaw}
+                />
+              </StyledTreeItem>
+            </StyledTreeItem>
+          </TreeView>
         </AgentBodyContainer>
       )}
     </AgentInfoContainer>
+  )
+}
+
+const AgentAttributeCol = ({attribute, val}) => {
+  return (
+    <div style={{display: 'flex'}}>
+      <div>
+        {attribute}
+      </div>
+      <div>
+        {val}
+      </div>
+    </div>
   )
 }
 
@@ -123,16 +203,25 @@ const AgentOrderButton = React.memo(styled(Button)`
 `)
 
 const AgentInfoContainer = React.memo(styled.div`
-  background: ${Colors.background};
+  background: #2e3c43;
+  color: ${props => props.active ? Colors.textPrimary: Colors.textQuaternary};
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 0.3em;
+  border: 1px solid ${props => props.active ? props.color: Colors.backgroundDisabled};
   margin: 0.8em;
   padding: 0.5em 1em;
+  background-color: ${props => props.active ? 
+          Colors.backgroundPointed : Colors.backgroundDisabled};
+  font-size: ${FontSize.small}
+  
+  :hover{
+    cursor: pointer;
+  }
 
-  // :active{
-  //   cursor: pointer;
-  //   background: ${Colors.backgroundMenu};
-  // }
+  :active{
+    background: ${props => props.active ?
+            Colors.backgroundHover : Colors.backgroundDisabled};
+  }
 `)
 
 
@@ -146,46 +235,12 @@ const AgentHeadContainer = React.memo(styled.div`
 
 const AgentHeadName = React.memo(styled.p`
   margin: 0;
-  color: ${props => props.color};
   text-align: left;
 `)
 
 const AgentHeadBatteryContainer = React.memo(styled.div`
   
 `)
-
-const AgentInfoTable = React.memo(styled.table`
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-
-`)
-
-const AgentInfoThead = React.memo(styled.thead`
-  display: flex;
-  margin-right: 1.5em;
-  text-align: right;
-  min-width: 20%;
-`)
-
-const AgentInfoTBody = React.memo(styled.tbody`
-  display: flex;
-`)
-
-const AgentInfoTr = React.memo(styled.tr`
-  font-size: small;
-  text-align: left;
-`)
-
-const AgentInfoTh = React.memo(styled.th`
-  display: block;
-`)
-
-const AgentInfoTd = styled.td`
-  display: block;
-  padding: 0.2em;
-`
-
 
 
 export default React.memo(AgentInfo);

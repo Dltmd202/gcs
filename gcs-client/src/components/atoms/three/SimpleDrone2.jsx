@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import React, {useRef, useState} from "react";
+import TextMesh from "./Text";
 
 function SimpleDrone2({
                       agentObj,
@@ -19,7 +20,7 @@ function SimpleDrone2({
       visible={active}
       position={[ned.x, -ned.z, ned.y]}
       ref={meshRef}
-      scale={clicked ? 0.8 : 0.5}
+      scale={1}
       onClick={onClick}
       onPointerOver={(event) => hover(true)}
       onPointerOut={(event) => hover(false)}
@@ -28,10 +29,10 @@ function SimpleDrone2({
       <axesHelper scale={2} />
       <mesh position={[0, 0.05, 0]}>
         {/*본체*/}
-        <boxGeometry args={[0.5, 0.1, 0.25]}/>
+        <boxGeometry args={[0.5, 0.2, 0.25]}/>
         <meshBasicMaterial color={hovered ? complementaryColor : color} />
       </mesh>
-      <mesh position={[0, 0.1, 0]} rotation={[0, Math.PI / 4, 0]}>
+      <mesh position={[0, 0.15, 0]} rotation={[0, Math.PI / 4, 0]}>
         {/*막대*/}
         <boxGeometry args={[1, 0.03, 0.03]}/>
         <meshBasicMaterial
@@ -40,7 +41,7 @@ function SimpleDrone2({
           opacity={0.8}
         />
       </mesh>
-      <mesh position={[0, 0.1, 0]} rotation={[0, -Math.PI / 4, 0]}>
+      <mesh position={[0, 0.15, 0]} rotation={[0, -Math.PI / 4, 0]}>
         {/*막대*/}
         <boxGeometry args={[1, 0.03, 0.03]}/>
         <meshBasicMaterial
@@ -49,7 +50,7 @@ function SimpleDrone2({
           opacity={0.8}
         />
       </mesh>
-      <mesh position={[0.35, 0.1, 0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
+      <mesh position={[0.35, 0.15, 0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
@@ -58,7 +59,7 @@ function SimpleDrone2({
           opacity={0.1}
         />
       </mesh>
-      <mesh position={[-0.35, 0.1, 0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
+      <mesh position={[-0.35, 0.15, 0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
@@ -67,7 +68,7 @@ function SimpleDrone2({
           opacity={0.1}
         />
       </mesh>
-      <mesh position={[0.35, 0.1, -0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
+      <mesh position={[0.35, 0.15, -0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
@@ -76,7 +77,7 @@ function SimpleDrone2({
           opacity={0.1}
         />
       </mesh>
-      <mesh position={[-0.35, 0.1, -0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
+      <mesh position={[-0.35, 0.15, -0.35]} rotation={[Math.PI / 2, 0, 0, 16]}>
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
@@ -85,6 +86,12 @@ function SimpleDrone2({
           opacity={0.1}
         />
       </mesh>
+      <TextMesh
+        text={agentObj.sysid.toString()}
+        color={color}
+        size={0.5}
+        rotation={[0, Math.PI / 2, 0]}
+        position={[0, 0.5, 0.5]}/>
     </group>
   )
 }
