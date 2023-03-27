@@ -2,6 +2,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import React from "react";
 import Swal from "sweetalert2";
+import contextApi from "../api/context";
 
 const PrivateRouter = ({
                        restricted = false,

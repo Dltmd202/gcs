@@ -63,7 +63,7 @@ const AgentInfo = ({
             aria-label="file system navigator"
             defaultCollapseIcon={<ExpandMoreSharp />}
             defaultExpandIcon={<ChevronRight />}
-            sx={{maxWidth: 200, padding: 0}}
+            sx={{maxWidth: 200, padding: 0, "font-size": FontSize.micro}}
           >
             <StyledTreeItem nodeId={"1"} labelText={"Configuration"}>
               <StyledTreeItem
@@ -99,23 +99,23 @@ const AgentInfo = ({
                 />
               </StyledTreeItem>
 
-              {/*<StyledTreeItem*/}
-              {/*  nodeId={10}*/}
-              {/*  labelText={"LLH Coordinate"}*/}
-              {/*>*/}
-              {/*  <StyledTreeItem*/}
-              {/*    nodeId={11} labelText={"Latitude"}*/}
-              {/*    labelInfo={agentObject.llh.lat}*/}
-              {/*  />*/}
-              {/*  <StyledTreeItem*/}
-              {/*    nodeId={12} labelText={"Longitude"}*/}
-              {/*    labelInfo={agentObject.llh.lng}*/}
-              {/*  />*/}
-              {/*  <StyledTreeItem*/}
-              {/*    nodeId={13} labelText={"Altitude"}*/}
-              {/*    labelInfo={agentObject.llh.alt}*/}
-              {/*  />*/}
-              {/*</StyledTreeItem>*/}
+              <StyledTreeItem
+                nodeId={"10"}
+                labelText={"LLH Coordinate"}
+              >
+                <StyledTreeItem
+                  nodeId={"11"} labelText={"Latitude"}
+                  labelInfo={agentObject.llh.lat}
+                />
+                <StyledTreeItem
+                  nodeId={"12"} labelText={"Longitude"}
+                  labelInfo={agentObject.llh.lng}
+                />
+                <StyledTreeItem
+                  nodeId={"13"} labelText={"Altitude"}
+                  labelInfo={agentObject.llh.alt}
+                />
+              </StyledTreeItem>
 
               <StyledTreeItem
                 nodeId={"14"}
@@ -212,7 +212,7 @@ const AgentInfoContainer = React.memo(styled.div`
   padding: 0.5em 1em;
   background-color: ${props => props.active ? 
           Colors.backgroundPointed : Colors.backgroundDisabled};
-  font-size: ${FontSize.small}
+  font-size: ${FontSize.small};
   
   :hover{
     cursor: pointer;

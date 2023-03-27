@@ -44,17 +44,17 @@ const ConfigurationLoadPage = () => {
     const contextRes = await contextApi.postContextConfigurationFile(values);
     if(contextRes.status === 201){
       const contextId = contextRes.data.response;
-      dispatch(holdContext(contextId));
+      await dispatch(holdContext(contextId));
       navigate(`/gcs/three`)
     } else if(contextRes.status === 400){
       alert(contextRes.error.message);
     }
   }
 
-  const onClickContextFile = (e, id) => {
+  const onClickContextFile = async (e, id) => {
     console.log("fuck");
     console.log(id);
-    dispatch(holdContext(id));
+    await dispatch(holdContext(id));
 
     navigate(`/gcs/three`)
   }

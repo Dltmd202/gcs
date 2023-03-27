@@ -35,7 +35,10 @@ export const context = createSlice({
         if(state.loading) return;
 
         const {agent, key} = action.payload;
-        state.data.agents[key] = agent;
+
+        for (const [ele, val] of Object.entries(agent)) {
+          state.data.agents[key][ele] = val;
+        }
         state.data.agents[key].active = true;
 
         // state.data.agents[key].ned = agent.ned;

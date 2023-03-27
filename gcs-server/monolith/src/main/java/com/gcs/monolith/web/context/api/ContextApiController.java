@@ -48,6 +48,22 @@ public class ContextApiController {
                 ));
     }
 
+    @DeleteMapping
+    public ResponseEntity<ApiUtil.ApiResult<Boolean>> cleanContext(){
+        return ResponseEntity
+                .ok(
+                        ApiUtil.success(contextService.cleanContext())
+                );
+    }
+
+    @GetMapping("/exist")
+    public ResponseEntity<ApiUtil.ApiResult<Boolean>> isCurrentContext(){
+        return ResponseEntity
+                .ok(
+                        ApiUtil.success(contextService.isRunningContext())
+                );
+    }
+
     @GetMapping("/current")
     public ResponseEntity<ApiUtil.ApiResult<AgentContextResponse>> setContext(){
         return ResponseEntity

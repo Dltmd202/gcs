@@ -94,4 +94,9 @@ public class AgentContextService {
         }
         return scenarioDto;
     }
+
+    public Boolean cleanContext() {
+        agentContextHolder.cleanContext();
+        return null;
+    }
 }

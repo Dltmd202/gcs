@@ -51,7 +51,8 @@ public class CoreMessageService {
         try {
             socket.send(packet);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            //TODO java.net.SocketException: Host is down handling
+            log.error("error", e);
         }
     }
 }

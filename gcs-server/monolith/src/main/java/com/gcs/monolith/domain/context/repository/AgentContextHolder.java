@@ -14,6 +14,10 @@ public class AgentContextHolder {
         currentAgentContext = agentContext;
     }
 
+    public void cleanContext(){
+        this.currentAgentContext = null;
+    }
+
     public Optional<AgentContext> getRunningContext(){
         if (Objects.isNull(currentAgentContext)) {
             return Optional.empty();

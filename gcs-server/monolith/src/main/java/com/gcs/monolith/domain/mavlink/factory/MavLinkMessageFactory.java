@@ -145,6 +145,12 @@ public class MavLinkMessageFactory {
         msg.msgid = MAVLINK_MSG_ID_HEARTBEAT;
         msg.sysid = sysid;
         msg.isMavlink2 = true;
+        msg.type = 0x06;
+        msg.autopilot = 0x08;
+        msg.base_mode = 0xc0;
+        msg.custom_mode = 0x0000;
+        msg.system_status = 0x04;
+        msg.mavlink_version = 3;
 
         return msg;
     }

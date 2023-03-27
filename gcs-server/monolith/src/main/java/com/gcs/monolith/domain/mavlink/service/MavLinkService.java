@@ -108,10 +108,13 @@ public class MavLinkService {
                 .collect(Collectors.toList());
     }
 
-    @Scheduled(fixedRate = 400)
-    public void scheduledHeartbeat(){
+    @MavLinkOrder
+    @Scheduled(fixedRate = 1000)
+    public Collection<MAVLinkMessage> scheduledHeartbeat(){
+        log.debug("hearbeat");
         if(contextService.isRunningContext())
-            heartBeat();
+            return heartBeat();
+        else return null;
     }
 
     @MavLinkOrder

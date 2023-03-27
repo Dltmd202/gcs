@@ -1,6 +1,7 @@
 import {TreeItem} from "@mui/lab";
 import React from "react";
 import styled from "styled-components";
+import {FontSize} from "../../../styles/font";
 
 const StyledTreeItem = ({
                           bgColor,
@@ -13,14 +14,14 @@ const StyledTreeItem = ({
   return (
     <TreeItem
       label={
-        <AgentAttributeContainer>
-          <AgentAttributeName>
+        <StyledContainer>
+          <AttributeName>
             {labelText}
-          </AgentAttributeName>
-          <AgentAttributeValue>
+          </AttributeName>
+          <AttributeValue>
             {labelInfo}
-          </AgentAttributeValue>
-        </AgentAttributeContainer>
+          </AttributeValue>
+        </StyledContainer>
       }
       style={{
         '--tree-view-color': color,
@@ -31,18 +32,19 @@ const StyledTreeItem = ({
   )
 }
 
-const AgentAttributeContainer = styled.div`
+const StyledContainer = React.memo(styled.div`
   display: flex;
   justify-content: space-between;
-`
+  font-size: ${FontSize.small};
+`)
 
-const AgentAttributeName = styled.div`
+const AttributeName = React.memo(styled.div`
 
-`
+`)
 
-const AgentAttributeValue = styled.div`
+const AttributeValue = React.memo(styled.div`
 
-`
+`)
 
 
 export default StyledTreeItem;

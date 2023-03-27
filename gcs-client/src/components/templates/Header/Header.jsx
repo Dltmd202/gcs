@@ -11,7 +11,7 @@ const Container = styled.div`
   box-sizing: border-box;
   height: 5%;
   display: flex;
-  padding: 1%;
+  padding: 0 1%;
   align-items: center;
 
   .active span {
