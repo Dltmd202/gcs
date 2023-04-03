@@ -6,11 +6,12 @@
 
 // MESSAGE FILE_TRANSFER_PROTOCOL PACKING
 package com.MAVLink.common;
+
 import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
-import com.MAVLink.Messages.Description;
 
 /**
  * File transfer protocol message: https://mavlink.io/en/services/ftp.html.

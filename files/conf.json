@@ -1,0 +1,23 @@
+{
+  "connection": "ros",
+  "agents": {
+    "1": {
+      "sysid": 1,
+      "mode": "real",
+      "type": "CMODEL",
+      "group": "1",
+      "vehicle": "1",
+      "ip": "192.169.0.1",
+      "port": 9750
+    },
+    "2": {
+      "sysid": 1,
+      "mode": "real",
+      "type": "CMODEL",
+      "group": "1",
+      "vehicle": "1",
+      "ip": "192.169.0.1",
+      "port": 9750
+    }
+  }
+}

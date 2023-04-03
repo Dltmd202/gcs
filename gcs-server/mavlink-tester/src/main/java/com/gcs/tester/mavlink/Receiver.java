@@ -7,11 +7,10 @@ import com.gcs.tester.mavlink.message.MAVLinkUtils;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Arrays;
 
 public class Receiver {
     public static void main(String[] args) throws UnknownHostException, SocketException {
-        SocketAddress me = new InetSocketAddress("192.168.35.37", 9750);
+        SocketAddress me = new InetSocketAddress("192.168.35.219", 9756);
         SocketAddress drone = new InetSocketAddress("127.0.0.1", 9750);
         InetAddress addr = InetAddress.getByName("127.0.0.1");
 
@@ -22,9 +21,10 @@ public class Receiver {
         DatagramPacket dronePacket = new DatagramPacket(buf, buf.length);
 
         Parser parser = new Parser();
+        int cnt = 0;
 
-        while (true){
-            try {
+        try {
+            while (true){
                 serverSocket.receive(dronePacket);
 
                 byte[] data = dronePacket.getData();
@@ -34,12 +34,17 @@ public class Receiver {
                 MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(data, length)
                         .orElseThrow(() -> new IllegalArgumentException());
 
-                if(mavLinkMessage instanceof msg_monitoring)
-                    System.out.println(mavLinkMessage);
+//                if(mavLinkMessage instanceof msg_monitoring)
+//                System.out.println(mavLinkMessage);
+                if(cnt % 100_000 == 0)
+                    System.out.println(cnt);
+                cnt++;
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            System.out.println(cnt);
         }
     }
 }

@@ -1,43 +1,48 @@
-import * as THREE from 'three';
-import React, {useRef, useState} from "react";
+import { SphereGeometry, BoxGeometry } from 'three';
+import React, {useEffect, useRef, useState} from "react";
 import { useFrame } from "@react-three/fiber";
 import { Euler } from 'three';
+import {OSphereGeometry} from "three/addons/libs/OimoPhysics";
 
 function SimpleDrone({
-                      agentObj,
-                      onClick,
-                      ...props
+                       agentObj,
+                       onClick,
+                       focused=false,
+                       ...props
                     }) {
   const meshRef = useRef()
-  const droneGeometry = new THREE.BoxGeometry(0.5, 0.3, 1);
-  const [hovered, hover] = useState(false)
+  const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false)
-  const {active, angle, ned} = agentObj
+  const {active, angle, ned, color, complementaryColor} = agentObj
+  const head = new BoxGeometry(0.1, 0.4, 0.4);
+  const body = new SphereGeometry(0.5, 16, 16);
 
 
-  useFrame((state, delta) => {
-    const mesh = meshRef.current;
-    const eular = new Euler(angle.roll, angle.yaw, angle.pitch);
-    mesh.rotation.setFromVector3(eular);
-  })
-
-  droneGeometry.translate(0, 0.15, 0)
 
   return (
-    <mesh
+    <group
       visible={active}
       position={[ned.x, -ned.z, ned.y]}
-      ref={meshRef}
-      scale={clicked ? 0.8 : 0.5}
+      scale={1}
       onClick={onClick}
       onPointerOver={(event) => hover(true)}
       onPointerOut={(event) => hover(false)}
       rotation={[angle.roll, angle.yaw, angle.pitch]}
-      geometry={droneGeometry}
     >
-      <axesHelper scale={2} />
-      <meshStandardMaterial color={hovered ? agentObj.complementaryColor : agentObj.color}/>
-    </mesh>
+      <mesh geometry={body} position={[0, 0.25, 0]}>
+        <meshPhongMaterial
+          color={hovered || focused ? complementaryColor : color}
+          transparent={true}
+          opacity={0.8}
+        />
+      </mesh>
+      <mesh geometry={head} position={[0.5, 0.25, 0]}>
+        <meshPhongMaterial
+          color={hovered || focused ? complementaryColor : color}
+          emissive={hovered || focused ? color : complementaryColor}
+        />
+      </mesh>
+    </group>
   )
 }
 

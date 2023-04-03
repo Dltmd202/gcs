@@ -2,7 +2,6 @@ package com.gcs.tester.mavlink;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.common.msg_command_long;
-import com.MAVLink.swarm.msg_monitoring;
 import com.gcs.tester.mavlink.message.MAVLinkUtils;
 
 import static com.MAVLink.enums.MAV_CMD.MAV_CMD_NAV_TAKEOFF;

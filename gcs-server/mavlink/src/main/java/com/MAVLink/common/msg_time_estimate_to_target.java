@@ -6,11 +6,12 @@
 
 // MESSAGE TIME_ESTIMATE_TO_TARGET PACKING
 package com.MAVLink.common;
+
 import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
-import com.MAVLink.Messages.Description;
 
 /**
  * Time/duration estimates for various events and actions given the current vehicle state and position.

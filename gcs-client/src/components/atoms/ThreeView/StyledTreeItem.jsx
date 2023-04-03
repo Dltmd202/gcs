@@ -9,7 +9,7 @@ const StyledTreeItem = ({
                           labelIcon: LabelIcon,
                           labelInfo,
                           labelText,
-                          ...other
+                          ...props
 }) => {
   return (
     <TreeItem
@@ -27,7 +27,7 @@ const StyledTreeItem = ({
         '--tree-view-color': color,
         '--tree-view-bg-color': bgColor,
       }}
-      {...other}
+      {...props}
     />
   )
 }

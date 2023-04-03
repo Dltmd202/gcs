@@ -5,14 +5,15 @@ import Button from "../../atoms/Button/Button";
 import {FontSize, FontWeight} from "../../../styles/font";
 import {Media} from "../../../styles/media";
 import agentApi from "../../../api/agent";
-import {TreeView} from "@mui/lab";
+import {TreeItem, TreeView} from "@mui/lab";
 import {ExpandMoreSharp} from "@mui/icons-material";
 import {ChevronRight} from "@mui/icons-material";
 import StyledTreeItem from "../../atoms/ThreeView/StyledTreeItem";
+import radianToDegree from "../../../module/coordinate/RadToDgreeConverter";
 
 const AgentInfo = ({
                      agentObject,
-                     focused,
+                     focus,
                      style,
                      ...props
 }) => {
@@ -27,6 +28,11 @@ const AgentInfo = ({
   } = agentObject;
 
   const [drop, isDrop] = useState(true);
+
+  const handleFocus = () => {
+    if(active)
+      focus(sysid);
+  }
 
   const handleDropDown = () => {
     isDrop(!drop);
@@ -49,113 +55,114 @@ const AgentInfo = ({
     <AgentInfoContainer
       active={active}
       color={color}
+      onClick={handleFocus}
       {...props}
     >
-      <AgentHeadContainer>
-        <AgentHeadName>SYSID - {sysid}</AgentHeadName>
-        <AgentHeadBatteryContainer>
-          {battery.toString().padStart(2, '0')}%
-        </AgentHeadBatteryContainer>
-      </AgentHeadContainer>
-      {active && (
-        <AgentBodyContainer>
-          <TreeView
-            aria-label="file system navigator"
-            defaultCollapseIcon={<ExpandMoreSharp />}
-            defaultExpandIcon={<ChevronRight />}
-            sx={{maxWidth: 200, padding: 0, "font-size": FontSize.micro}}
-          >
-            <StyledTreeItem nodeId={"1"} labelText={"Configuration"}>
-              <StyledTreeItem
-                nodeId={"2"} labelText={"IP"}
-                labelInfo={agentObject.ip}
-              />
-              <StyledTreeItem
-                nodeId={"3"} labelText={"MODE"}
-                labelInfo={agentObject.mode}
-              />
-              <StyledTreeItem
-                nodeId={"4"} labelText={"VEHICLE"}
-                labelInfo={agentObject.vehicle}
-              />
-            </StyledTreeItem>
+      <AgentBodyContainer>
+        <TreeView
+          aria-label="file system navigator"
+          defaultCollapseIcon={<ExpandMoreSharp />}
+          defaultExpandIcon={<ChevronRight />}
+          sx={{width: "90%", padding: 0, "font-size": FontSize.micro}}
+        >
+          <StyledTreeItem nodeId={"1"} labelText={
+              <AgentHeadName>{sysid}</AgentHeadName>
+          } labelInfo={
+            <AgentHeadBatteryContainer>
+              {battery.toString().padStart(2, '0')}%
+            </AgentHeadBatteryContainer>
+          } sx={{width: "100%"}}>
+            {active && (
+              <>
+                <StyledTreeItem nodeId={"2"} labelText={"Configuration"}>
+                  <StyledTreeItem
+                    nodeId={"3"} labelText={"IP"}
+                    labelInfo={agentObject.ip}
+                  />
+                  <StyledTreeItem
+                    nodeId={"4"} labelText={"MODE"}
+                    labelInfo={agentObject.mode}
+                  />
+                  <StyledTreeItem
+                    nodeId={"5"} labelText={"VEHICLE"}
+                    labelInfo={agentObject.vehicle}
+                  />
+                </StyledTreeItem>
+                <StyledTreeItem nodeId={"6"} labelText="Status">
+                  <StyledTreeItem
+                    nodeId={"7"}
+                    labelText={"NED Coordinate"}
+                  >
+                    <StyledTreeItem
+                      nodeId={"8"} labelText={"X"}
+                      labelInfo={agentObject.ned.x.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"9"} labelText={"Y"}
+                      labelInfo={agentObject.ned.y.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"10"} labelText={"Z"}
+                      labelInfo={agentObject.ned.z.toFixed(2)}
+                    />
+                  </StyledTreeItem>
 
-            <StyledTreeItem nodeId={"5"} labelText="Status">
-              <StyledTreeItem
-                nodeId={"6"}
-                labelText={"NED Coordinate"}
-              >
-                <StyledTreeItem
-                  nodeId={"7"} labelText={"X"}
-                  labelInfo={agentObject.ned.x}
-                />
-                <StyledTreeItem
-                  nodeId={"8"} labelText={"Y"}
-                  labelInfo={agentObject.ned.y}
-                />
-                <StyledTreeItem
-                  nodeId={"9"} labelText={"Z"}
-                  labelInfo={agentObject.ned.z}
-                />
-              </StyledTreeItem>
+                  <StyledTreeItem
+                    nodeId={"11"}
+                    labelText={"LLH Coordinate"}
+                  >
+                    <StyledTreeItem
+                      nodeId={"12"} labelText={"Latitude"}
+                      labelInfo={agentObject.llh.lat.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"13"} labelText={"Longitude"}
+                      labelInfo={agentObject.llh.lng.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"14"} labelText={"Altitude"}
+                      labelInfo={agentObject.llh.alt.toFixed(2)}
+                    />
+                  </StyledTreeItem>
 
-              <StyledTreeItem
-                nodeId={"10"}
-                labelText={"LLH Coordinate"}
-              >
-                <StyledTreeItem
-                  nodeId={"11"} labelText={"Latitude"}
-                  labelInfo={agentObject.llh.lat}
-                />
-                <StyledTreeItem
-                  nodeId={"12"} labelText={"Longitude"}
-                  labelInfo={agentObject.llh.lng}
-                />
-                <StyledTreeItem
-                  nodeId={"13"} labelText={"Altitude"}
-                  labelInfo={agentObject.llh.alt}
-                />
-              </StyledTreeItem>
+                  <StyledTreeItem
+                    nodeId={"15"}
+                    labelText={"Velocity"}
+                  >
+                    <StyledTreeItem
+                      nodeId={"16"} labelText={"VX"}
+                      labelInfo={agentObject.velocity.vx.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"17"} labelText={"VY"}
+                      labelInfo={agentObject.velocity.vy.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"18"} labelText={"VZ"}
+                      labelInfo={agentObject.velocity.vz.toFixed(2)}
+                    />
+                  </StyledTreeItem>
 
-              <StyledTreeItem
-                nodeId={"14"}
-                labelText={"Velocity"}
-              >
-                <StyledTreeItem
-                  nodeId={"15"} labelText={"VX"}
-                  labelInfo={agentObject.velocity.vx}
-                />
-                <StyledTreeItem
-                  nodeId={"16"} labelText={"VY"}
-                  labelInfo={agentObject.velocity.vy}
-                />
-                <StyledTreeItem
-                  nodeId={"17"} labelText={"VZ"}
-                  labelInfo={agentObject.velocity.vz}
-                />
-              </StyledTreeItem>
-
-              <StyledTreeItem
-                nodeId={"18"}
-                labelText={"Angle"}
-              >
-                <StyledTreeItem
-                  nodeId={"19"} labelText={"ROLL"}
-                  labelInfo={agentObject.angle.roll}
-                />
-                <StyledTreeItem
-                  nodeId={"20"} labelText={"PITCH"}
-                  labelInfo={agentObject.angle.pitch}
-                />
-                <StyledTreeItem
-                  nodeId={"21"} labelText={"YAW"}
-                  labelInfo={agentObject.angle.yaw}
-                />
-              </StyledTreeItem>
-            </StyledTreeItem>
-          </TreeView>
-        </AgentBodyContainer>
-      )}
+                  <StyledTreeItem nodeId={"19"} labelText={"Angle"}>
+                    <StyledTreeItem
+                      nodeId={"20"} labelText={"ROLL"}
+                      labelInfo={radianToDegree(agentObject.angle.roll).toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"21"} labelText={"PITCH"}
+                      labelInfo={radianToDegree(agentObject.angle.pitch).toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"22"} labelText={"YAW"}
+                      labelInfo={radianToDegree(agentObject.angle.yaw).toFixed(2)}
+                    />
+                  </StyledTreeItem>
+                </StyledTreeItem>
+              </>
+            )}
+          </StyledTreeItem>
+        </TreeView>
+      </AgentBodyContainer>
     </AgentInfoContainer>
   )
 }
@@ -230,6 +237,7 @@ const AgentHeadContainer = React.memo(styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5em;
+  width: 100%;
   
 `)
 

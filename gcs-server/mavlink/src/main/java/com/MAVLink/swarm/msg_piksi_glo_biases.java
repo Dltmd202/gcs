@@ -6,11 +6,12 @@
 
 // MESSAGE PIKSI_GLO_BIASES PACKING
 package com.MAVLink.swarm;
+
 import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
-import com.MAVLink.Messages.Description;
 
 /**
  * piksi_glo_biases

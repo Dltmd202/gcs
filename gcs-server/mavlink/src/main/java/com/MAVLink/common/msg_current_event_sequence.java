@@ -6,11 +6,12 @@
 
 // MESSAGE CURRENT_EVENT_SEQUENCE PACKING
 package com.MAVLink.common;
+
 import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
-import com.MAVLink.Messages.Description;
 
 /**
  * Regular broadcast for the current latest event sequence number for a component. This is used to check for dropped events.

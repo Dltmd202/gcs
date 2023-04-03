@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import React, {useRef, useState} from "react";
-import TextMesh from "./Text";
 
 function SimpleDrone2({
-                      agentObj,
-                      onClick,
-                      ...props
+                        agentObj,
+                        onClick,
+                        focused=false,
+                        ...props
                     }) {
   const meshRef = useRef()
   const droneGeometry = new THREE.BoxGeometry(0.5, 0.3, 1);
@@ -30,13 +30,13 @@ function SimpleDrone2({
       <mesh position={[0, 0.05, 0]}>
         {/*본체*/}
         <boxGeometry args={[0.5, 0.2, 0.25]}/>
-        <meshBasicMaterial color={hovered ? complementaryColor : color} />
+        <meshBasicMaterial color={hovered || focused ? complementaryColor : color} />
       </mesh>
       <mesh position={[0, 0.15, 0]} rotation={[0, Math.PI / 4, 0]}>
         {/*막대*/}
         <boxGeometry args={[1, 0.03, 0.03]}/>
         <meshBasicMaterial
-          color={hovered ? complementaryColor : color}
+          color={hovered || focused ? complementaryColor : color}
           transparent={true}
           opacity={0.8}
         />
@@ -45,7 +45,7 @@ function SimpleDrone2({
         {/*막대*/}
         <boxGeometry args={[1, 0.03, 0.03]}/>
         <meshBasicMaterial
-          color={hovered ? complementaryColor : color}
+          color={hovered || focused ? complementaryColor : color}
           transparent={true}
           opacity={0.8}
         />
@@ -54,7 +54,7 @@ function SimpleDrone2({
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
-          color={hovered ? complementaryColor : color}
+          color={hovered || focused ? complementaryColor : color}
           transparent={true}
           opacity={0.1}
         />
@@ -63,7 +63,7 @@ function SimpleDrone2({
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
-          color={hovered ? complementaryColor : color}
+          color={hovered || focused ? complementaryColor : color}
           transparent={true}
           opacity={0.1}
         />
@@ -72,7 +72,7 @@ function SimpleDrone2({
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
-          color={hovered ? complementaryColor : color}
+          color={hovered || focused ? complementaryColor : color}
           transparent={true}
           opacity={0.1}
         />
@@ -81,17 +81,17 @@ function SimpleDrone2({
         {/*프로펠러*/}
         <cylinderGeometry args={[0.2, 0.1, 0.01]}/>
         <meshBasicMaterial
-          color={hovered ? complementaryColor : color}
+          color={hovered || focused ? complementaryColor : color}
           transparent={true}
           opacity={0.1}
         />
       </mesh>
-      <TextMesh
-        text={agentObj.sysid.toString()}
-        color={color}
-        size={0.5}
-        rotation={[0, Math.PI / 2, 0]}
-        position={[0, 0.5, 0.5]}/>
+      {/*<TextMesh*/}
+      {/*  text={agentObj.sysid.toString()}*/}
+      {/*  color={color}*/}
+      {/*  size={0.5}*/}
+      {/*  rotation={[0, Math.PI / 2, 0]}*/}
+      {/*  position={[0, 0.5, 0.5]}/>*/}
     </group>
   )
 }

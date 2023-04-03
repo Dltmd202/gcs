@@ -1,7 +1,6 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "../pages/user/LoginPage";
 import PublicRoute from "./PublicRoute";
-import TwoDimensionGCSPage from "../pages/gcs/TwoDimensionGCSPage";
 import ConfigurationLoadPage from "../pages/load/ConfigurationLoadPage";
 import PrivateRouter from "./PrivateRoute";
 import UserPage from "../pages/user/UserPage";
@@ -28,11 +27,7 @@ const Routers = () => {
 
 
         <Route element={<PrivateRouter/>}>
-          <Route path="/gcs/path" element={<TwoDimensionGCSPage/>} />
-          <Route path="/gcs/two" element={<TwoDimensionGCSPage/>} />
           <Route path="/gcs/three" element={<ThreeDimensionGCSPage/>} />
-          <Route path="/gcs/simulate" element={<TwoDimensionGCSPage dim={3}/>}/>
-          <Route path="/gcs/path" element={<TwoDimensionGCSPage dim={0}/>}/>
         </Route>
 
         <Route element={<ProtectRoute/>}>

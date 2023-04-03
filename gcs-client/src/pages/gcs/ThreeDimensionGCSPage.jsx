@@ -14,8 +14,9 @@ import Spinner from "../../components/atoms/Spinner/Spinner";
 import CanvasContainer from "../../components/templates/Container/CanvasContainer";
 import Swal from "sweetalert2";
 import {useNavigate} from "react-router-dom";
-import SimpleDrone2 from "../../components/atoms/three/SimpleDrone2";
 import Logger from "../../components/molecules/logger/Logger";
+import AgentDetailInfo from "../../components/molecules/AgentInfo/AgentDetailInfo";
+import SimpleDrone from "../../components/atoms/three/SimpleDrone";
 
 const ThreeDimensionGCSPage = () => {
   const navigate = useNavigate();
@@ -40,6 +41,8 @@ const ThreeDimensionGCSPage = () => {
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
   })
+  const [focused, focus] = useState(null);
+
 
   const wsSubscribe = () => {
     client.onConnect = () => {
@@ -103,8 +106,6 @@ const ThreeDimensionGCSPage = () => {
     client.activate();
     wsSubscribe();
 
-
-
     isSocketLoading(false);
   }, []);
 
@@ -137,10 +138,16 @@ const ThreeDimensionGCSPage = () => {
           <>
             <GcsSidebarAgentListContainer>
               {context.agents && Object.values(context.agents)?.map((agent, i) => (
-                <AgentInfo key={i} agentObject={agent} />
+                <AgentInfo
+                  key={i}
+                  agentObject={agent}
+                  focus={focus}
+                />
               ))}
             </GcsSidebarAgentListContainer>
-            {/*<GcsInfo position={center} onCenterChange={handleCenterChange}/>*/}
+            {focused && (
+              <AgentDetailInfo agentObject={context.agents[focused]}/>
+            )}
           </>
         )}
       </MapSidebar>
@@ -150,10 +157,11 @@ const ThreeDimensionGCSPage = () => {
           <MainGcsContainer>
             <CanvasContainer cameraRef={cameraRef} controlRef={controlRef}>
               {context.agents && Object.values(context.agents)?.map((agent, i) => (
-                <SimpleDrone2
+                <SimpleDrone
                   key={i}
                   agentObj={agent}
                   onClick={handleMeshClick}
+                  focused={focused === agent.sysid}
                 />
               ))}
             </CanvasContainer>
@@ -170,7 +178,7 @@ const ThreeDimensionGCSPage = () => {
 
 const GcsSidebarAgentListContainer = styled.div`
   overflow: scroll;
-  height: 70%;
+  height: 50%;
 
   ::-webkit-scrollbar {
     display: none;

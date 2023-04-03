@@ -6,11 +6,12 @@
 
 // MESSAGE ORBIT_EXECUTION_STATUS PACKING
 package com.MAVLink.common;
+
 import com.MAVLink.MAVLinkPacket;
+import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
-import com.MAVLink.Messages.Description;
 
 /**
  * Vehicle status report that is sent out while orbit execution is in progress (see MAV_CMD_DO_ORBIT).

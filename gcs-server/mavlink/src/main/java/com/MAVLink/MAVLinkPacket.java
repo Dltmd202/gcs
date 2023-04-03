@@ -6,14 +6,15 @@
 
 package com.MAVLink;
 
-import java.io.Serializable;
-import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.common.CRC;
-
 import com.MAVLink.common.*;
-import com.MAVLink.minimal.*;
+import com.MAVLink.minimal.msg_heartbeat;
+import com.MAVLink.minimal.msg_protocol_version;
 import com.MAVLink.swarm.*;
+
+import java.io.Serializable;
 
 /**
  * Common interface for all MAVLink Messages

@@ -3,8 +3,11 @@ package com.gcs.domain.agent.dto;
 import com.gcs.domain.agent.Agent;
 import com.gcs.domain.agent.Flyable;
 import com.gcs.domain.agent.Moveable;
+import com.gcs.domain.coordinate.llh.LlhCoordinate;
 import com.gcs.domain.coordinate.llh.LlhLocatable;
+import com.gcs.domain.coordinate.ned.NedCoordinate;
 import com.gcs.domain.coordinate.ned.NedLocatable;
+import com.gcs.domain.rotation.Rotation;
 import com.gcs.domain.rotation.Rotationable;
 import com.gcs.domain.velocity.Velociterable;
 import lombok.Builder;
@@ -63,13 +66,23 @@ public class AgentDto implements Agent {
 
         String color = String.format("#%02x%02x%02x", r, g, b);
         String complementaryColor = String.format("#%02x%02x%02x", 255 - r, 255 - g, 255 - b);
-        return AgentDto.builder()
+        AgentDto agent = AgentDto.builder()
                 .sysid(sysid)
                 .ip(ip)
                 .port(port)
                 .color(color)
                 .complementaryColor(complementaryColor)
                 .build();
+
+        LlhLocatable llh = new LlhCoordinate(0, 0, 0);
+        NedLocatable ned = new NedCoordinate(0, 0, 0);
+        Rotationable rotate = new Rotation(0, 0, 0);
+
+        agent.update(llh);
+        agent.update(ned);
+        agent.update(rotate);
+
+        return agent;
     }
 
     @Builder

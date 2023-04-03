@@ -1,0 +1,86 @@
+{
+  "groups": [
+    {
+      "name": "coordinate.initial",
+      "type": "com.gcs.api.constants.InitialCoordinateConstants",
+      "sourceType": "com.gcs.api.constants.InitialCoordinateConstants"
+    },
+    {
+      "name": "google-map",
+      "type": "com.gcs.api.constants.GoogleMapApiConstants",
+      "sourceType": "com.gcs.api.constants.GoogleMapApiConstants"
+    },
+    {
+      "name": "jwt.token",
+      "type": "com.gcs.api.constants.JwtTokenConstants",
+      "sourceType": "com.gcs.api.constants.JwtTokenConstants"
+    },
+    {
+      "name": "ros2.ros2-web-bridge.web-socket",
+      "type": "com.gcs.api.config.Ros2WebBridgeConfiguration",
+      "sourceType": "com.gcs.api.config.Ros2WebBridgeConfiguration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "coordinate.initial.alt",
+      "type": "java.lang.Double",
+      "sourceType": "com.gcs.api.constants.InitialCoordinateConstants",
+      "defaultValue": 0
+    },
+    {
+      "name": "coordinate.initial.lat",
+      "type": "java.lang.Double",
+      "sourceType": "com.gcs.api.constants.InitialCoordinateConstants",
+      "defaultValue": 0
+    },
+    {
+      "name": "coordinate.initial.lng",
+      "type": "java.lang.Double",
+      "sourceType": "com.gcs.api.constants.InitialCoordinateConstants",
+      "defaultValue": 0
+    },
+    {
+      "name": "google-map.key",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.constants.GoogleMapApiConstants"
+    },
+    {
+      "name": "jwt.token.client-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.constants.JwtTokenConstants"
+    },
+    {
+      "name": "jwt.token.expiry-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "com.gcs.api.constants.JwtTokenConstants",
+      "defaultValue": 0
+    },
+    {
+      "name": "jwt.token.header",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.constants.JwtTokenConstants"
+    },
+    {
+      "name": "jwt.token.issuer",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.constants.JwtTokenConstants"
+    },
+    {
+      "name": "ros2.ros2-web-bridge.web-socket.ip",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.config.Ros2WebBridgeConfiguration"
+    },
+    {
+      "name": "ros2.ros2-web-bridge.web-socket.port",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.config.Ros2WebBridgeConfiguration"
+    },
+    {
+      "name": "ros2.ros2-web-bridge.web-socket.schema",
+      "type": "java.lang.String",
+      "sourceType": "com.gcs.api.config.Ros2WebBridgeConfiguration"
+    }
+  ],
+  "hints": []
+}

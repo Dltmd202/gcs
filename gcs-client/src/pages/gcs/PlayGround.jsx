@@ -1,10 +1,5 @@
 import CanvasContainer from "../../components/templates/Container/CanvasContainer";
 import {useEffect, useRef, useState} from "react";
-import StyledThreeDrone from "../../components/atoms/three/StyledThreeDrone";
-import StyledThreePathDrone from "../../components/atoms/three/StyledThreePathDrone";
-import {useLoader} from "@react-three/fiber";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import drone from "../../components/assets/obj/drone.glb";
 import SimpleDrone from "../../components/atoms/three/SimpleDrone";
 import SimplePathDrone from "../../components/atoms/three/SimplePathDrone";
 import SimpleDrone2 from "../../components/atoms/three/SimpleDrone2";

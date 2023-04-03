@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 import storageSession from 'redux-persist/es/storage/session';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import user from './user';
 import context from "./context";
 import {configureStore} from "@reduxjs/toolkit";
