@@ -4,7 +4,8 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.api.domain.context.service.AgentContextService;
 import com.gcs.api.domain.mavlink.factory.MavLinkMessageFactory;
-import com.gcs.domain.mavlink.anntation.MavLinkOrder;
+import com.gcs.domain.coordinate.ned.NedCoordinate;
+import com.gcs.supporter.mavlink.annotation.MavLinkOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -94,11 +95,9 @@ public class MavLinkService {
         return messages;
     }
 
-    @MavLinkOrder
-    public Collection<MAVLinkMessage> setPosition(float x, float y, float z){
-        return contextService.getRunningContext().stream()
-                .map(a -> MavLinkMessageFactory.setPoint(a.getSysid(), x, y, z))
-                .collect(Collectors.toList());
+    public void setDestination(float x, float y, float z){
+        contextService.getRunningContext().stream()
+                .forEach(a -> a.setDestination(new NedCoordinate(x, y, z)));
     }
 
     @MavLinkOrder
@@ -118,7 +117,7 @@ public class MavLinkService {
     }
 
     @MavLinkOrder
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 400)
     public Collection<MAVLinkMessage> scheduledSetPoint(){
         if(contextService.isRunningContext())
             return setPoint();
@@ -127,13 +126,13 @@ public class MavLinkService {
 
     private Collection<MAVLinkMessage> heartBeat(){
         return contextService.getRunningContext().stream()
-                .map(a -> MavLinkMessageFactory.hearBeat(a.getSysid()))
+                .map(a -> MavLinkMessageFactory.heartBeat(a.getSysid()))
                 .collect(Collectors.toList());
     }
 
     private Collection<MAVLinkMessage> setPoint(){
         return contextService.getRunningContext().stream()
-                .map(MavLinkMessageFactory::setPoint)
+                .map(a -> MavLinkMessageFactory.setPoint(a, a.getDestination()))
                 .collect(Collectors.toList());
     }
 }

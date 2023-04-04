@@ -1,8 +1,9 @@
-package com.gcs.domain.mavlink.mask;
+package com.gcs.supporter.mavlink.notification;
 
 import lombok.Getter;
 
-import static com.gcs.domain.mavlink.mask.MavLinkMonitoringStatus.*;
+import static com.gcs.supporter.mavlink.notification.MavLinkMonitoringStatus.*;
+
 
 @Getter
 public enum MavLinkMonitoringFlag {

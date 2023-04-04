@@ -1,10 +1,11 @@
 rootProject.name = 'gcs-server'
 include 'domain'
 include 'api'
-include 'supporter'
+include 'api-supporter'
 include 'mavlink'
 include 'kafka-core'
 include 'pure-udp-core'
 include 'ros2-core'
 include 'mavlink-tester'
+include 'mavlink-supporter'
 

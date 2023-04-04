@@ -130,13 +130,13 @@ public class AgentApiController {
                 .body(null);
     }
 
-    @PostMapping("/position")
-    public ResponseEntity<Void> position(
+    @PostMapping("/destination")
+    public ResponseEntity<Void> destination(
             @RequestParam(name = "x") Float x,
             @RequestParam(name = "y") Float y,
             @RequestParam(name = "z") Float z
     ){
-        mavLinkService.setPosition(x, y, z);
+        mavLinkService.setDestination(x, y, z);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(null);
@@ -149,4 +149,5 @@ public class AgentApiController {
                 .status(HttpStatus.NO_CONTENT)
                 .body(null);
     }
+
 }

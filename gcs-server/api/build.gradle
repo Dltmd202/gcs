@@ -10,7 +10,8 @@ repositories {
 }
 
 dependencies {
-    implementation project(path: ":supporter", configuration: 'default')
+    implementation project(path: ":api-supporter", configuration: 'default')
+    implementation project(path: ":mavlink-supporter", configuration: 'default')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'

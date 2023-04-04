@@ -13,8 +13,8 @@ const agentApi = {
     globalOffboard: () => authRequest.post(`/api/agent/offboard`),
     reboot: (sysid) => authRequest.post(`/api/agent/${sysid}/reboot`),
     globalReboot: () => authRequest.post(`/api/agent/reboot`),
-    position: (sysid, x, y, z) => authRequest.post(
-      `/api/agent/${sysid}/position?x=${x}&y=${y}&z=${z}`
+    destination: (sysid, x, y, z) => authRequest.post(
+      `/api/agent/${sysid}/destination?x=${x}&y=${y}&z=${z}`
     ),
     globalPosition: (x, y, z) => authRequest.post(
       `/api/agent/position?x=${x}&y=${y}&z=${z}`

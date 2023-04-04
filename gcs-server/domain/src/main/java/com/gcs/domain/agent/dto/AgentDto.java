@@ -28,6 +28,7 @@ public class AgentDto implements Agent {
     private Integer port;
     private LlhLocatable llh;
     private NedLocatable ned;
+    private NedLocatable destination;
     private Rotationable angle;
     private Velociterable velocity;
     private final String color;
@@ -120,6 +121,10 @@ public class AgentDto implements Agent {
 
         this.color = String.format("#%02x%02x%02x", r, g, b);
         this.complementaryColor = String.format("#%02x%02x%02x", 255 - r, 255 - g, 255 - b);
+        this.llh = new LlhCoordinate(0, 0, 0);
+        this.ned = new NedCoordinate(0, 0, 0);
+        this.angle = new Rotation(0, 0, 0);
+        this.destination = new NedCoordinate(0, 0, 0);
     }
 
     @Override
@@ -226,5 +231,13 @@ public class AgentDto implements Agent {
     @Override
     public Velociterable getVelocity() {
         return velocity;
+    }
+
+    public NedLocatable getDestination() {
+        return destination;
+    }
+
+    public void setDestination(NedLocatable destination) {
+        this.destination = destination;
     }
 }

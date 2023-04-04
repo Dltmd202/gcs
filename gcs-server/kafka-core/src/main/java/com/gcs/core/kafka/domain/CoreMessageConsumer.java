@@ -3,10 +3,10 @@ package com.gcs.core.kafka.domain;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.swarm.msg_monitoring;
 import com.gcs.domain.agent.service.AgentService;
-import com.gcs.domain.mavlink.mask.MavLinkMonitoringFlag;
-import com.gcs.domain.mavlink.message.MavLinkNotificationMessage;
-import com.gcs.supporter.domain.mavlink.adapter.MoveableMonitoringAdapter;
 import com.gcs.supporter.error.exception.ApiException;
+import com.gcs.supporter.mavlink.message.adapter.MoveableMonitoringAdapter;
+import com.gcs.supporter.mavlink.notification.MavLinkMonitoringFlag;
+import com.gcs.supporter.mavlink.notification.NotificationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -45,7 +45,7 @@ public class CoreMessageConsumer {
             if((monitoring.status1 & flag.getMask()) > 0){
                 template.convertAndSend(
                         "/topic/notification",
-                        new MavLinkNotificationMessage(monitoring.sysid, flag));
+                        new NotificationMessage(monitoring.sysid, flag));
             }
         }
     }

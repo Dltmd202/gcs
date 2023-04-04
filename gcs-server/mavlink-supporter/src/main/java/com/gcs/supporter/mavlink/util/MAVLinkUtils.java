@@ -1,4 +1,4 @@
-package com.gcs.supporter.util.mavlink;
+package com.gcs.supporter.mavlink.util;
 
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkMessage;

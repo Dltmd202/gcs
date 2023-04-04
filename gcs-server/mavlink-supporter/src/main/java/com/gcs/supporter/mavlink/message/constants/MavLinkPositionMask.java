@@ -1,4 +1,4 @@
-package com.gcs.domain.mavlink.mask;
+package com.gcs.supporter.mavlink.message.constants;
 
 public class MavLinkPositionMask {
     public static final int MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION = 0b0000110111111000;

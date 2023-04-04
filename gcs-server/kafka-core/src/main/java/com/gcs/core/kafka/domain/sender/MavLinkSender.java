@@ -19,7 +19,7 @@ import java.util.Collection;
 public class MavLinkSender {
     private final KafkaTemplate<Integer, MAVLinkMessage> kafkaTemplate;
 
-    @Pointcut("@annotation(com.gcs.domain.mavlink.anntation.MavLinkOrder)")
+    @Pointcut("@annotation(com.gcs.supporter.mavlink.annotation.MavLinkOrder)")
     private void mavlinkOrder() { }
 
     public void send(MAVLinkMessage msg){

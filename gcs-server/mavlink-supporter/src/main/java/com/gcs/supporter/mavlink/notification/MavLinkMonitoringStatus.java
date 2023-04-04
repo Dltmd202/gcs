@@ -1,4 +1,4 @@
-package com.gcs.domain.mavlink.mask;
+package com.gcs.supporter.mavlink.notification;
 
 import lombok.Getter;
 

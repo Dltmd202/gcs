@@ -1,4 +1,4 @@
-package com.gcs.api.domain.mavlink.factory;
+package com.gcs.supporter.mavlink.message.factory;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.common.msg_command_int;
@@ -13,7 +13,7 @@ import static com.MAVLink.enums.MAV_CMD.*;
 import static com.MAVLink.enums.MAV_COMPONENT.MAV_COMP_ID_ALL;
 import static com.MAVLink.enums.MAV_FRAME.MAV_FRAME_LOCAL_NED;
 import static com.MAVLink.enums.MAV_MODE_FLAG.*;
-import static com.gcs.supporter.mavlink.message.constants.MavLinkPositionMask.*;
+import static com.gcs.supporter.mavlink.message.constants.MavLinkPositionMask.MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION;
 
 public class MavLinkMessageFactory {
     private static final int PX4_CUSTOM_MAIN_MODE_AUTO = 4;

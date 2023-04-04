@@ -10,6 +10,9 @@ repositories {
 }
 
 dependencies {
+    implementation project(path: ":mavlink-supporter", configuration: 'default')
+    implementation project(path: ":api", configuration: 'default')
+
     implementation project(path: ":domain", configuration: 'default')
     implementation project(path: ":mavlink", configuration: 'default')
     implementation project(path: ":api", configuration: 'default')

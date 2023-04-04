@@ -1,4 +1,4 @@
-package com.gcs.domain.mavlink.anntation;
+package com.gcs.supporter.mavlink.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

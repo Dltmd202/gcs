@@ -1,4 +1,4 @@
-package com.gcs.supporter.domain.mavlink.adapter;
+package com.gcs.supporter.mavlink.message.adapter;
 
 import com.MAVLink.swarm.msg_monitoring;
 import com.gcs.domain.agent.Moveable;

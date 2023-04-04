@@ -66,6 +66,10 @@ const GcsHeader = () => {
     agentApi.gloablDisarm();
   }
 
+  const handleReboot = () => {
+    agentApi.reboot();
+  }
+
   const logoutButton = () => {
     localStorage.removeItem('token');
     navigate('/')
@@ -114,6 +118,9 @@ const GcsHeader = () => {
                 </GcsOrderButton>
                 <GcsOrderButton onClick={handleOffboardButton}>
                   OFFBOARD
+                </GcsOrderButton>
+                <GcsOrderButton onClick={handleReboot}>
+                  REBOOT
                 </GcsOrderButton>
               </ModalBody>
             </ModalContainer>

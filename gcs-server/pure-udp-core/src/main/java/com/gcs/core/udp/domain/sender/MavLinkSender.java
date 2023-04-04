@@ -21,7 +21,7 @@ public class MavLinkSender {
 
     private final CoreMavlinkService mavlinkService;
 
-    @Pointcut("@annotation(com.gcs.domain.mavlink.anntation.MavLinkOrder)")
+    @Pointcut("@annotation(com.gcs.supporter.mavlink.annotation.MavLinkOrder)")
     private void mavlinkOrder() { }
 
     public void send(MAVLinkMessage msg){
@@ -33,6 +33,7 @@ public class MavLinkSender {
         Object res = joinPoint.proceed();
         if(res instanceof Collection<?>){
             Collection<MAVLinkMessage> msg = (Collection<MAVLinkMessage>) res;
+            log.info("{}", res);
             msg.forEach(this::send);
         } else if(res instanceof MAVLinkMessage){
             MAVLinkMessage msg = (MAVLinkMessage) res;
