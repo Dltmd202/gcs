@@ -6,12 +6,11 @@
 
 // MESSAGE SET_ATTITUDE_TARGET PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Sets a desired vehicle attitude. Used by an external controller to command the vehicle (manual controller or other system).

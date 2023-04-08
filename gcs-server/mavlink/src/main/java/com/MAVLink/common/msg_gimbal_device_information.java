@@ -6,12 +6,11 @@
 
 // MESSAGE GIMBAL_DEVICE_INFORMATION PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Information about a low level gimbal. This message should be requested by the gimbal manager or a ground station using MAV_CMD_REQUEST_MESSAGE. The maximum angles and rates are the limits by hardware. However, the limits by software used are likely different/smaller and dependent on mode/settings/etc..

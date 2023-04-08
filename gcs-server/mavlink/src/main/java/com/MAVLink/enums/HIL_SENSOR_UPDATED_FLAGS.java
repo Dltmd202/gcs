@@ -27,3 +27,4 @@ public class HIL_SENSOR_UPDATED_FLAGS {
    public static final int HIL_SENSOR_UPDATED_RESET = -2147483648; /* Full reset of attitude/position/velocities/etc was performed in sim (Bit 31). | */
    public static final int HIL_SENSOR_UPDATED_FLAGS_ENUM_END = -2147483647; /*  | */
 }
+            

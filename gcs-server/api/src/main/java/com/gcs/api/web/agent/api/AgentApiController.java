@@ -150,4 +150,20 @@ public class AgentApiController {
                 .body(null);
     }
 
+    @PostMapping("/led")
+    public ResponseEntity<Void> led(
+            @RequestParam int type,
+            @RequestParam int r,
+            @RequestParam int g,
+            @RequestParam int b,
+            @RequestParam int brightness,
+            @RequestParam int speed
+    ){
+        mavLinkService.ledControl(type, r, g, b, brightness, speed);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(null);
+    }
+
+
 }

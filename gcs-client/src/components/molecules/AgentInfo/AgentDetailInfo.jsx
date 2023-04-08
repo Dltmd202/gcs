@@ -73,6 +73,10 @@ const AgentDetailInfo = ({
               <>
                 <StyledTreeItem nodeId={"2"} labelText={"Configuration"} defaultExpanded>
                   <StyledTreeItem
+                    nodeId={"100"} labelText={"ID"}
+                    labelInfo={agentObject.id}
+                  />
+                  <StyledTreeItem
                     nodeId={"8"} labelText={"IP"}
                     labelInfo={agentObject.ip}
                   />
@@ -154,6 +158,10 @@ const AgentDetailInfo = ({
                       labelInfo={agentObject.angle.yaw.toFixed(2)}
                     />
                   </StyledTreeItem>
+                  <StyledTreeItem
+                    nodeId={"23"} labelText={"Status"}
+                    labelInfo={agentObject.status}
+                  />
                 </StyledTreeItem>
               </>
             )}

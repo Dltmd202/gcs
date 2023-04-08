@@ -36,15 +36,14 @@ export const context = createSlice({
 
         const {agent, key} = action.payload;
 
-        for (const [ele, val] of Object.entries(agent)) {
-          state.data.agents[key][ele] = val;
-        }
-        state.data.agents[key].active = true;
-
-        // state.data.agents[key].ned = agent.ned;
-        // state.data.agents[key].battery = agent.battery;
-        // state.data.agents[key].angle = agent.angle;
-        // state.data.agents[key].velocity = agent.velocity;
+        console.log(agent, key);
+        // state.data.agents[key].active = true;
+        state.data.agents[key].battery = agent.battery;
+        state.data.agents[key].angle = agent.angle;
+        state.data.agents[key].velocity = agent.velocity;
+        state.data.agents[key].status = agent.status;
+        state.data.agents[key].rtk = agent.rtk;
+        state.data.agents[key].ned = agent.ned;
       }
     },
     setFocusAgent: {

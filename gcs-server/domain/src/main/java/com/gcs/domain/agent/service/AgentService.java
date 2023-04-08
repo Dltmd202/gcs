@@ -1,4 +1,4 @@
 package com.gcs.domain.agent.service;
 
-public interface AgentService extends AgentConfigureService, AgentRunningService{
+public interface AgentService extends AgentConfigureService, AgentOperationService, AgentRealTimeOperationService {
 }

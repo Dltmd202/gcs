@@ -3,13 +3,18 @@ package com.gcs.domain.agent.dto;
 import com.gcs.domain.agent.Agent;
 import com.gcs.domain.agent.Flyable;
 import com.gcs.domain.agent.Moveable;
+import com.gcs.domain.agent.RealTimeAgent;
 import com.gcs.domain.coordinate.llh.LlhCoordinate;
 import com.gcs.domain.coordinate.llh.LlhLocatable;
 import com.gcs.domain.coordinate.ned.NedCoordinate;
 import com.gcs.domain.coordinate.ned.NedLocatable;
 import com.gcs.domain.rotation.Rotation;
 import com.gcs.domain.rotation.Rotationable;
+import com.gcs.domain.rtk.RealTimeKinematic;
+import com.gcs.domain.rtk.RealTimeLocatable;
+import com.gcs.domain.rtk.RealTimeStatus;
 import com.gcs.domain.velocity.Velociterable;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.Objects;
@@ -18,7 +23,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author Dltmd202
  */
-public class AgentDto implements Agent {
+public class AgentDto implements RealTimeAgent {
+    private Integer id;
     private Integer sysid;
     private String mode;
     private String type;
@@ -31,8 +37,11 @@ public class AgentDto implements Agent {
     private NedLocatable destination;
     private Rotationable angle;
     private Velociterable velocity;
+    private RealTimeKinematic rtk;
     private final String color;
     private final String complementaryColor;
+    private short baseSatelliteCount;
+    private short roverSatelliteCount;
 
     public void setSysid(Integer sysid) {
         this.sysid = sysid;
@@ -60,34 +69,14 @@ public class AgentDto implements Agent {
     public void setPort(Integer port) {
         this.port = port;
     }
-    public static AgentDto makeAgent(int sysid, String ip, int port){
-        int r = ThreadLocalRandom.current().nextInt(0xff + 1);
-        int g = ThreadLocalRandom.current().nextInt(0xff + 1);
-        int b = ThreadLocalRandom.current().nextInt(0xff + 1);
 
-        String color = String.format("#%02x%02x%02x", r, g, b);
-        String complementaryColor = String.format("#%02x%02x%02x", 255 - r, 255 - g, 255 - b);
-        AgentDto agent = AgentDto.builder()
-                .sysid(sysid)
-                .ip(ip)
-                .port(port)
-                .color(color)
-                .complementaryColor(complementaryColor)
-                .build();
-
-        LlhLocatable llh = new LlhCoordinate(0, 0, 0);
-        NedLocatable ned = new NedCoordinate(0, 0, 0);
-        Rotationable rotate = new Rotation(0, 0, 0);
-
-        agent.update(llh);
-        agent.update(ned);
-        agent.update(rotate);
-
-        return agent;
+    public void setId(Integer id){
+        this.id = id;
     }
 
     @Builder
     public AgentDto(
+            Integer id,
             Integer sysid,
             String mode,
             String type,
@@ -95,9 +84,19 @@ public class AgentDto implements Agent {
             String vehicle,
             String ip,
             Integer port,
-            String color,
-            String complementaryColor
+            LlhLocatable llh,
+            NedLocatable ned,
+            NedLocatable destination,
+            Rotationable angle,
+            Velociterable velocity
     ) {
+        int r = ThreadLocalRandom.current().nextInt(0xff + 1);
+        int g = ThreadLocalRandom.current().nextInt(0xff + 1);
+        int b = ThreadLocalRandom.current().nextInt(0xff + 1);
+
+        this.color = String.format("#%02x%02x%02x", r, g, b);
+        this.complementaryColor = String.format("#%02x%02x%02x", 255 - r, 255 - g, 255 - b);
+        this.id = id;
         this.sysid = sysid;
         this.mode = mode;
         this.type = type;
@@ -105,8 +104,11 @@ public class AgentDto implements Agent {
         this.vehicle = vehicle;
         this.ip = ip;
         this.port = port;
-        this.color = color;
-        this.complementaryColor = complementaryColor;
+        this.llh = llh;
+        this.ned = ned;
+        this.destination = destination;
+        this.angle = angle;
+        this.velocity = velocity;
     }
 
     @Override
@@ -125,6 +127,11 @@ public class AgentDto implements Agent {
         this.ned = new NedCoordinate(0, 0, 0);
         this.angle = new Rotation(0, 0, 0);
         this.destination = new NedCoordinate(0, 0, 0);
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
     }
 
     @Override
@@ -239,5 +246,35 @@ public class AgentDto implements Agent {
 
     public void setDestination(NedLocatable destination) {
         this.destination = destination;
+    }
+
+    @Override
+    public void update(RealTimeKinematic moveable) {
+        this.rtk = moveable;
+    }
+
+    @Override
+    public void update(RealTimeStatus status) {
+
+    }
+
+    @Override
+    public void update(RealTimeLocatable realTimeLocatable) {
+
+    }
+
+    @Override
+    public NedLocatable getRtkCoordinate() {
+        return rtk.getRtkCoordinate();
+    }
+
+    @Override
+    public short getBaseSatelliteCount() {
+        return baseSatelliteCount;
+    }
+
+    @Override
+    public short getRoverSatelliteCount() {
+        return roverSatelliteCount;
     }
 }

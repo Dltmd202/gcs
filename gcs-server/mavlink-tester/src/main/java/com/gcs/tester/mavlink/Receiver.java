@@ -10,7 +10,7 @@ import java.net.*;
 
 public class Receiver {
     public static void main(String[] args) throws UnknownHostException, SocketException {
-        SocketAddress me = new InetSocketAddress("192.168.35.219", 9756);
+        SocketAddress me = new InetSocketAddress("10.42.0.3", 9750);
         SocketAddress drone = new InetSocketAddress("127.0.0.1", 9750);
         InetAddress addr = InetAddress.getByName("127.0.0.1");
 
@@ -25,20 +25,19 @@ public class Receiver {
 
         try {
             while (true){
-                serverSocket.receive(dronePacket);
+                synchronized (serverSocket) {
+                    serverSocket.receive(dronePacket);
 
-                byte[] data = dronePacket.getData();
+                    byte[] data = dronePacket.getData();
 
-                int length = dronePacket.getLength();
+                    int length = dronePacket.getLength();
 
-                MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(data, length)
-                        .orElseThrow(() -> new IllegalArgumentException());
+                    MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(data, length)
+                            .orElseThrow(() -> new IllegalArgumentException());
 
-//                if(mavLinkMessage instanceof msg_monitoring)
-//                System.out.println(mavLinkMessage);
-                if(cnt % 100_000 == 0)
-                    System.out.println(cnt);
-                cnt++;
+                    System.out.println(mavLinkMessage);
+                    cnt++;
+                }
 
             }
         } catch (IOException e) {

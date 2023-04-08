@@ -89,5 +89,8 @@ public class AgentServiceImpl implements AgentService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NO_AGENT_FROM_CONTEXT_CONF));
     }
 
+    @Override
+    public void updateRtkCoordinate(int sysid, NedLocatable coordinate) {
 
+    }
 }

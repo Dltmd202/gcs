@@ -13,29 +13,29 @@ import java.net.SocketAddress;
 
 public class Sender {
     public static void main(String[] args) throws IOException, InterruptedException {
-        SocketAddress me = new InetSocketAddress("192.168.35.219", 9755);
-        SocketAddress server = new InetSocketAddress("192.168.35.219", 9756);
+        SocketAddress me = new InetSocketAddress("127.0.0.1", 9755);
+        SocketAddress dest = new InetSocketAddress("127.0.0.1", 9750);
 
         DatagramSocket socket = new DatagramSocket(me);
         StringBuilder sb = new StringBuilder();
 
         int i = 0;
         MAVLinkMessage monitoring = new msg_monitoring();
-        for (i = 0; i < 1000000; i++) {
+        for (i = 0; i < 1; i++) {
             monitoring = MonitoringFactory.make(
-                    1,
-                    1.0F + 0.1F,
-                    2.0F + 0.1F * i,
-                    -2.0F - 0.1F,
-                    0.0F,
-                    0.0F + 0.05F,
-                    0F
+                    5,
+                    0.0F + 0.0F,
+                    0.0F + 0.0F,
+                    -3.0F - 0.5F,
+                    -0.0F,
+                    0.0F + 0.00F,
+                    -45.00F
             );
 
             byte[] data;
             DatagramPacket packet;
             data = MAVLinkUtils.getPacketData(monitoring);
-            packet = new DatagramPacket(data, data.length, server);
+            packet = new DatagramPacket(data, data.length, dest);
             socket.send(packet);
 //            System.out.println(monitoring.toString());
 //

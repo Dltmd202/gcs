@@ -6,12 +6,11 @@
 
 // MESSAGE EVENT PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Event message. Each new event from a particular component gets a new sequence number. The same message might be sent multiple times if (re-)requested. Most events are broadcast, some can be specific to a target component (as receivers keep track of the sequence for missed events, all events need to be broadcast. Thus we use destination_component instead of target_component).

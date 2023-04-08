@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class AgentConfig implements AgentConfigureable {
+    Integer id;
     Integer sysid;
     String mode;
     String type;

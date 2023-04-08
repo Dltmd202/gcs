@@ -3,9 +3,9 @@ package com.gcs.api.domain.mavlink.service;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.api.domain.context.service.AgentContextService;
-import com.gcs.api.domain.mavlink.factory.MavLinkMessageFactory;
 import com.gcs.domain.coordinate.ned.NedCoordinate;
 import com.gcs.supporter.mavlink.annotation.MavLinkOrder;
+import com.gcs.supporter.mavlink.message.factory.MavLinkMessageFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -119,9 +119,73 @@ public class MavLinkService {
     @MavLinkOrder
     @Scheduled(fixedRate = 400)
     public Collection<MAVLinkMessage> scheduledSetPoint(){
-        if(contextService.isRunningContext())
+        if(contextService.isRepeatedSetPoint() && contextService.isRunningContext())
             return setPoint();
         return null;
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> setScenarioStartTime(float startTime){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.setScenarioStartTime(a.getSysid(), startTime))
+                .collect(Collectors.toList());
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> stopScenario(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.stopScenario(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> resetScenario(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.resetScenario(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> setScenarioConfigs(float offsetX, float offsetY, float rotation, String filepath){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.setScenarioConfigs(
+                        a.getSysid(),
+                        offsetX,
+                        offsetY,
+                        rotation,
+                        filepath
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @MavLinkOrder
+    public MAVLinkMessage setScenarioConfigs(int sysid, float offsetX, float offsetY, float rotation, String filepath){
+        return MavLinkMessageFactory.setScenarioConfigs(
+                sysid,
+                offsetX,
+                offsetY,
+                rotation,
+                filepath
+        );
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> emergencyLanding(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.emergencyLanding(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+
+    //TODO 파라미터 패킹
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> ledControl(int type, int r, int g, int b, int brightness, int speed){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.ledCommand(
+                        a.getSysid(), type, r, g, b, brightness, speed)
+                )
+                .collect(Collectors.toList());
     }
 
     private Collection<MAVLinkMessage> heartBeat(){

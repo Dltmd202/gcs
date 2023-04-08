@@ -6,12 +6,11 @@
 
 // MESSAGE WIFI_CONFIG_AP PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Configure WiFi AP SSID, password, and mode. This message is re-emitted as an acknowledgement by the AP. The message may also be explicitly requested using MAV_CMD_REQUEST_MESSAGE

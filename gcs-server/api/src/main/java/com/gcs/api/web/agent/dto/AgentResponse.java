@@ -11,6 +11,7 @@ import java.util.Objects;
 
 @Getter
 public class AgentResponse {
+    private Integer id;
     private Integer sysid;
     private String mode;
     private String type;
@@ -27,6 +28,7 @@ public class AgentResponse {
     private Boolean active = false;
 
     public AgentResponse(AgentDto agent){
+        this.id = agent.getId();
         this.sysid = agent.getSysid();
         this.mode = agent.getMode();
         this.type = agent.getType();

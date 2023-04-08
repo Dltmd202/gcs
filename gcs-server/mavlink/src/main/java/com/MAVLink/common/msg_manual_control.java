@@ -6,12 +6,11 @@
 
 // MESSAGE MANUAL_CONTROL PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * This message provides an API for manually controlling the vehicle using standard joystick axes nomenclature, along with a joystick-like input device. Unused axes can be disabled and buttons states are transmitted as individual on/off bits of a bitmask

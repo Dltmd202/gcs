@@ -9,9 +9,23 @@ import java.util.Optional;
 @Repository
 public class AgentContextHolder {
     private AgentContext currentAgentContext;
+    private boolean repeatedHeartbeat;
+    private boolean repeatedSetPoint;
 
     public void saveContext(AgentContext agentContext){
         currentAgentContext = agentContext;
+        repeatedHeartbeat = true;
+        repeatedSetPoint = true;
+    }
+
+    public boolean toggleRepeatedHeartbeat(){
+        this.repeatedSetPoint = !this.repeatedHeartbeat;
+        return this.repeatedHeartbeat;
+    }
+
+    public boolean toggleRepeatedSetPoint(){
+        this.repeatedSetPoint = !this.repeatedHeartbeat;
+        return this.repeatedSetPoint;
     }
 
     public void cleanContext(){
@@ -25,4 +39,11 @@ public class AgentContextHolder {
         return Optional.ofNullable(currentAgentContext);
     }
 
+    public boolean isRepeatedHeartbeat() {
+        return repeatedHeartbeat;
+    }
+
+    public boolean isRepeatedSetPoint() {
+        return repeatedSetPoint;
+    }
 }

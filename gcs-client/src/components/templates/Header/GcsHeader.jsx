@@ -17,13 +17,18 @@ import Modal, {
 } from "../../atoms/modal/Modal";
 import {useNavigate} from "react-router-dom";
 import contextApi from "../../../api/context";
+import GcsControlModal from "./GcsControlModal";
+import GcsScenarioModal from "./GcsScenarioModal";
+import GcsAlertModal from "./GcsAlertModal";
+import GcsUserModal from "./GcsUserModal";
 
 const GcsHeader = () => {
+  // TODO context selector 사용해도 될지 검토해야함
   const {loading, data: user} = useSelector((state) => state.user);
   const [showAlert, setShowAlert] = useState(false);
+  const [showScenario, setShowScenario] = useState(false);
   const [showController, setShowController] = useState(false);
   const [showUserController, setShowUserController] = useState(false);
-  const navigate = useNavigate();
 
   const handleUserToggle = () => {
     if(showAlert)
@@ -31,9 +36,16 @@ const GcsHeader = () => {
     setShowUserController(!showUserController);
   }
 
-
   const handleControllerToggle = () => {
+    if(showScenario)
+      setShowScenario(!showScenario);
     setShowController(!showController)
+  }
+
+  const handleScenarioToggle = () => {
+    if(showController)
+      setShowController(!showController)
+    setShowScenario(!showScenario);
   }
 
   const handleModalToggle = () => {
@@ -42,43 +54,6 @@ const GcsHeader = () => {
     setShowAlert(!showAlert);
   };
 
-  const handleModalClose = () => {
-    setShowAlert(false);
-  };
-
-  const handleTakeOffButton = () => {
-    agentApi.globalTakeOff(5);
-  }
-
-  const handleLandButton = () => {
-    agentApi.globalLand();
-  }
-
-  const handleOffboardButton = () => {
-    agentApi.globalOffboard();
-  }
-
-  const handleArmButton = () => {
-    agentApi.globalArm();
-  }
-
-  const handleDisarmButton = () => {
-    agentApi.gloablDisarm();
-  }
-
-  const handleReboot = () => {
-    agentApi.reboot();
-  }
-
-  const logoutButton = () => {
-    localStorage.removeItem('token');
-    navigate('/')
-  }
-
-  const reloadButton = () => {
-    contextApi.cleanContext();
-    navigate('/load')
-  }
 
 
 
@@ -88,82 +63,32 @@ const GcsHeader = () => {
 
   return (
     <StyledGcsHeader>
-      <StyledGcsOrderContainer>
-        <ModalDropDown onClick={handleControllerToggle} >
-          <ModalDropDownName>
-            Control
-          </ModalDropDownName>
-          <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
-        </ModalDropDown>
-        {showController &&
-          <GcsControllerModal>
-            <ModalContainer>
-              <ModalHeader>
-                <ModalHeaderName>
-                  Controller
-                </ModalHeaderName>
-              </ModalHeader>
-              <ModalBody>
-                <GcsOrderButton onClick={handleArmButton}>
-                  ARM
-                </GcsOrderButton>
-                <GcsOrderButton onClick={handleDisarmButton}>
-                  DISARM
-                </GcsOrderButton>
-                <GcsOrderButton onClick={handleTakeOffButton}>
-                  TAKFOFF
-                </GcsOrderButton>
-                <GcsOrderButton onClick={handleLandButton}>
-                  LAND
-                </GcsOrderButton>
-                <GcsOrderButton onClick={handleOffboardButton}>
-                  OFFBOARD
-                </GcsOrderButton>
-                <GcsOrderButton onClick={handleReboot}>
-                  REBOOT
-                </GcsOrderButton>
-              </ModalBody>
-            </ModalContainer>
-          </GcsControllerModal>
-        }
-      </StyledGcsOrderContainer>
+      <GcsControlContainer>
+        <HeaderOrderContainer>
+          <ModalDropDown onClick={handleControllerToggle} >
+            <ModalDropDownName>
+              Control
+            </ModalDropDownName>
+            <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
+          </ModalDropDown>
+          <GcsControlModal showController={showController}/>
 
-      <StyledGcsUser>
+          <ModalDropDown onClick={handleScenarioToggle} >
+            <ModalDropDownName>
+              Scenario
+            </ModalDropDownName>
+            <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
+          </ModalDropDown>
+          <GcsScenarioModal showScenario={showScenario} />
+        </HeaderOrderContainer>
+      </GcsControlContainer>
+
+      <HeaderUserContainer>
         <GcsHeaderUserAlert onClick={handleModalToggle}>
           <GcsHeaderBellIcon icon={faBell} size={"lg"}/>
         </GcsHeaderUserAlert>
-        {showAlert &&
-          <GcsAlertModal
-            onClose={handleModalClose}
-            >
-            <ModalContainer>
-              <ModalHeader>
-                <ModalHeaderName>
-                  Notifications
-                </ModalHeaderName>
-                <GcsAlertClearButton
-                  onClick={() => {}}
-                >
-                  Clear all
-                </GcsAlertClearButton>
-              </ModalHeader>
-              <ModalBody>
-                <AlertButton>
-                  <AlertIcon icon={faCircleInfo} color={Colors.info}/>
-                  <div>송시운이 말을 안듣습니다.</div>
-                </AlertButton>
-                <AlertButton>
-                  <AlertIcon icon={faTriangleExclamation} color={Colors.warning}/>
-                  <div>송시운이 말을 안듣습니다.</div>
-                </AlertButton>
-                <AlertButton>
-                  <AlertIcon icon={faCircleXmark} color={Colors.error}/>
-                  <div>송시운이 말을 안듣습니다.</div>
-                </AlertButton>
-              </ModalBody>
-            </ModalContainer>
-          </GcsAlertModal>
-        }
+        <GcsAlertModal showAlert={showAlert}/>
+
         <ModalDropDown onClick={handleUserToggle} >
           <ModalDropDownName>
             <GcsHeaderUserInfo>
@@ -171,74 +96,42 @@ const GcsHeader = () => {
             </GcsHeaderUserInfo>
           </ModalDropDownName>
         </ModalDropDown>
+        <GcsUserModal showUser={showUserController}/>
 
-        {showUserController &&
-          <GcsUserModal
-            onClose={handleUserToggle}
-          >
-            <ModalContainer>
-              <UserModalHeader>
-                <UserModalHeaderName>
-                  {user.name}
-                </UserModalHeaderName>
-              </UserModalHeader>
-              <UserModalBody>
-                <UserButton onClick={logoutButton}>
-                  <UserButtonContent>
-                    logout
-                  </UserButtonContent>
-                </UserButton>
-                <UserButton onClick={reloadButton}>
-                  <UserButtonContent>
-                    reload
-                  </UserButtonContent>
-                </UserButton>
-              </UserModalBody>
-            </ModalContainer>
-          </GcsUserModal>
-        }
-
-      </StyledGcsUser>
+      </HeaderUserContainer>
     </StyledGcsHeader>
   )
 }
 
 export default React.memo(GcsHeader);
 
+const GcsControlContainer = React.memo(styled.div`
+  display: flex;
+  height: 100%;
+`)
+
 const GcsDropDownIcon = React.memo(styled(FontAwesomeIcon)`
   
 `)
 
-const ModalDropDownName = React.memo(styled.div`
+export const ModalDropDownName = React.memo(styled.div`
   margin-right: 0.5em;
 `)
 
-const UserModalBody = React.memo(styled(ModalBody)`
-`)
-
-const UserModalHeaderName = React.memo(styled.div`
-  text-align: right;
-`)
-
-const UserModalHeader = React.memo(styled(ModalHeader)`
-  justify-content: space-between;
-  flex-direction: column-reverse;
-`)
-
-
-const ModalDropDown = React.memo(styled.div`
+export const ModalDropDown = React.memo(styled.div`
   display: flex;
   align-items: center;
   font-size: ${FontSize.micro};
   height: 100%;
   padding: 0 0.5em;
+  margin-right: 0.5em;
   
   &:hover {
     background-color: ${Colors.backgroundHover};
   }
 `)
 
-const GcsOrderButton = React.memo(styled(HeaderButton)`
+export const GcsOrderButton = React.memo(styled(HeaderButton)`
   display: flex;
   align-items: center;
   border-radius: 0.3em;
@@ -249,74 +142,6 @@ const GcsOrderButton = React.memo(styled(HeaderButton)`
     background: rgba(255, 255, 255, 0.2);
   }
 `)
-
-const GcsControllerModal = React.memo(styled(Modal)`
-  width: 50vh;
-  min-height: 10vh;
-  top: 6vh;
-`)
-
-const GcsUserModal = React.memo(styled(Modal)`
-  width: 15vh;
-  min-height: 5vh;
-  top: 6vh;
-  right: 3vh;
-`)
-
-const GcsAlertModal = React.memo(styled(Modal)`
-  width: 50vh;
-  min-height: 20vh;
-  top: 6vh;
-  right: 3vh;
-`)
-
-const AlertButton = React.memo(styled(HeaderButton)`
-  display: flex;
-  align-items: center;
-  border-radius: 0.3em;
-  height: 2.5em;
-  font-size: ${FontSize.small};
-  
-  :hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-`)
-
-
-const UserButton = React.memo(styled(HeaderButton)`
-  display: flex;
-  align-items: center;
-  border-radius: 0.3em;
-  height: 2.5em;
-  font-size: ${FontSize.small};
-  maring-top: 0;
-  text-align: right;
-  flex-direction: row-reverse;
-  
-  :hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-`)
-
-const UserButtonContent = React.memo(styled.div`
-  
-`)
-
-const AlertIcon = React.memo(styled(FontAwesomeIcon)`
-  margin-right: 1em;
-  margin-left: 1em;
-`)
-
-
-
-const GcsAlertClearButton = React.memo(styled.div`
-  color: ${Colors.functionConfirm};
-  
-  :hover {
-    text-decoration: underline;
-  }
-`)
-
 
 
 const GcsHeaderBellIcon = React.memo(styled(FontAwesomeIcon)`
@@ -352,13 +177,13 @@ const StyledGcsHeader = React.memo(styled(Header)`
   justify-content: space-between;
 `)
 
-const StyledGcsOrderContainer = React.memo(styled.div`
+const HeaderOrderContainer = React.memo(styled.div`
   display: flex;
   height: 100%;
   align-items: center;
 `)
 
-const StyledGcsUser = React.memo(styled.div`
+const HeaderUserContainer = React.memo(styled.div`
   display: flex;
   align-items: center;
   height: 100%;

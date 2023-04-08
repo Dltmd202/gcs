@@ -6,9 +6,9 @@
 
 package com.MAVLink.Messages;
 
-import com.MAVLink.MAVLinkPacket;
-
 import java.io.Serializable;
+
+import com.MAVLink.MAVLinkPacket;
 
 /**
  * Common interface for all MAVLink messages

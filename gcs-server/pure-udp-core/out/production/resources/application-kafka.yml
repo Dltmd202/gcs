@@ -1,0 +1,17 @@
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:9093
+  consumer:
+    properties:
+      enable.idempotence: true
+
+gcs:
+  kafka:
+    topics:
+      serverToAgent: serverToAgent
+      agentToServer: agentToServer
+    polling:
+      period: 100
+    consumer:
+      group: agentToServer
+

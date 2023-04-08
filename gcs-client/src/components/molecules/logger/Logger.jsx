@@ -19,94 +19,94 @@ const Logger = ({
           {content}
         </LoggerBody>
       </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
+      {/*<Log>*/}
+      {/*  <LoggerCategory>*/}
+      {/*    [{category}]*/}
+      {/*  </LoggerCategory>*/}
+      {/*  <LoggerBody>*/}
+      {/*    {content}*/}
+      {/*  </LoggerBody>*/}
+      {/*</Log>*/}
 
     </LoggerContainer>
   )

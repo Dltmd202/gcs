@@ -6,12 +6,11 @@
 
 // MESSAGE GIMBAL_MANAGER_STATUS PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Current status about a high level gimbal manager. This message should be broadcast at a low regular rate (e.g. 5Hz).

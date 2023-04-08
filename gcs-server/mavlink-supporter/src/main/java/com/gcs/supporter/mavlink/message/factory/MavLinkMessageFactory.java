@@ -5,29 +5,23 @@ import com.MAVLink.common.msg_command_int;
 import com.MAVLink.common.msg_command_long;
 import com.MAVLink.common.msg_set_position_target_local_ned;
 import com.MAVLink.minimal.msg_heartbeat;
+import com.MAVLink.swarm.msg_led_control;
 import com.MAVLink.swarm.msg_scenario_cmd;
 import com.gcs.domain.agent.Agent;
 import com.gcs.domain.coordinate.ned.NedLocatable;
+import com.gcs.error.exception.GcsException;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 import static com.MAVLink.enums.MAV_CMD.*;
 import static com.MAVLink.enums.MAV_COMPONENT.MAV_COMP_ID_ALL;
 import static com.MAVLink.enums.MAV_FRAME.MAV_FRAME_LOCAL_NED;
-import static com.MAVLink.enums.MAV_MODE_FLAG.*;
-import static com.gcs.supporter.mavlink.message.constants.MavLinkPositionMask.MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION;
+import static com.MAVLink.enums.SCENARIO_CMD_ENUM.*;
+import static com.gcs.supporter.mavlink.message.factory.MavLinkModeConstants.*;
+import static com.gcs.supporter.mavlink.message.factory.MavLinkPositionMask.*;
 
 public class MavLinkMessageFactory {
-    private static final int PX4_CUSTOM_MAIN_MODE_AUTO = 4;
-    private static final int PX4_CUSTOM_SUB_MODE_AUTO_LAND = 6;
-    private static final int PX4_CUSTOM_MAIN_MODE_OFFBOARD = 6;
-    private static final int LAND_MODE = MAV_MODE_FLAG_SAFETY_ARMED |
-            MAV_MODE_FLAG_STABILIZE_ENABLED |
-            MAV_MODE_FLAG_GUIDED_ENABLED |
-            MAV_MODE_FLAG_AUTO_ENABLED |
-            MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-
-    private static final int OFFBOARD_MODE = MAV_MODE_FLAG_SAFETY_ARMED | MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-
-    public static final int MAVLINK_MSG_ID_HEARTBEAT = 0;
 
     public static MAVLinkMessage armMessage(Agent agent){
         return armMessage(agent.getSysid());
@@ -106,7 +100,7 @@ public class MavLinkMessageFactory {
         msg.target_system = (short) sysid;
         msg.target_component = MAV_COMP_ID_ALL;
         msg.command = MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN;
-        msg.param1 = 1;
+        msg.param1 = 1.0F;
 
         msg.isMavlink2 = true;
 
@@ -166,7 +160,7 @@ public class MavLinkMessageFactory {
         msg.target_component = 0;
         msg.type_mask = MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION;
         msg.coordinate_frame = MAV_FRAME_LOCAL_NED;
-        msg.time_boot_ms = 0;
+        msg.time_boot_ms = (int) System.currentTimeMillis();
         msg.x = x;
         msg.y = y;
         msg.z = z;
@@ -194,10 +188,111 @@ public class MavLinkMessageFactory {
     }
 
 
-    public static MAVLinkMessage reverseScenarioStartTime(float statTime){
+    public static MAVLinkMessage setScenarioStartTime(int sysid, float statTime){
         msg_scenario_cmd msg = new msg_scenario_cmd();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
 
-        return null;
+        msg.cmd = SCENARIO_CMD_SET_START_TIME;
+        msg.target_system = (short) sysid;
+        msg.param1 = statTime;
+
+        return msg;
     }
+
+    public static MAVLinkMessage stopScenario(int sysid){
+        msg_scenario_cmd msg = new msg_scenario_cmd();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
+
+        msg.cmd = SCENARIO_CMD_STOP_SCENARIO;
+        msg.target_system = (short) sysid;
+
+        return msg;
+    }
+
+    public static MAVLinkMessage resetScenario(int sysid){
+        msg_scenario_cmd msg = new msg_scenario_cmd();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
+
+        msg.cmd = SCENARIO_CMD_RESET_CONFIGS;
+        msg.target_system = (short) sysid;
+
+        return msg;
+    }
+
+    public static MAVLinkMessage setScenarioConfigs(int sysid, float offsetX, float offsetY, float rotation, String filepath){
+        // TODO handling
+        checkValidScenarioPath(filepath);
+
+        msg_scenario_cmd msg = new msg_scenario_cmd();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
+
+        msg.cmd = SCENARIO_CMD_SET_CONFIGS;
+        msg.target_system = (short) sysid;
+
+        msg.param1 = offsetX;
+        msg.param2 = offsetY;
+        msg.param3 = degreeToRadian(rotation);
+
+        byte[] pathBytes = filepath.getBytes();
+        Arrays.fill(msg.param5, (short) 0);
+        for (int i = 0; i < filepath.length(); i++) {
+            msg.param5[i] = pathBytes[i];
+        }
+
+        return msg;
+    }
+
+    public static MAVLinkMessage emergencyLanding(int sysid){
+        msg_scenario_cmd msg = new msg_scenario_cmd();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
+
+        msg.cmd = SCENARIO_CMD_EMERGENCY_LAND;
+        msg.target_system = (short) sysid;
+
+        return msg;
+    }
+
+    public static MAVLinkMessage tesetRTKOff(int sysid){
+        msg_scenario_cmd msg = new msg_scenario_cmd();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
+
+        msg.cmd = SCENARIO_CMD_ENUM_ENUM_END;
+        msg.target_system = (short) sysid;
+
+        return msg;
+    }
+
+    public static MAVLinkMessage ledCommand(int sysid, int type, int r, int g, int b, int brightness, int speed){
+        msg_led_control msg = new msg_led_control();
+        msg.isMavlink2 = true;
+        msg.sysid = sysid;
+
+        msg.r = (short) r;
+        msg.g = (short) g;
+        msg.b = (short) b;
+        msg.brightness = (short) brightness;
+        msg.type = (short) type;
+
+        return msg;
+    }
+
+
+    private static void checkValidScenarioPath(String filepath){
+        if(Objects.isNull(filepath) || filepath.length() >= 32)
+            throw new GcsException("Wrong scenario Path");
+    }
+
+
+    // TODO RadianUtil modulation
+    private static float degreeToRadian(float degree){
+        return (float) (degree * Math.PI / 180);
+    }
+
 
 }

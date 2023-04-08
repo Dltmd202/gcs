@@ -6,12 +6,11 @@
 
 // MESSAGE CAMERA_IMAGE_CAPTURED PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Information about a captured image. This is emitted every time a message is captured.

@@ -17,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 import Logger from "../../components/molecules/logger/Logger";
 import AgentDetailInfo from "../../components/molecules/AgentInfo/AgentDetailInfo";
 import SimpleDrone from "../../components/atoms/three/SimpleDrone";
+import SimpleDrone2 from "../../components/atoms/three/SimpleDrone2";
 
 const ThreeDimensionGCSPage = () => {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ const ThreeDimensionGCSPage = () => {
         const agent = {
           sysid: parsedMessage.sysid,
           battery: parsedMessage.battery,
+          status: parsedMessage.status1,
           angle: {
             roll: parsedMessage.roll,
             pitch: parsedMessage.pitch,
@@ -65,6 +67,11 @@ const ThreeDimensionGCSPage = () => {
             vx: parsedMessage.vx,
             vy: parsedMessage.vy,
             vz: parsedMessage.vz
+          },
+          rtk: {
+            n: parsedMessage.rtk_n,
+            e: parsedMessage.rtk_e,
+            d: parsedMessage.rtk_d,
           }
         }
 

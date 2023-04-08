@@ -24,6 +24,15 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>GCS</title>
+    <script>
+      const appHeight = () => {
+        const doc = document.documentElement
+        doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+      }
+
+      window.addEventListener('resize', appHeight)
+      appHeight()
+    </script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Yeon+Sung&display=swap");
 
@@ -35,7 +44,7 @@
           -ms-user-select:none;
           user-select:none;
             font-family: "Nanum Pen Script";
-            height: 100vh !important;
+            height: 100%;
       }
 
         body.swal2-height-auto {

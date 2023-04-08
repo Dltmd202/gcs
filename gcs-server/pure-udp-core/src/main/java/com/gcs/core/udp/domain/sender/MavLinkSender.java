@@ -1,8 +1,8 @@
 package com.gcs.core.udp.domain.sender;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.gcs.core.udp.domain.mavlink.service.CoreMavlinkService;
-import com.gcs.supporter.util.mavlink.MAVLinkUtils;
+import com.gcs.core.udp.domain.mavlink.service.MavlinkGatewayService;
+import com.gcs.supporter.mavlink.util.MAVLinkUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,13 +19,13 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class MavLinkSender {
 
-    private final CoreMavlinkService mavlinkService;
+    private final MavlinkGatewayService mavlinkService;
 
     @Pointcut("@annotation(com.gcs.supporter.mavlink.annotation.MavLinkOrder)")
     private void mavlinkOrder() { }
 
     public void send(MAVLinkMessage msg){
-        mavlinkService.sentToAgent(msg.sysid, MAVLinkUtils.getPacketData(msg));
+        mavlinkService.sentToAgent(msg.sysid, MAVLinkUtils.getMessage(msg));
     }
 
     @Around("mavlinkOrder()")

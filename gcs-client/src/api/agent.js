@@ -13,12 +13,21 @@ const agentApi = {
     globalOffboard: () => authRequest.post(`/api/agent/offboard`),
     reboot: (sysid) => authRequest.post(`/api/agent/${sysid}/reboot`),
     globalReboot: () => authRequest.post(`/api/agent/reboot`),
+    globalLED: (type, r, g, b, brightness, speed) => authRequest.post(
+      `/api/agent/led?type=${type}&r=${r}&g=${g}&b=${b}&brightness=${brightness}&speed=${speed}`),
     destination: (sysid, x, y, z) => authRequest.post(
-      `/api/agent/${sysid}/destination?x=${x}&y=${y}&z=${z}`
-    ),
-    globalPosition: (x, y, z) => authRequest.post(
-      `/api/agent/position?x=${x}&y=${y}&z=${z}`
-    ),
+      `/api/agent/${sysid}/destination?x=${x}&y=${y}&z=${z}`),
+    globalDestination: (x, y, z) => authRequest.post(
+      `/api/agent/destination?x=${x}&y=${y}&z=${z}`),
+    globalScenarioConfiguration: (x, y, rotation, path) => authRequest.post(
+      `/api/scenario?x=${x}&y=${y}&rot=${rotation}&path=${path}`),
+    scenarioConfiguration: (sysid, x, y, rotation, path) => authRequest.post(
+      `/api/scenario/${sysid}?x=${x}&y=${y}&rot=${rotation}&path=${path}`),
+    scenarioSync: (time) => authRequest.post(
+      `/api/scenario/sync?time=${time}`),
+    scenarioStop: () => authRequest.post(`/api/scenario/stop`),
+    scenarioReset: () => authRequest.post(`/api/scenario/reset`)
+
 };
 
 export default agentApi;

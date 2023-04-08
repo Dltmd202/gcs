@@ -6,12 +6,11 @@
 
 // MESSAGE OBSTACLE_DISTANCE PACKING
 package com.MAVLink.common;
-
 import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Messages.Description;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.Units;
+import com.MAVLink.Messages.Description;
 
 /**
  * Obstacle distances in front of the sensor, starting from the left in increment degrees to the right

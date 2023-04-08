@@ -1,6 +1,11 @@
 package com.MAVLink.Messages;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Field;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -24,4 +29,14 @@ public @interface Units {
 	 */
 	String value();
 
+	class Test {
+		@Units("m/s")
+		public float speed;
+
+		public static void main(String[] args) throws Exception {
+			Field field = Test.class.getField("speed");
+			Units annotation = (Units) field.getAnnotation(Units.class);
+			System.out.println(UnitsEnum.fromName(annotation.value()));
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package com.gcs.domain.agent;
 
 public interface AgentConfigureable {
+    Integer getId();
     Integer getSysid();
     String getMode();
     String getType();

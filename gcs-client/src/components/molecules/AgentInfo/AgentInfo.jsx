@@ -76,6 +76,10 @@ const AgentInfo = ({
               <>
                 <StyledTreeItem nodeId={"2"} labelText={"Configuration"}>
                   <StyledTreeItem
+                    nodeId={"100"} labelText={"ID"}
+                    labelInfo={agentObject.id}
+                  />
+                  <StyledTreeItem
                     nodeId={"3"} labelText={"IP"}
                     labelInfo={agentObject.ip}
                   />

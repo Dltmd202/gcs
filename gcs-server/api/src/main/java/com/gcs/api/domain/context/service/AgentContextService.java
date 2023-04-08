@@ -93,6 +93,14 @@ public class AgentContextService {
 
     public Boolean cleanContext() {
         agentContextHolder.cleanContext();
-        return null;
+        return true;
+    }
+
+    public boolean toggleContextRepeatedSetPointMessage() {
+        return agentContextHolder.toggleRepeatedSetPoint();
+    }
+
+    public boolean isRepeatedSetPoint(){
+        return agentContextHolder.isRepeatedSetPoint();
     }
 }

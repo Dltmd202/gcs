@@ -1,6 +1,7 @@
 package com.gcs.api.util.confparser;
 
 import com.gcs.domain.agent.dto.AgentDto;
+import com.gcs.domain.agent.dto.RealTimeAgentDto;
 import com.gcs.domain.context.AgentContext;
 import com.gcs.domain.context.dto.AgentContextDto;
 import com.gcs.domain.context.exception.ConfigurationParseException;
@@ -10,10 +11,7 @@ import com.gcs.supporter.util.tracker.TimeTracker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -82,9 +80,13 @@ public class AgentContextXMLParser {
                 Node agent = agentsChildNodes.item(agentSeq);
                 if(!agent.getNodeName().toLowerCase().trim().equals("agent")) continue;
 
-                AgentDto agentDto = new AgentDto();
+                RealTimeAgentDto agentDto = new RealTimeAgentDto();
                 Set<Integer> sysidValidator = new HashSet<>();
                 NodeList agentChildNodes = agent.getChildNodes();
+
+                NamedNodeMap attributes = agent.getAttributes();
+                String id = attributes.getNamedItem("id").getNodeValue();
+                agentDto.setId(Integer.parseInt(id));
 
                 for (int agentChild = 0; agentChild < agentChildNodes.getLength(); agentChild++) {
                     Node agentProperty = agentChildNodes.item(agentChild);

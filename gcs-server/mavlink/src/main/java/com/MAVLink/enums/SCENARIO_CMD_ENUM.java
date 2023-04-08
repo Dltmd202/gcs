@@ -15,7 +15,7 @@ public class SCENARIO_CMD_ENUM {
    public static final int SCENARIO_CMD_SELECT_SCENARIO_FILE = 2; /* set scenario file name (param5 : file name) | */
    public static final int SCENARIO_CMD_STOP_SCENARIO = 3; /* stop scenario | */
    public static final int SCENARIO_CMD_EMERGENCY_LAND = 4; /* land | */
-   public static final int SCENARIO_CMD_SET_CONFIGS = 5; /* set vairous configurations param1: offset pos x, param2: offset pos y, param5: scenario file name | */
+   public static final int SCENARIO_CMD_SET_CONFIGS = 5; /* set vairous configurations param1: base vehicle pos x, param2: base vehicle pos y, param5: scenario file name | */
    public static final int SCENARIO_CMD_RESET_CONFIGS = 6; /* reset configurations | */
    public static final int SCENARIO_CMD_ENUM_ENUM_END = 7; /*  | */
 }

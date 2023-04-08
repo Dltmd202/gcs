@@ -130,4 +130,13 @@ public class ContextApiController {
                 );
     }
 
+    @PostMapping("/setPoint")
+    public ResponseEntity<ApiUtil.ApiResult<Boolean>> toggleContextSetPointMessage(){
+        return ResponseEntity.ok(
+                ApiUtil.success(
+                    contextService.toggleContextRepeatedSetPointMessage())
+        );
+    }
+
+
 }

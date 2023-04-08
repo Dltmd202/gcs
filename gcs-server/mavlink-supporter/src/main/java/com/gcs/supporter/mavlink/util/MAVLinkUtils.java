@@ -25,7 +25,7 @@ public class MAVLinkUtils {
         return Optional.empty();
     }
 
-    public static byte[] getPacketData(MAVLinkMessage msg){
+    public static byte[] getMessage(MAVLinkMessage msg){
         return msg.pack().encodePacket();
     }
 
