@@ -89,7 +89,6 @@ public class MavLinkService {
     public Collection<MAVLinkMessage> takeOff(Float alt){
         List<MAVLinkMessage> messages = new ArrayList<>();
         for (AgentDto agent : contextService.getRunningContext().agents()) {
-            messages.add(MavLinkMessageFactory.armMessage(agent.getSysid()));
             messages.add(MavLinkMessageFactory.takeOffMessage(agent.getSysid(), alt));
         }
         return messages;

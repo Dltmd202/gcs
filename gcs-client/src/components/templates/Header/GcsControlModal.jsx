@@ -1,14 +1,54 @@
 import agentApi from "../../../api/agent";
-import React, {useEffect, useState} from "react";
-import Modal, {ModalBody, ModalContainer, ModalHeader, ModalHeaderName} from "../../atoms/modal/Modal";
+import React, {useEffect, useRef, useState} from "react";
+import Modal, {
+  ModalBody,
+  ModalContainer,
+  ModalHeader,
+  ModalHeaderName, ModalInput,
+  ModalInputContainer, ModalInputLabel, ModalInputPair
+} from "../../atoms/modal/Modal";
 import { GcsOrderButton } from "./GcsHeader";
 import styled from "styled-components";
 import contextApi from "../../../api/context";
 
 const GcsControlModal = ({showController}) => {
-  const handleTakeOffButton = () => {
-    agentApi.globalTakeOff(5);
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+  const [z, setZ] = useState(null);
+  const [isRepeatedSetPoint, setRepeatedSetPoint] = useState(false);
+  const [showPointDetail, setShowPointDetail] = useState(false);
+  const [showTakeoffDetail, setTakeoffDetail] = useState(false);
+  const setPointXReference = useRef();
+  const setPointYReference = useRef();
+  const setPointZReference = useRef();
+  const takOffAltitudeReference = useRef();
+
+  const fetchRepeatPoint = async () => {
+    try{
+      const res = await contextApi.isRepeatSetPoint();
+      return res.data.response;
+    } catch (e){
+
+    }
   }
+
+  useEffect(() => {
+    setRepeatedSetPoint(fetchRepeatPoint())
+  }, []);
+
+  const handleTakeOffButton = () => {
+    if(!showTakeoffDetail){
+      setTakeoffDetail(true);
+      setShowPointDetail(false);
+      return;
+    } else if(z === null) {
+      takOffAltitudeReference.current.focus();
+      alert("Set Altitude")
+      return;
+    }
+    agentApi.globalTakeOff(z);
+  }
+
 
   const handleLandButton = () => {
     agentApi.globalLand();
@@ -31,7 +71,24 @@ const GcsControlModal = ({showController}) => {
   }
 
   const handleSetPoint = () => {
-    agentApi.globalDestination(0, 0, -2);
+    if(!showPointDetail){
+      setShowPointDetail(true);
+      setTakeoffDetail(false);
+      return;
+    } else if(x === null){
+      setPointXReference.current.focus();
+      alert("Set X")
+      return;
+    } else if(y === null){
+      setPointYReference.current.focus();
+      alert("Set Y")
+      return;
+    } else if(z === null){
+      setPointZReference.current.focus();
+      alert("Set Z")
+      return;
+    }
+    agentApi.globalDestination(x, y, z);
   }
 
   const handleGlobalLED = () => {
@@ -39,7 +96,12 @@ const GcsControlModal = ({showController}) => {
   }
 
   const toggleRepeatedSetPoint = async () => {
-    contextApi.toggleSetPoint();
+    try{
+      const res = await contextApi.toggleSetPoint();
+      setRepeatedSetPoint(res.data.response);
+    } catch (e){
+
+    }
   }
 
   return (
@@ -50,6 +112,11 @@ const GcsControlModal = ({showController}) => {
           <ModalHeaderName>
             Controller
           </ModalHeaderName>
+          <div>
+            <div>
+              setPoint - {isRepeatedSetPoint ? "ON" : "OFF"}
+            </div>
+          </div>
         </ModalHeader>
         <ModalBody>
           <GcsOrderButton onClick={handleArmButton}>
@@ -61,6 +128,17 @@ const GcsControlModal = ({showController}) => {
           <GcsOrderButton onClick={handleTakeOffButton}>
             TAKFOFF
           </GcsOrderButton>
+          <ModalInputContainer display={showTakeoffDetail}>
+            <ModalInputPair>
+              <ModalInputLabel>z</ModalInputLabel>
+              <ModalInput
+                value={z || ''}
+                onChange={(e) => setZ(e.target.value)}
+                type={"number"}
+                ref={takOffAltitudeReference}
+              />
+            </ModalInputPair>
+          </ModalInputContainer>
           <GcsOrderButton onClick={handleLandButton}>
             LAND
           </GcsOrderButton>
@@ -76,8 +154,37 @@ const GcsControlModal = ({showController}) => {
           <GcsOrderButton onClick={handleSetPoint}>
             SET POINT
           </GcsOrderButton>
+          <ModalInputContainer display={showPointDetail}>
+            <ModalInputPair>
+              <ModalInputLabel>x</ModalInputLabel>
+              <ModalInput
+                value={x || ''}
+                onChange={(e) => setX(e.target.value)}
+                type={"number"}
+                ref={setPointXReference}
+              />
+            </ModalInputPair>
+            <ModalInputPair>
+              <ModalInputLabel>y</ModalInputLabel>
+              <ModalInput
+                value={y || ''}
+                onChange={(e) => setY(e.target.value)}
+                type={"number"}
+                ref={setPointYReference}
+              />
+            </ModalInputPair>
+            <ModalInputPair>
+              <ModalInputLabel>z</ModalInputLabel>
+              <ModalInput
+                value={z || ''}
+                onChange={(e) => setZ(e.target.value)}
+                type={"number"}
+                ref={setPointZReference}
+              />
+            </ModalInputPair>
+          </ModalInputContainer>
           <GcsOrderButton onClick={toggleRepeatedSetPoint}>
-            On SETPOINT
+            Toggle SETPOINT
           </GcsOrderButton>
 
         </ModalBody>

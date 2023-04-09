@@ -1,76 +1,104 @@
 import {useSelector} from "react-redux";
 import agentApi from "../../../api/agent";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import Modal, {ModalBody, ModalContainer, ModalHeader, ModalHeaderName} from "../../atoms/modal/Modal";
+import Modal, {
+  ModalBody,
+  ModalContainer,
+  ModalHeader,
+  ModalHeaderName, ModalInput,
+  ModalInputContainer, ModalInputLabel, ModalInputPair
+} from "../../atoms/modal/Modal";
 import {GcsOrderButton} from "./GcsHeader";
 
 const GcsScenarioModal = ({showScenario}) => {
+  const [scenario, setScenario] = useState("");
+  const [time, setTime] = useState(0);
+  const [showConfigDetail, setShowConfigDetail] = useState(false);
+  const [showStartDetail, setShowStartDetail] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [fixedCount, setFixedCount] = useState(0);
+  const [configCount, setConfigCount] = useState(0);
+
+  const [offsetX, setOffsetX] = useState(null);
+  const [offsetY, setOffsetY] = useState(null);
+
+  const scenarioNameReference = useRef();
+  const startTimeReference = useRef();
   const {
     loading: contextLoading,
     data: context,
     error: contextError
   } = useSelector((state) => state.context);
-  const handleScenarioConfig = () => {
-    if(contextLoading || contextError) return;
-    let valid = true;
-    let cnt = 0;
-    let offsetx;
-    let offsety;
 
-    context.agents && Object.values(context.agents).map((agent, i) => {
-      agentApi.scenarioConfiguration(
-        agent.sysid,
-        offsetx,
-        offsety,
-        0,
-        `"test/node_${agent.id}.txt"`
-      )
-    });
+  useEffect(() => {
+    if(!contextLoading && !contextError){
+      setTotalCount(Object.keys(context?.agents).length)
+      let fixedCnt = 0;
+      let configCnt = 0;
 
-    context.agents && Object.values(context.agents).map((agent, i) => {
-      if(agent?.status & (1 << 9) !== 0) {
-        cnt++;
+      context.agents && Object.values(context.agents).map((agent, i) => {
         if(agent.id === 1){
-          offsetx = agent.rtk.e;
-          offsety = agent.rtk.n;
+          setOffsetX(agent.rtk.x);
+          setOffsetY(agent.rtk.y);
         }
+        if(agent?.status & (1 << 9) !== 0) {
+          fixedCnt++;
+        }
+        if((agent?.status & (1 << 17) !== 0) && (agent?.status & (1 << 18) !== 0)){
+          configCnt++;
+        }
+      });
+      setFixedCount(fixedCnt);
+      setConfigCount(configCnt);
+    }
+  }, [context])
 
-      } else {
-        valid = false;
-      }
-    });
+  const handleScenarioConfig = () => {
+    if(!showConfigDetail){
+      setShowStartDetail(false);
+      setShowConfigDetail(true);
+      return
+    } else if(scenario.length < 1){
+      scenarioNameReference.current.focus();
+      alert("Set Configuration Name")
+      return;
+    }
 
-    let total = Object.keys(context.agents).length;
-
-    // if(valid && offsetx !== undefined && offsety !== undefined){
-    //
-    //   alert(`config 보냄 ${cnt / total * 100}%`)
-    // } else {
-    //   alert(`fixed 다 안됨 ${cnt / total * 100}%`)
-    // }
+    if(totalCount === fixedCount){
+      context.agents && Object.values(context.agents).map((agent, i) => {
+        agentApi.scenarioConfiguration(
+          agent.sysid,
+          offsetX,
+          offsetY,
+          0,
+          `${scenario}/node_${agent.id}.txt`
+        )
+      });
+      alert(`config 보냄 ${fixedCount / totalCount * 100}%`)
+    } else {
+      alert(`fixed 안됨 ${fixedCount / totalCount * 100}%`)
+    }
   }
 
   const handleScenarioSync = () => {
-    let valid = true;
-    let total = Object.keys(context.agents).length;
-    let cnt = 0;
+    if(contextLoading || contextError) return;
+    if(!showStartDetail){
+      setShowStartDetail(true);
+      setShowConfigDetail(false);
+      return
+    } else if(time === null){
+      startTimeReference.current.focus();
+      alert("Set StartTime")
+      return;
+    }
 
-    agentApi.scenarioSync(3);
-    context.agents && Object.values(context.agents).map((agent, i) => {
-      if(agent?.status & (1 << 17) !== 0 && agent?.status & (1 << 18) !== 0) {
-        valid = false;
-        cnt++;
-      } else {
-        valid = false;
-      }
-    });
-
-    // if(valid){
-    //   alert(`start 보냄 ${cnt / total * 100}%`)
-    // } else{
-    //   alert(`config 아직 안됨 ${cnt / total * 100}%`)
-    // }
+    if(totalCount === configCount){
+      agentApi.scenarioSync(time);
+      alert(`start 보냄 ${configCount / totalCount * 100}%`)
+    } else{
+      alert(`config 안됨 ${configCount / totalCount * 100}%`)
+    }
   }
 
   const handleScenarioStop = () => {
@@ -90,14 +118,49 @@ const GcsScenarioModal = ({showScenario}) => {
             <ModalHeaderName>
               Scenario
             </ModalHeaderName>
+            <div>
+              <div>
+                Fixed - {fixedCount / totalCount * 100}%
+              </div>
+              <div>
+                Config - {configCount / totalCount * 100}%
+              </div>
+              <div>
+                offsetX - {offsetX}
+              </div>
+              <div>
+                offsetY - {offsetY}
+              </div>
+            </div>
           </ModalHeader>
           <ModalBody>
             <GcsOrderButton onClick={handleScenarioConfig}>
               CONFIG
             </GcsOrderButton>
+            <ModalInputContainer display={showConfigDetail}>
+              <ModalInputPair>
+                <ModalInputLabel>scenario</ModalInputLabel>
+                <ModalInput
+                  value={scenario || ''}
+                  onChange={(e) => setScenario(e.target.value)}
+                  ref={scenarioNameReference}
+                />
+              </ModalInputPair>
+            </ModalInputContainer>
             <GcsOrderButton onClick={handleScenarioSync}>
               START
             </GcsOrderButton>
+            <ModalInputContainer display={showStartDetail}>
+              <ModalInputPair>
+                <ModalInputLabel>time</ModalInputLabel>
+                <ModalInput
+                  value={time}
+                  type={"number"}
+                  onChange={(e) => setTime(e.target.value)}
+                  ref={startTimeReference}
+                />
+              </ModalInputPair>
+            </ModalInputContainer>
             <GcsOrderButton onClick={handleScenarioStop}>
               STOP
             </GcsOrderButton>

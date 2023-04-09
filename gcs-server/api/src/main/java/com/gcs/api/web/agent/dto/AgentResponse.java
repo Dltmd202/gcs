@@ -21,10 +21,12 @@ public class AgentResponse {
     private Integer battery;
     private NedResponse ned;
     private LlhResponse llh;
+    private NedResponse rtk;
     private VelocityResponse velocity;
     private RotationResponse angle;
     private String color;
     private String complementaryColor;
+    private Long tow;
     private Boolean active = false;
 
     public AgentResponse(AgentDto agent){
@@ -36,8 +38,10 @@ public class AgentResponse {
         this.vehicle = agent.getVehicle();
         this.ip = agent.getIp();
         this.battery = 0;
+        this.tow = 0L;
 
         this.ned = Objects.nonNull(agent.getNed()) ? new NedResponse(agent.getNed()) : NedResponse.defaultInstance;
+        this.rtk = NedResponse.defaultInstance;
         this.llh = Objects.nonNull(agent.getLlh()) ? new LlhResponse(agent.getLlh()) : LlhResponse.defaultInstance;
         this.velocity = Objects.nonNull(agent.getVelocity()) ?
                 new VelocityResponse(agent.getVelocity()) :

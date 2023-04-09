@@ -138,5 +138,14 @@ public class ContextApiController {
         );
     }
 
+    @GetMapping("/setPoint")
+    public ResponseEntity<ApiUtil.ApiResult<Boolean>> isContextRepeatSetPoint(){
+        return ResponseEntity.ok(
+                ApiUtil.success(
+                        contextService.isRepeatedSetPoint()
+                )
+        );
+    }
+
 
 }

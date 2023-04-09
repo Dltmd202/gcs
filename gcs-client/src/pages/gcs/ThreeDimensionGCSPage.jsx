@@ -69,10 +69,11 @@ const ThreeDimensionGCSPage = () => {
             vz: parsedMessage.vz
           },
           rtk: {
-            n: parsedMessage.rtk_n,
-            e: parsedMessage.rtk_e,
-            d: parsedMessage.rtk_d,
-          }
+            y: parsedMessage.rtk_n,
+            x: parsedMessage.rtk_e,
+            z: parsedMessage.rtk_d,
+          },
+          tow: parsedMessage.tow
         }
 
         dispatch(contextStore.actions.update({

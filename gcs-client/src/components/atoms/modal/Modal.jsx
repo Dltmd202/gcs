@@ -49,5 +49,29 @@ export const ModalButton = React.memo(styled(HeaderButton)`
   }
 `)
 
+export const ModalInputPair = React.memo(styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+`)
+
+
+export const ModalInputContainer = React.memo(styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  transition: height 0.3s ease;
+  height: ${props => props.display ? 'auto' : '0px'};
+  overflow: hidden;
+`)
+
+export const ModalInputLabel = React.memo(styled.label`
+  margin-right: 2px;
+`)
+
+export const ModalInput = React.memo(styled.input`
+  
+`)
+
+
 
 export default Modal;

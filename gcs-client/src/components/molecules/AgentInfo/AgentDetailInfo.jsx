@@ -6,9 +6,8 @@ import {FontSize, FontWeight} from "../../../styles/font";
 import {Media} from "../../../styles/media";
 import agentApi from "../../../api/agent";
 import {TreeItem, TreeView} from "@mui/lab";
-import {ExpandMoreSharp} from "@mui/icons-material";
-import {ChevronRight} from "@mui/icons-material";
 import StyledTreeItem from "../../atoms/ThreeView/StyledTreeItem";
+import {agentStatusMask, agentStatusMasking} from "../../../module/coordinate/agentStatus";
 
 const AgentDetailInfo = ({
                      agentObject,
@@ -23,7 +22,8 @@ const AgentDetailInfo = ({
     color,
     battery,
     complementaryColor,
-    angle
+    angle,
+    status
   } = agentObject;
 
   const [drop, isDrop] = useState(true);
@@ -44,7 +44,19 @@ const AgentDetailInfo = ({
     agentApi.disarm(sysid);
   }
 
-  const defualtExpaneded = ["1", "2", "3", "4", "5", "6", "7"]
+  const defualtExpaneded = ["1", "2", "3", "4", "5", "6", "7", "23", "25"]
+
+  const parseStatusDetail = (status) => {
+    const parsedStatus = [];
+
+    for (const mask of agentStatusMask) {
+      if((mask.mask & status) !== 0){
+        parsedStatus.push(mask.name);
+      }
+    }
+
+    return parsedStatus;
+  }
 
 
   return (
@@ -91,8 +103,13 @@ const AgentDetailInfo = ({
                 </StyledTreeItem>
                 <StyledTreeItem nodeId={"3"} labelText="Status" defaultExpanded={true}>
                   <StyledTreeItem
+                    nodeId={"26"}
+                    labelText={"Tow"}
+                    labelInfo={agentObject.tow}
+                  />
+                  <StyledTreeItem
                     nodeId={"4"}
-                    labelText={"NED Coordinate"}
+                    labelText={"Local NED"}
                   >
                     <StyledTreeItem
                       nodeId={"11"} labelText={"X"}
@@ -107,6 +124,26 @@ const AgentDetailInfo = ({
                       labelInfo={agentObject.ned.z.toFixed(2)}
                     />
                   </StyledTreeItem>
+
+                  <StyledTreeItem
+                    nodeId={"25"}
+                    labelText={"RTK NED"}
+                  >
+                    <StyledTreeItem
+                      nodeId={"26"} labelText={"N"}
+                      labelInfo={agentObject.rtk.y.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"27"} labelText={"E"}
+                      labelInfo={agentObject.rtk.x.toFixed(2)}
+                    />
+                    <StyledTreeItem
+                      nodeId={"28"} labelText={"D"}
+                      labelInfo={agentObject.rtk.z.toFixed(2)}
+                    />
+                  </StyledTreeItem>
+
+
 
                   <StyledTreeItem
                     nodeId={"5"}
@@ -161,7 +198,13 @@ const AgentDetailInfo = ({
                   <StyledTreeItem
                     nodeId={"23"} labelText={"Status"}
                     labelInfo={agentObject.status}
-                  />
+                  >
+                    <StyledTreeItem nodeId={"24"} labelText={
+                        parseStatusDetail(agentObject.status).map((st, i) => (
+                          <PlanStatus key={st}>{st}</PlanStatus>
+                        ))}
+                    />
+                  </StyledTreeItem>
                 </StyledTreeItem>
               </>
             )}
@@ -212,6 +255,10 @@ const AgentOrderButton = React.memo(styled(Button)`
     min-height: 30px;
     font-size: ${FontSize.medium};
   }
+`)
+
+const PlanStatus = React.memo(styled.div`
+  text-align: left;
 `)
 
 const AgentInfoContainer = React.memo(styled.div`

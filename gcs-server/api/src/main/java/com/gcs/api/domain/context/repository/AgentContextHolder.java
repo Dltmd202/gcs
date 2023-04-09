@@ -24,7 +24,7 @@ public class AgentContextHolder {
     }
 
     public boolean toggleRepeatedSetPoint(){
-        this.repeatedSetPoint = !this.repeatedHeartbeat;
+        this.repeatedSetPoint = !this.repeatedSetPoint;
         return this.repeatedSetPoint;
     }
 

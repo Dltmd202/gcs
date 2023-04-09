@@ -14,7 +14,8 @@ const contextApi = {
   holdContext: (contextId) => authRequest.post(`/api/context/${contextId}`),
   cleanContext: () => authRequest.delete(`/api/context`),
   isCurrentContext: () => authRequest.get(`/api/context/exist`),
-  toggleSetPoint: () => authRequest.post(`/api/context/setPoint`)
+  toggleSetPoint: () => authRequest.post(`/api/context/setPoint`),
+  isRepeatSetPoint: () => authRequest.get(`/api/context/setPoint`),
 };
 
 export default contextApi;
