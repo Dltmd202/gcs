@@ -10,14 +10,16 @@ import Modal, {
   ModalInputContainer, ModalInputLabel, ModalInputPair
 } from "../../atoms/modal/Modal";
 import {GcsOrderButton} from "./GcsHeader";
+import {agentStatusMask} from "../../../module/coordinate/agentStatus";
 
 const GcsScenarioModal = ({showScenario}) => {
   const [scenario, setScenario] = useState("");
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(10);
   const [showConfigDetail, setShowConfigDetail] = useState(false);
   const [showStartDetail, setShowStartDetail] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [fixedCount, setFixedCount] = useState(0);
+  const [tow, setTow] = useState(0);
   const [configCount, setConfigCount] = useState(0);
 
   const [offsetX, setOffsetX] = useState(null);
@@ -41,11 +43,14 @@ const GcsScenarioModal = ({showScenario}) => {
         if(agent.id === 1){
           setOffsetX(agent.rtk.x);
           setOffsetY(agent.rtk.y);
+          setTow(agent.tow);
         }
-        if(agent?.status & (1 << 9) !== 0) {
+
+        if((agent.status & agentStatusMask[9].mask) !== 0) {
           fixedCnt++;
         }
-        if((agent?.status & (1 << 17) !== 0) && (agent?.status & (1 << 18) !== 0)){
+        if(((agent.status & agentStatusMask[17].mask) !== 0) &&
+          ((agent.status & agentStatusMask[18].mask) !== 0)){
           configCnt++;
         }
       });
@@ -94,7 +99,7 @@ const GcsScenarioModal = ({showScenario}) => {
     }
 
     if(totalCount === configCount){
-      agentApi.scenarioSync(time);
+      agentApi.scenarioSync(time + (tow / 1000));
       alert(`start 보냄 ${configCount / totalCount * 100}%`)
     } else{
       alert(`config 안됨 ${configCount / totalCount * 100}%`)

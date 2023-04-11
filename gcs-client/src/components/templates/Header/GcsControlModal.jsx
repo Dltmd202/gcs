@@ -184,7 +184,7 @@ const GcsControlModal = ({showController}) => {
             </ModalInputPair>
           </ModalInputContainer>
           <GcsOrderButton onClick={toggleRepeatedSetPoint}>
-            Toggle SETPOINT
+            TOGGLE SETPOINT
           </GcsOrderButton>
 
         </ModalBody>

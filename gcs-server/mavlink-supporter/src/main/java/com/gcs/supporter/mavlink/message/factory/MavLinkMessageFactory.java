@@ -7,9 +7,11 @@ import com.MAVLink.common.msg_set_position_target_local_ned;
 import com.MAVLink.minimal.msg_heartbeat;
 import com.MAVLink.swarm.msg_led_control;
 import com.MAVLink.swarm.msg_scenario_cmd;
+import com.MAVLink.swarm.msg_scenario_cmd_start;
 import com.gcs.domain.agent.Agent;
 import com.gcs.domain.coordinate.ned.NedLocatable;
 import com.gcs.error.exception.GcsException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Objects;
