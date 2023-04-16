@@ -38,20 +38,22 @@ public class MavlinkGatewayService {
     public void publishToBrowser(Message<?> message){
         if(message.getPayload() instanceof byte[]) {
             byte[] payload = (byte[]) message.getPayload();
-            MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(payload, payload.length)
-                    .orElse(null);
+            publishToBrowser(payload);
+        }
+    }
 
-//            log.info("{}", mavLinkMessage);
+    public void publishToBrowser(byte[] payload){
+        MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(payload, payload.length)
+                .orElse(null);
 
-            if(mavLinkMessage instanceof msg_monitoring){
-                msg_monitoring monitoring = (msg_monitoring) mavLinkMessage;
-                try{
-                    agentService.updateMove(monitoring.sysid, new MoveableMonitoringAdapter(monitoring));
-                } catch (ApiException e){
-                    log.debug("error", e);
-                }
-                template.convertAndSend("/topic/monitoring", monitoring);
+        if(mavLinkMessage instanceof msg_monitoring){
+            msg_monitoring monitoring = (msg_monitoring) mavLinkMessage;
+            try{
+                agentService.updateMove(monitoring.sysid, new MoveableMonitoringAdapter(monitoring));
+            } catch (ApiException e){
+                log.debug("error", e);
             }
+            template.convertAndSend("/topic/monitoring", monitoring);
         }
     }
 

@@ -162,7 +162,7 @@ public class MavLinkMessageFactory {
         msg.target_component = 0;
         msg.type_mask = MAVLINK_MSG_SET_POSITION_TARGET_LOCAL_NED_POSITION;
         msg.coordinate_frame = MAV_FRAME_LOCAL_NED;
-        msg.time_boot_ms = (int) System.currentTimeMillis();
+        msg.time_boot_ms = 0;
         msg.x = x;
         msg.y = y;
         msg.z = z;
