@@ -22,8 +22,8 @@ const GcsScenarioModal = ({showScenario}) => {
   const [tow, setTow] = useState(0);
   const [configCount, setConfigCount] = useState(0);
 
-  const [offsetX, setOffsetX] = useState(null);
-  const [offsetY, setOffsetY] = useState(null);
+  const [offsetX, setOffsetX] = useState(0);
+  const [offsetY, setOffsetY] = useState(0);
 
   const scenarioNameReference = useRef();
   const startTimeReference = useRef();
@@ -146,7 +146,7 @@ const GcsScenarioModal = ({showScenario}) => {
               <ModalInputPair>
                 <ModalInputLabel>scenario</ModalInputLabel>
                 <ModalInput
-                  value={scenario || ''}
+                  value={scenario}
                   onChange={(e) => setScenario(e.target.value)}
                   ref={scenarioNameReference}
                 />

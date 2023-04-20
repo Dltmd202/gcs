@@ -147,6 +147,8 @@ public class MavLinkService {
 
     @MavLinkOrder
     public Collection<MAVLinkMessage> setScenarioConfigs(float offsetX, float offsetY, float rotation, String filepath){
+        // TODO filter Agent Status Fixed Bit Mask
+
         return contextService.getRunningContext().stream()
                 .map(a -> MavLinkMessageFactory.setScenarioConfigs(
                         a.getSysid(),
@@ -186,6 +188,32 @@ public class MavLinkService {
                 )
                 .collect(Collectors.toList());
     }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> calibrationGyro(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.calibrationGyro(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> calibrationLevel(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.calibrationLevel(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> calibrationAccel(){
+        return contextService.getRunningContext().stream()
+                .map(a -> MavLinkMessageFactory.calibrationAccel(a.getSysid()))
+                .collect(Collectors.toList());
+    }
+
+
+
+
 
     private Collection<MAVLinkMessage> heartBeat(){
         return contextService.getRunningContext().stream()

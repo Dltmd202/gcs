@@ -38,6 +38,9 @@ public class AgentDto implements RealTimeAgent {
     private Rotationable angle;
     private Velociterable velocity;
     private RealTimeKinematic rtk;
+    private int status1;
+    private int status2;
+    private String LEDColor;
     private final String color;
     private final String complementaryColor;
     private short baseSatelliteCount;
@@ -84,6 +87,8 @@ public class AgentDto implements RealTimeAgent {
             String vehicle,
             String ip,
             Integer port,
+            Integer status1,
+            Integer status2,
             LlhLocatable llh,
             NedLocatable ned,
             NedLocatable destination,
@@ -109,6 +114,8 @@ public class AgentDto implements RealTimeAgent {
         this.destination = destination;
         this.angle = angle;
         this.velocity = velocity;
+        this.status1 = status1;
+        this.status2 = status2;
     }
 
     @Override

@@ -329,6 +329,51 @@ class MavLinkMessageFactoryTest {
     @DisplayName("시나리오 리셋 메시지 테스트")
     void emergencyLanding() {
 
+    }
+
+    @Test
+    @DisplayName("자이로 센서 캘리브레이션 테스트")
+    void calibrationGyro(){
+
+    }
+
+    @Test
+    @DisplayName("레벨 센서 캘리브레이션 테스트")
+    void calibrationLevel(){
+
+    }
+
+    @Test
+    @DisplayName("엑셀레이터 캘리브레이션 테스트")
+    void calibrationAccel(){
+
+    }
+
+    @Test
+    @DisplayName("드론의 파라미터 요청 테스트")
+    void requestParamTest(){
+
+    }
+
+
+    @Test
+    @DisplayName("드론의 파라미터 변경 메시지 테스트")
+    void setParamTest(){
+        int sysid = 203;
+        String paramName = "BAT1";
+
+        MAVLinkMessage mavLinkMessage = MavLinkMessageFactory.requestParams(sysid, paramName);
+        byte[] packetData = MAVLinkUtils.getMessage(mavLinkMessage);
+
+        MAVLinkMessage decoded = MAVLinkUtils.getMessage(packetData, packetData.length).get();
+
+
+        assertThat(decoded).isNotNull();
+        assertThat(decoded).isInstanceOf(msg_scenario_cmd.class);
+
+        msg_scenario_cmd msg = (msg_scenario_cmd) decoded;
+
+
 
     }
 }

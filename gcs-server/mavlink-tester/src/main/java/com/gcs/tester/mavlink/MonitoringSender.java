@@ -11,7 +11,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-public class Sender {
+public class MonitoringSender {
     public static void main(String[] args) throws IOException, InterruptedException {
         SocketAddress me = new InetSocketAddress("127.0.0.1", 9755);
         SocketAddress dest = new InetSocketAddress("127.0.0.1", 9750);
