@@ -20,7 +20,7 @@ public enum BatteryCalibration {
     );
 
 
-    private String value;
+    String value;
     private String info;
     private Object defaultValue;
     private int valueType;

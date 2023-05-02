@@ -5,8 +5,12 @@ import com.gcs.api.web.agent.coordinate.llh.dto.LlhResponse;
 import com.gcs.api.web.agent.coordinate.ned.dto.NedResponse;
 import com.gcs.api.web.agent.rotation.RotationResponse;
 import com.gcs.api.web.agent.velocity.dto.VelocityResponse;
+import com.gcs.supporter.mavlink.param.DroneShow;
 import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Getter
@@ -28,6 +32,7 @@ public class AgentResponse {
     private String complementaryColor;
     private Long tow;
     private Boolean active = false;
+    private Map<String, Object> param = new HashMap<>();
 
     public AgentResponse(AgentDto agent){
         this.id = agent.getId();
@@ -56,6 +61,12 @@ public class AgentResponse {
 
         if(Objects.nonNull(agent.getNed()) || Objects.nonNull(agent.getLlh())){
             this.active = true;
+        }
+
+        param = new HashMap<>();
+
+        for (DroneShow value : DroneShow.values()) {
+            param.put(value.getValue(), Float.NaN);
         }
     }
 

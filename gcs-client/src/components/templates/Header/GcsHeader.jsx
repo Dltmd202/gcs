@@ -6,7 +6,7 @@ import Colors from "../../../styles/colors";
 import {useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBell} from "@fortawesome/free-regular-svg-icons";
-import {faCircleInfo, faTriangleExclamation, faCircleXmark, faChevronDown} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import agentApi from "../../../api/agent";
 import HeaderButton from "../../atoms/Button/HeaderButton";
 import Modal, {
@@ -21,14 +21,20 @@ import GcsControlModal from "./GcsControlModal";
 import GcsScenarioModal from "./GcsScenarioModal";
 import GcsAlertModal from "./GcsAlertModal";
 import GcsUserModal from "./GcsUserModal";
+import GcsParameterModal from "./GcsParameterModal";
+import paramApi from "../../../api/param";
 
 const GcsHeader = () => {
   // TODO context selector 사용해도 될지 검토해야함
   const {loading, data: user} = useSelector((state) => state.user);
+  const [paramKeyList, setParamKeyList] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [showScenario, setShowScenario] = useState(false);
   const [showController, setShowController] = useState(false);
   const [showUserController, setShowUserController] = useState(false);
+  const [showParamSet, setShowParamSet] = useState(false);
+  const [loadingParamSet, setLoadingParamSet] = useState(false);
+
 
   const handleUserToggle = () => {
     if(showAlert)
@@ -37,15 +43,21 @@ const GcsHeader = () => {
   }
 
   const handleControllerToggle = () => {
-    if(showScenario)
-      setShowScenario(!showScenario);
-    setShowController(!showController)
+    setShowController(!showController);
+    setShowParamSet(false);
+    setShowScenario(false);
   }
 
   const handleScenarioToggle = () => {
-    if(showController)
-      setShowController(!showController)
+    setShowController(false);
+    setShowParamSet(false);
     setShowScenario(!showScenario);
+  }
+
+  const handleParameterToggle = () => {
+    setShowController(false);
+    setShowParamSet(!showParamSet);
+    setShowScenario(false);
   }
 
   const handleModalToggle = () => {
@@ -54,11 +66,20 @@ const GcsHeader = () => {
     setShowAlert(!showAlert);
   };
 
+  const getParamKeyList = async () => {
+    setLoadingParamSet(true);
+    try{
+      const paramKey = await paramApi.paramKeyList();
+      setParamKeyList(paramKey.data.response);
+    }catch (e){
 
+    }
+    setLoadingParamSet(false);
+  }
 
 
   useEffect(() => {
-
+    getParamKeyList();
   }, [])
 
   return (
@@ -79,7 +100,17 @@ const GcsHeader = () => {
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
-          <GcsScenarioModal showScenario={showScenario} />
+          <GcsScenarioModal showScenario={showScenario}/>
+
+          <ModalDropDown onClick={handleParameterToggle} >
+            <ModalDropDownName>
+              Parameter
+            </ModalDropDownName>
+            <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
+          </ModalDropDown>
+          {!loadingParamSet &&
+            <GcsParameterModal showScenario={showParamSet} paramKeyList={paramKeyList}/>
+          }
         </HeaderOrderContainer>
       </GcsControlContainer>
 

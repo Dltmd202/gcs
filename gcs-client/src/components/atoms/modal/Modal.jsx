@@ -21,6 +21,8 @@ export const Modal = React.memo(styled.div`
 export const ModalHeader = React.memo(styled.div`
   display: flex;
   justify-content: space-between;
+  border-bottom: rgba(90, 90, 90, 0.3) 1px solid;
+  padding-bottom: 5px;
 `)
 
 export const ModalContainer = React.memo(styled.div`

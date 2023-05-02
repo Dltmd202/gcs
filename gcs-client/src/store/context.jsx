@@ -30,6 +30,25 @@ export const context = createSlice({
         state.data.agents[key].position = pos;
       }
     },
+    updateParams: {
+      reducer: (state, action) => {
+        if(state.loading) return;
+
+        const params = action.payload.params;
+        const key = action.payload.key;
+        state.data.agents[key].param = params;
+      }
+    },
+    updateParam: {
+      reducer: (state, action) => {
+        if(state.loading) return;
+
+        const param = action.payload.param;
+        const val = action.payload.val;
+        const key = action.payload.key;
+        state.data.agents[key].param[param] = val;
+      }
+    },
     update: {
       reducer: (state, action) => {
         if(state.loading) return;

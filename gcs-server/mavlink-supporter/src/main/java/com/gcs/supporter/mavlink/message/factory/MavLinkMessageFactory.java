@@ -362,8 +362,8 @@ public class MavLinkMessageFactory {
         msg_param_request_list msg = new msg_param_request_list();
 
         msg.sysid = sysid;
+        msg.target_system = (short) sysid;
         msg.target_component = (short) sysid;
-        msg.target_component = 0;
 
         return msg;
     }
@@ -432,7 +432,6 @@ public class MavLinkMessageFactory {
             msg.param_type = MAV_PARAM_TYPE.MAV_PARAM_TYPE_REAL32;
             float value = (float) paramValue;
             msg.param_value = value;
-            System.out.println("fuck");
 
         } else {
             throw new GcsException("Wrong Parameter Value");

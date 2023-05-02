@@ -36,6 +36,7 @@ public class MavLinkSender {
             msg.forEach(this::send);
         } else if(res instanceof MAVLinkMessage){
             MAVLinkMessage msg = (MAVLinkMessage) res;
+            log.info("{}", msg);
             this.send(msg);
         }
         return res;

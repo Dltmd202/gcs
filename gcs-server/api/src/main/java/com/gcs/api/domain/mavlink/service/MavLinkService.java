@@ -213,8 +213,6 @@ public class MavLinkService {
 
 
 
-
-
     private Collection<MAVLinkMessage> heartBeat(){
         return contextService.getRunningContext().stream()
                 .map(a -> MavLinkMessageFactory.heartBeat(a.getSysid()))

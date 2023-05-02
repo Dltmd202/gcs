@@ -17,7 +17,6 @@ import {useNavigate} from "react-router-dom";
 import Logger from "../../components/molecules/logger/Logger";
 import AgentDetailInfo from "../../components/molecules/AgentInfo/AgentDetailInfo";
 import SimpleDrone from "../../components/atoms/three/SimpleDrone";
-import SimpleDrone2 from "../../components/atoms/three/SimpleDrone2";
 
 const ThreeDimensionGCSPage = () => {
   const navigate = useNavigate();
@@ -70,10 +69,11 @@ const ThreeDimensionGCSPage = () => {
           },
           rtk: {
             y: parsedMessage.rtk_e,
-            x: parsedMessag.rtk_n,
+            x: parsedMessage.rtk_n,
             z: parsedMessage.rtk_d,
           },
-          tow: parsedMessage.tow
+          tow: parsedMessage.tow,
+          param: {}
         }
 
         dispatch(contextStore.actions.update({
@@ -81,6 +81,15 @@ const ThreeDimensionGCSPage = () => {
           agent: agent
         }));
       }, {id: "user"})
+
+      client.subscribe(`/topic/param`, (msg) => {
+        const {sysid, paramId, value} = JSON.parse(msg.body);
+        dispatch(contextStore.actions.updateParam({
+          key: sysid,
+          param: paramId,
+          val: value
+        }))
+      })
     }
   }
 

@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 public class AgentContextDto implements AgentContext {
     private AgentContextConnection connection;
     private final Map<Integer, AgentDto> agents;
+    private Integer rotation;
 
     public AgentContextDto() {
         agents = new HashMap<>();
@@ -32,6 +33,14 @@ public class AgentContextDto implements AgentContext {
 
     public void setConnection(AgentContextConnection connection) {
         this.connection = connection;
+    }
+
+    public void setRotation(int rotation){
+        this.rotation = rotation;
+    }
+
+    public int getRotation(){
+        return rotation;
     }
 
     @Override

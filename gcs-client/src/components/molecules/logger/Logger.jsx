@@ -19,95 +19,6 @@ const Logger = ({
           {content}
         </LoggerBody>
       </Log>
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-      {/*<Log>*/}
-      {/*  <LoggerCategory>*/}
-      {/*    [{category}]*/}
-      {/*  </LoggerCategory>*/}
-      {/*  <LoggerBody>*/}
-      {/*    {content}*/}
-      {/*  </LoggerBody>*/}
-      {/*</Log>*/}
-
     </LoggerContainer>
   )
 }
@@ -116,8 +27,8 @@ const LoggerContainer = React.memo(styled.div`
   position: relative;
   top: -5vh;
   left: 50%;
-  width: 70%;
-  height: 20%;
+  width: 65%;
+  height: 8%;
   overflow: scroll;
   transform: translate(-50%, -100%);
   background: rgba(0, 0, 0, 0.6);

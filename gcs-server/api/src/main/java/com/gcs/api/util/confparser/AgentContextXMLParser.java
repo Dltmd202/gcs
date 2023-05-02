@@ -63,12 +63,14 @@ public class AgentContextXMLParser {
         AgentContextDto agentContext = new AgentContextDto();
 
         String connection = confElement.getAttribute("connection").toLowerCase().trim();
+        int rotation = Integer.parseInt(confElement.getAttribute("rotation").toLowerCase().trim());
 
         if(connection.equals(ROS.getVar())){
             agentContext.setConnection(ROS);
         } else if(connection.equals(MAV_LINK.getVar())){
             agentContext.setConnection(MAV_LINK);
         }
+        agentContext.setRotation(rotation);
 
         NodeList agentsNodeList = confDocument.getChildNodes();
 
