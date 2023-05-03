@@ -92,7 +92,7 @@ const GcsScenarioModal = ({showScenario}) => {
           agent.sysid,
           offsetX,
           offsetY,
-          context.rotation,
+          0,
           `${scenario}/node_${agent.id}.txt`
         )
       });

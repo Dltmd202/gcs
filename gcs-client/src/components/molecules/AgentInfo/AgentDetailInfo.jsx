@@ -131,11 +131,11 @@ const AgentDetailInfo = ({
                   >
                     <StyledTreeItem
                       nodeId={"26"} labelText={"N"}
-                      labelInfo={agentObject.rtk.y.toFixed(2)}
+                      labelInfo={agentObject.rtk.x.toFixed(2)}
                     />
                     <StyledTreeItem
                       nodeId={"27"} labelText={"E"}
-                      labelInfo={agentObject.rtk.x.toFixed(2)}
+                      labelInfo={agentObject.rtk.y.toFixed(2)}
                     />
                     <StyledTreeItem
                       nodeId={"28"} labelText={"D"}

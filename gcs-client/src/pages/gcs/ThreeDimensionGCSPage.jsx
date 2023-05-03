@@ -55,7 +55,7 @@ const ThreeDimensionGCSPage = () => {
           angle: {
             roll: parsedMessage.roll,
             pitch: parsedMessage.pitch,
-            yaw: parsedMessage.yaw,
+            yaw: parsedMessage.head,
           },
           ned: {
             x: parsedMessage.pos_x,
@@ -63,14 +63,19 @@ const ThreeDimensionGCSPage = () => {
             z: parsedMessage.pos_z,
           },
           velocity: {
-            vx: parsedMessage.vx,
-            vy: parsedMessage.vy,
-            vz: parsedMessage.vz
+            vx: 0,
+            vy: 0,
+            vz: 0
           },
           rtk: {
             x: parsedMessage.rtk_n,
             y: parsedMessage.rtk_e,
             z: parsedMessage.rtk_d,
+          },
+          led: {
+            r: parsedMessage.r,
+            g: parsedMessage.g,
+            b: parsedMessage.b,
           },
           tow: parsedMessage.tow,
           param: {}
