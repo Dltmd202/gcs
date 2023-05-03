@@ -13,8 +13,8 @@ import java.net.SocketAddress;
 
 public class MonitoringSender {
     public static void main(String[] args) throws IOException, InterruptedException {
-        SocketAddress me = new InetSocketAddress("192.168.0.16", 9752);
-        SocketAddress dest = new InetSocketAddress("192.168.0.16", 9750);
+        SocketAddress me = new InetSocketAddress("127.0.0.1", 9752);
+        SocketAddress dest = new InetSocketAddress("127.0.0.1", 9750);
 
         DatagramSocket socket = new DatagramSocket(me);
         StringBuilder sb = new StringBuilder();
@@ -23,8 +23,8 @@ public class MonitoringSender {
         MAVLinkMessage monitoring = new msg_monitoring();
         for (i = 0; i < 1; i++) {
             monitoring = MonitoringFactory.make(
-                    1,
-                    0.0F + 0.0F,
+                    126,
+                    1.0F + 0.0F,
                     0.0F + 0.0F,
                     -3.0F - 0.5F,
                     -0.0F,

@@ -68,8 +68,8 @@ const ThreeDimensionGCSPage = () => {
             vz: parsedMessage.vz
           },
           rtk: {
-            y: parsedMessage.rtk_e,
             x: parsedMessage.rtk_n,
+            y: parsedMessage.rtk_e,
             z: parsedMessage.rtk_d,
           },
           tow: parsedMessage.tow,

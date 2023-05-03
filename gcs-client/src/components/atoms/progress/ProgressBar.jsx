@@ -10,7 +10,7 @@ const ProgressBar = ({
     <ProgressContainer>
       <ProgressFiller color={color} progress={progress}>
         <ProgressLabel>
-          {`${progress}%`}
+          {`${progress}`}
         </ProgressLabel>
       </ProgressFiller>
     </ProgressContainer>

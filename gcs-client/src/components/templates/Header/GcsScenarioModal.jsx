@@ -12,6 +12,7 @@ import Modal, {
 import {GcsOrderButton} from "./GcsHeader";
 import {agentStatusMask} from "../../../module/coordinate/agentStatus";
 import ProgressBar from "../../atoms/progress/ProgressBar";
+import Colors from "../../../styles/colors";
 
 const GcsScenarioModal = ({showScenario}) => {
   const [scenario, setScenario] = useState("");
@@ -201,13 +202,13 @@ const GcsScenarioModal = ({showScenario}) => {
               <StatusRow>
                 <StatusLabel>Fixed</StatusLabel>
                 <StatusValue>
-                  <ProgressBar color={'#00FF00'} progress={fixedCount / totalCount * 100}/>
+                  <ProgressBar color={Colors.point} progress={`${fixedCount / totalCount * 100}%`}/>
                 </StatusValue>
               </StatusRow>
               <StatusRow>
                 <StatusLabel>Config</StatusLabel>
                 <StatusValue>
-                  <ProgressBar color={'#00FF00'} progress={configCount / totalCount * 100}/>
+                  <ProgressBar color={Colors.point} progress={`${configCount / totalCount * 100}%`}/>
                 </StatusValue>
               </StatusRow>
             </ModalBodyStatus>

@@ -13,7 +13,7 @@ function SimpleDrone({
   const meshRef = useRef()
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false)
-  const {active, angle, ned, color, complementaryColor} = agentObj
+  const {active, angle, rtk, color, complementaryColor} = agentObj
   const head = new BoxGeometry(0.1, 0.4, 0.4);
   const body = new SphereGeometry(0.5, 16, 16);
 
@@ -22,7 +22,7 @@ function SimpleDrone({
   return (
     <group
       visible={active}
-      position={[ned.x, -ned.z, ned.y]}
+      position={[rtk.x, -rtk.z, rtk.y]}
       scale={1}
       onClick={onClick}
       onPointerOver={(event) => hover(true)}

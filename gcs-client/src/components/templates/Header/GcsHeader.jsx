@@ -6,7 +6,7 @@ import Colors from "../../../styles/colors";
 import {useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBell} from "@fortawesome/free-regular-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faGamepad, faClapperboard, faGears } from "@fortawesome/free-solid-svg-icons";
 import agentApi from "../../../api/agent";
 import HeaderButton from "../../atoms/Button/HeaderButton";
 import Modal, {
@@ -88,7 +88,7 @@ const GcsHeader = () => {
         <HeaderOrderContainer>
           <ModalDropDown onClick={handleControllerToggle} >
             <ModalDropDownName>
-              Control
+              <GcsDropDownIcon icon={faGamepad} size={"bg"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
@@ -96,7 +96,7 @@ const GcsHeader = () => {
 
           <ModalDropDown onClick={handleScenarioToggle} >
             <ModalDropDownName>
-              Scenario
+              <GcsDropDownIcon icon={faClapperboard}color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
@@ -104,7 +104,7 @@ const GcsHeader = () => {
 
           <ModalDropDown onClick={handleParameterToggle} >
             <ModalDropDownName>
-              Parameter
+              <GcsDropDownIcon icon={faGears} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
