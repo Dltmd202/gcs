@@ -12,16 +12,23 @@ import styled from "styled-components";
 import contextApi from "../../../api/context";
 
 const GcsControlModal = ({showController}) => {
-  const [x, setX] = useState(null);
-  const [y, setY] = useState(null);
-  const [z, setZ] = useState(null);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  const [z, setZ] = useState(0);
+  const [r, setR] = useState(0);
+  const [g, setG] = useState(0);
+  const [b, setB] = useState(0);
   const [isRepeatedSetPoint, setRepeatedSetPoint] = useState(false);
   const [showPointDetail, setShowPointDetail] = useState(false);
   const [showTakeoffDetail, setTakeoffDetail] = useState(false);
+  const [showLEDDetail, setLEDDetail] = useState(false);
   const setPointXReference = useRef();
   const setPointYReference = useRef();
   const setPointZReference = useRef();
   const takOffAltitudeReference = useRef();
+  const setLEDRReference = useRef();
+  const setLEDGReference = useRef();
+  const setLEDBReference = useRef();
 
   const fetchRepeatPoint = async () => {
     try{
@@ -40,6 +47,7 @@ const GcsControlModal = ({showController}) => {
     if(!showTakeoffDetail){
       setTakeoffDetail(true);
       setShowPointDetail(false);
+      setLEDDetail(false);
       return;
     } else if(z === null) {
       takOffAltitudeReference.current.focus();
@@ -74,6 +82,7 @@ const GcsControlModal = ({showController}) => {
     if(!showPointDetail){
       setShowPointDetail(true);
       setTakeoffDetail(false);
+      setLEDDetail(false);
       return;
     } else if(x === null){
       setPointXReference.current.focus();
@@ -92,7 +101,13 @@ const GcsControlModal = ({showController}) => {
   }
 
   const handleGlobalLED = () => {
-    agentApi.globalLED(0, 0, 0, 0, 0, 1);
+    if(!showLEDDetail){
+      setShowPointDetail(false);
+      setTakeoffDetail(false);
+      setLEDDetail(true);
+      return;
+    }
+    agentApi.globalLED(0, r, g, b, 0, 1);
   }
 
   const toggleRepeatedSetPoint = async () => {
@@ -151,6 +166,35 @@ const GcsControlModal = ({showController}) => {
           <GcsOrderButton onClick={handleGlobalLED}>
             LED
           </GcsOrderButton>
+          <ModalInputContainer display={showLEDDetail}>
+            <ModalInputPair>
+              <ModalInputLabel>R</ModalInputLabel>
+              <ModalInput
+                value={r || ''}
+                onChange={(e) => setR(e.target.value)}
+                type={"number"}
+                ref={setLEDRReference}
+              />
+            </ModalInputPair>
+            <ModalInputPair>
+              <ModalInputLabel>G</ModalInputLabel>
+              <ModalInput
+                value={g || ''}
+                onChange={(e) => setG(e.target.value)}
+                type={"number"}
+                ref={setLEDGReference}
+              />
+            </ModalInputPair>
+            <ModalInputPair>
+              <ModalInputLabel>B</ModalInputLabel>
+              <ModalInput
+                value={b || ''}
+                onChange={(e) => setG(e.target.value)}
+                type={"number"}
+                ref={setLEDBReference}
+              />
+            </ModalInputPair>
+          </ModalInputContainer>
           <GcsOrderButton onClick={handleSetPoint}>
             SET POINT
           </GcsOrderButton>

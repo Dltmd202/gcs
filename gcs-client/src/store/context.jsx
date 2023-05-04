@@ -55,6 +55,7 @@ export const context = createSlice({
 
         const {agent, key} = action.payload;
 
+        state.data.agents[key].led = agent.led;
         state.data.agents[key].tow = agent.tow;
         state.data.agents[key].battery = agent.battery;
         state.data.agents[key].angle = agent.angle;

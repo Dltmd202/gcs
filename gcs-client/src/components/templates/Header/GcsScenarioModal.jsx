@@ -17,6 +17,8 @@ import Colors from "../../../styles/colors";
 const GcsScenarioModal = ({showScenario}) => {
   const [scenario, setScenario] = useState("");
   const [time, setTime] = useState(10);
+  const [leftTime, setLeftTime] = useState(-1);
+  const [isWaiting, setWaiting] = useState(false);
   const [showConfigDetail, setShowConfigDetail] = useState(false);
   const [showStartDetail, setShowStartDetail] = useState(false);
   const [showAutoSort, setShowAutoSort] = useState(false);
@@ -73,6 +75,27 @@ const GcsScenarioModal = ({showScenario}) => {
     }
   }, [context])
 
+  useEffect(() => {
+    let interval = null;
+    if(isWaiting){
+      interval = setInterval(() => {
+        setLeftTime(prevTime => {
+          if(prevTime < 0){
+            setWaiting(false);
+            setLeftTime(-1);
+            return 0;
+          } else{
+            return prevTime - 1000;
+          }
+        });
+      }, 1000);
+    } else {
+      clearInterval(interval)
+    }
+
+    return () => clearInterval(interval)
+  }, [isWaiting])
+
   const handleScenarioConfig = () => {
     if(!showConfigDetail){
       setShowStartDetail(false);
@@ -117,6 +140,8 @@ const GcsScenarioModal = ({showScenario}) => {
 
     if(totalCount === configCount){
       agentApi.scenarioSync(time + (tow / 1000));
+      setLeftTime(time * 1000);
+      setWaiting(true);
       alert(`start 보냄 ${configCount / totalCount * 100}%`)
     } else{
       alert(`config 안됨 ${configCount / totalCount * 100}%`)
@@ -188,6 +213,9 @@ const GcsScenarioModal = ({showScenario}) => {
             <ModalHeaderName>
               Scenario
             </ModalHeaderName>
+            <div>
+              {leftTime >= 0 ? leftTime / 1000 : ""}
+            </div>
           </ModalHeader>
           <ModalBody>
             <ModalBodyStatus>

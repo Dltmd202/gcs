@@ -48,6 +48,7 @@ const ThreeDimensionGCSPage = () => {
     client.onConnect = () => {
       client.subscribe('/topic/monitoring', (msg) => {
         const parsedMessage = JSON.parse(msg.body);
+        console.log(parsedMessage);
         const agent = {
           sysid: parsedMessage.sysid,
           battery: parsedMessage.battery,

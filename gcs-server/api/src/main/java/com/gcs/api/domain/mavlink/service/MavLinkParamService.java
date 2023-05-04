@@ -9,6 +9,7 @@ import com.gcs.supporter.mavlink.param.ParameterKeyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,13 @@ public class MavLinkParamService {
     @MavLinkOrder
     public MAVLinkMessage paramList(int sysid){
         return MavLinkMessageFactory.parameterList(sysid);
+    }
+
+    @MavLinkOrder
+    public Collection<MAVLinkMessage> droneShowParamList(int sysid){
+        return Arrays.stream(DroneShow.values())
+                .map(p -> MavLinkMessageFactory.requestParams(sysid, p.getValue()))
+                .collect(Collectors.toList());
     }
 
     @MavLinkOrder

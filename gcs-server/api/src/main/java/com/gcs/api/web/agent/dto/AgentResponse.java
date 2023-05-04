@@ -1,5 +1,6 @@
 package com.gcs.api.web.agent.dto;
 
+import com.gcs.api.web.agent.led.LedResponse;
 import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.api.web.agent.coordinate.llh.dto.LlhResponse;
 import com.gcs.api.web.agent.coordinate.ned.dto.NedResponse;
@@ -28,6 +29,7 @@ public class AgentResponse {
     private NedResponse rtk;
     private VelocityResponse velocity;
     private RotationResponse angle;
+    private LedResponse led;
     private String color;
     private String complementaryColor;
     private Long tow;
@@ -48,6 +50,7 @@ public class AgentResponse {
         this.ned = Objects.nonNull(agent.getNed()) ? new NedResponse(agent.getNed()) : NedResponse.defaultInstance;
         this.rtk = NedResponse.defaultInstance;
         this.llh = Objects.nonNull(agent.getLlh()) ? new LlhResponse(agent.getLlh()) : LlhResponse.defaultInstance;
+        this.led = new LedResponse(-1, -1, -1);
         this.velocity = Objects.nonNull(agent.getVelocity()) ?
                 new VelocityResponse(agent.getVelocity()) :
                 VelocityResponse.defaultInstance;

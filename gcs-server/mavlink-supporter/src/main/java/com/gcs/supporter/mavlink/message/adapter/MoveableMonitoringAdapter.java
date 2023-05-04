@@ -30,7 +30,7 @@ public class MoveableMonitoringAdapter implements Moveable {
             this.angle = Rotation.builder()
                     .roll(msg.roll)
                     .pitch(msg.pitch)
-                    .yaw(msg.yaw)
+                    .yaw(msg.head)
                     .build();
         return angle;
     }
@@ -39,9 +39,9 @@ public class MoveableMonitoringAdapter implements Moveable {
     public Velociterable getVelocity() {
         if(Objects.isNull(velocity))
             this.velocity = Velocity.builder()
-                    .vx(msg.vx)
-                    .vy(msg.vy)
-                    .vz(msg.vz)
+                    .vx(0)
+                    .vy(0)
+                    .vz(0)
                     .build();
         return velocity;
     }

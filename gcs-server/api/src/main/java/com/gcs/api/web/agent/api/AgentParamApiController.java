@@ -37,6 +37,14 @@ public class AgentParamApiController {
                 .body(null);
     }
 
+    @GetMapping("/ds/{sysid}")
+    public ResponseEntity<Void> requestDroneShowParam(@PathVariable int sysid){
+        mavLinkParamService.droneShowParamList(sysid);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(null);
+    }
 
     @GetMapping
     public ResponseEntity<Void> requestParam(){

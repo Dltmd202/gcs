@@ -88,7 +88,7 @@ const GcsHeader = () => {
         <HeaderOrderContainer>
           <ModalDropDown onClick={handleControllerToggle} >
             <ModalDropDownName>
-              <GcsDropDownIcon icon={faGamepad} size={"bg"} color={Colors.point}/>
+              <GcsDropDownIcon icon={faGamepad} size={"lg"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
@@ -96,7 +96,7 @@ const GcsHeader = () => {
 
           <ModalDropDown onClick={handleScenarioToggle} >
             <ModalDropDownName>
-              <GcsDropDownIcon icon={faClapperboard}color={Colors.point}/>
+              <GcsDropDownIcon icon={faClapperboard} size={"lg"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
@@ -104,7 +104,7 @@ const GcsHeader = () => {
 
           <ModalDropDown onClick={handleParameterToggle} >
             <ModalDropDownName>
-              <GcsDropDownIcon icon={faGears} color={Colors.point}/>
+              <GcsDropDownIcon icon={faGears} size={"lg"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>

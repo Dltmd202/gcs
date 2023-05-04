@@ -28,6 +28,7 @@ public enum DroneShow implements ParamameterKey {
             MAV_PARAM_TYPE_INT32,
             ""
     ),
+
     MIS_TAKEOFF_ALT(
             "MIS_TAKEOFF_ALT",
             "Take-off altitude",
@@ -48,6 +49,34 @@ public enum DroneShow implements ParamameterKey {
             8.0F,
             MAV_PARAM_TYPE_REAL32,
             "%"
+    ),
+    MPC_LAND_SPEED(
+            "MPC_LAND_SPEED",
+            "Landing descend rate",
+            0.7F,
+            MAV_PARAM_TYPE_REAL32,
+            "m/s"
+    ),
+    MPC_LAND_ALT1(
+            "MPC_LAND_ALT1",
+            "Altitude for 1. step of slow landing(descend)",
+            10.0F,
+            MAV_PARAM_TYPE_REAL32,
+            "m"
+    ),
+    MPC_LAND_ALT2(
+            "MPC_LAND_ALT2",
+            "Altitude for 2. step of slow landing(descend)",
+            5.0F,
+            MAV_PARAM_TYPE_REAL32,
+            "m"
+    ),
+    MPC_LAND_CRWL(
+            "MPC_LAND_CRWL",
+            "Land crawl descend rate. Used below",
+            5.0F,
+            MAV_PARAM_TYPE_REAL32,
+            "m"
     ),
     MPC_TILTMAX_AIR(
             "MPC_TILTMAX_AIR",
@@ -127,7 +156,7 @@ public enum DroneShow implements ParamameterKey {
                ""
     ),
     MPC_Z_VEL_D_ACC(
-               "MPC_Z_VEL_D",
+               "MPC_Z_VEL_D_ACC",
                "Differential gain vertical velocity error",
                0.000F,
                MAV_PARAM_TYPE_REAL32,
@@ -188,6 +217,13 @@ public enum DroneShow implements ParamameterKey {
                 0.0030F,
                 MAV_PARAM_TYPE_REAL32,
                 ""
+    ),
+    MC_ROLLRATE_MAX(
+                 "MC_ROLLRATE_MAX",
+                "Max roll rate",
+                220.0,
+                MAV_PARAM_TYPE_REAL32,
+                "deg/s"
     ),
     MC_PITCH_P(
               "MC_PITCH_P",
@@ -252,72 +288,9 @@ public enum DroneShow implements ParamameterKey {
                   MAV_PARAM_TYPE_REAL32,
                   "deg/s"
     ),
-    INAV_W_MOC_P(
-                "INAV_W_MOC_P",
-                "",
-                10.0F,
-                MAV_PARAM_TYPE_REAL32,
-                ""
-    ),
-    INAV_W_Z_BARO(
-                 "INAV_W_Z_BARO",
-                 "",
-                 0.5F,
-                 MAV_PARAM_TYPE_REAL32,
-                 ""
-    ),
-    INAV_W_XY_RTK_P(
-                   "INAV_W_XY_RTK_P",
-                   "",
-                   1.0F,
-                   MAV_PARAM_TYPE_REAL32,
-                   ""
-    ),
-    INAV_W_XY_RTK_V(
-                   "INAV_W_XY_RTK_V",
-                   "",
-                   2.0F,
-                   MAV_PARAM_TYPE_REAL32,
-                   ""
-    ),
-    INAV_W_Z_RTK_P(
-                  "INAV_W_Z_RTK_P",
-                  "",
-                  2.0F,
-                  MAV_PARAM_TYPE_REAL32,
-                  ""
-    ),
-    INAV_W_Z_RTK_V(
-                  "INAV_W_Z_RTK_V",
-                  "",
-                  2.0F,
-                  MAV_PARAM_TYPE_REAL32,
-                  ""
-    ),
-    INAV_W_ACC_BIAS(
-                   "INAV_W_ACC_BIAS",
-                   "",
-                   0.05F,
-                   MAV_PARAM_TYPE_REAL32,
-                   ""
-    ),
-    INAV_DELAY_GPS(
-                  "INAV_DELAY_GPS",
-                  "",
-                  0.15F,
-                  MAV_PARAM_TYPE_REAL32,
-                  ""
-    ),
-    SYS_COMPANION(
-                 "SYS_COMPANION",
-                 "",
-                 0,
-                 MAV_PARAM_TYPE_INT32,
-                 ""
-    ),
     SYS_MC_EST_GROUP(
                     "SYS_MC_EST_GROUP",
-                    "",
+                    "Set multicopter estimator group",
                     0,
                     MAV_PARAM_TYPE_INT32,
                     ""
@@ -328,13 +301,6 @@ public enum DroneShow implements ParamameterKey {
              0.15F,
              MAV_PARAM_TYPE_REAL32,
              ""
-    ),
-    COM_ARM_MAG(
-               "COM_ARM_MAG",
-               "",
-               0.7F,
-               MAV_PARAM_TYPE_REAL32,
-               ""
     ),
     COM_ARM_IMU_ACC(
                    "COM_ARM_IMU_ACC",
@@ -360,7 +326,7 @@ public enum DroneShow implements ParamameterKey {
     CBRK_VELPOSERR(
                   "CBRK_VELPOSERR",
                   "Circuit breaker for position error check",
-                  201607,
+                  1,
                   MAV_PARAM_TYPE_INT32,
                   ""
     ),
@@ -370,6 +336,34 @@ public enum DroneShow implements ParamameterKey {
                  2400.0F,
                  MAV_PARAM_TYPE_REAL32,
                  "s"
+    ),
+    COM_FLTMODE1(
+                 "COM_FLTMODE1",
+                 "First flightmode slot(1000-1160)",
+                 0,
+                 MAV_PARAM_TYPE_INT32,
+                 ""
+    ),
+    COM_FLTMODE4(
+                 "COM_FLTMODE4",
+                 "Fourth flightmode slot(1480-1640)",
+                 2,
+                 MAV_PARAM_TYPE_INT32,
+                 ""
+    ),
+    COM_FLTMODE6(
+                 "COM_FLTMODE4",
+                 "Sixth flightmode slot(1800-2000)",
+                 11,
+                 MAV_PARAM_TYPE_INT32,
+                 ""
+    ),
+    EKF2_HGT_MODE(
+            "EKF2_HGT_MODE",
+            "Barometric pressure Determines the primary source of height data used by the EKF",
+            0.5F,
+            MAV_PARAM_TYPE_REAL32,
+            "m"
     ),
     EKF2_GPS_P_NOISE(
             "EKF2_GPS_P_NOISE",
