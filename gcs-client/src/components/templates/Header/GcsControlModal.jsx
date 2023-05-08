@@ -18,6 +18,7 @@ const GcsControlModal = ({showController}) => {
   const [r, setR] = useState(0);
   const [g, setG] = useState(0);
   const [b, setB] = useState(0);
+  const [bright, setBright] = useState(0);
   const [isRepeatedSetPoint, setRepeatedSetPoint] = useState(false);
   const [showPointDetail, setShowPointDetail] = useState(false);
   const [showTakeoffDetail, setTakeoffDetail] = useState(false);
@@ -29,6 +30,7 @@ const GcsControlModal = ({showController}) => {
   const setLEDRReference = useRef();
   const setLEDGReference = useRef();
   const setLEDBReference = useRef();
+  const setLEDBrightReference = useRef();
 
   const fetchRepeatPoint = async () => {
     try{
@@ -192,6 +194,15 @@ const GcsControlModal = ({showController}) => {
                 onChange={(e) => setB(e.target.value)}
                 type={"number"}
                 ref={setLEDBReference}
+              />
+            </ModalInputPair>
+            <ModalInputPair>
+              <ModalInputLabel>Brightness</ModalInputLabel>
+              <ModalInput
+                value={bright || ''}
+                onChange={(e) => setBright(e.target.value)}
+                type={"number"}
+                ref={setLEDBrightReference}
               />
             </ModalInputPair>
           </ModalInputContainer>

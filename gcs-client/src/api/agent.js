@@ -19,6 +19,8 @@ const agentApi = {
       `/api/agent/${sysid}/destination?x=${x}&y=${y}&z=${z}`),
     globalDestination: (x, y, z) => authRequest.post(
       `/api/agent/destination?x=${x}&y=${y}&z=${z}`),
+    globalDirectionDestination: (x, y, z, yaw) => authRequest.post(
+      `/api/agent/destination?x=${x}&y=${y}&z=${z}&yaw=${yaw}`),
     globalScenarioConfiguration: (x, y, rotation, path) => authRequest.post(
       `/api/scenario?x=${x}&y=${y}&rot=${rotation}&path=${path}`),
     scenarioConfiguration: (sysid, x, y, rotation, path) => authRequest.post(

@@ -58,9 +58,13 @@ const GcsScenarioModal = ({showScenario}) => {
 
       context.agents && Object.values(context.agents).map((agent, i) => {
         if(agent.id === 1 && !hasSentConfig){
-          setOffsetX(agent.rtk.x);
-          setOffsetY(agent.rtk.y);
-          setTow(agent.tow);
+          if(!hasSentConfig){
+            setOffsetX(agent.rtk.x);
+            setOffsetY(agent.rtk.y);
+          }
+          if(!isWaiting){
+            setTow(agent.tow);
+          }
         }
 
         if((agent.status & agentStatusMask[9].mask) !== 0) {
@@ -273,9 +277,6 @@ const GcsScenarioModal = ({showScenario}) => {
             </GcsOrderButton>
             <GcsOrderButton onClick={handleScenarioReset}>
               RESET
-            </GcsOrderButton>
-            <GcsOrderButton onClick={handleAutoSorting}>
-              Auto Sort
             </GcsOrderButton>
             <ModalInputContainer display={showAutoSort}>
               <ModalInputPair>

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/agent")
@@ -134,9 +136,11 @@ public class AgentApiController {
     public ResponseEntity<Void> destination(
             @RequestParam(name = "x") Float x,
             @RequestParam(name = "y") Float y,
-            @RequestParam(name = "z") Float z
+            @RequestParam(name = "z") Float z,
+            @RequestParam(name = "yaw", required = false) Float yaw
     ){
-        mavLinkService.setDestination(x, y, z);
+        if(Objects.isNull(yaw)) mavLinkService.setDestination(x, y, z);
+        else mavLinkService.setDestination(x, y, z, yaw);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(null);

@@ -35,6 +35,16 @@ public class AgentDto implements RealTimeAgent {
     private LlhLocatable llh;
     private NedLocatable ned;
     private NedLocatable destination;
+
+    public float getDestYaw() {
+        return destYaw;
+    }
+
+    public void setDestYaw(float destYaw) {
+        this.destYaw = destYaw;
+    }
+
+    private float destYaw = 0.F;
     private Rotationable angle;
     private Velociterable velocity;
     private RealTimeKinematic rtk;

@@ -3,6 +3,7 @@ package com.gcs.api.domain.mavlink.service;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.api.domain.context.service.AgentContextService;
+import com.gcs.domain.agent.service.AgentService;
 import com.gcs.domain.coordinate.ned.NedCoordinate;
 import com.gcs.supporter.mavlink.annotation.MavLinkOrder;
 import com.gcs.supporter.mavlink.message.factory.MavLinkMessageFactory;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MavLinkService {
     private final AgentContextService contextService;
+    private final AgentService agentService;
 
     @MavLinkOrder
     public MAVLinkMessage arm(int sysid){
@@ -50,6 +52,11 @@ public class MavLinkService {
     @MavLinkOrder
     public MAVLinkMessage setPosition(int sysid, float x, float y, float z){
         return MavLinkMessageFactory.setPoint(sysid, x, y, z);
+    }
+
+    @MavLinkOrder
+    public MAVLinkMessage setPosition(int sysid, float x, float y, float z, float yaw){
+        return MavLinkMessageFactory.setPoint(sysid, x, y, z, yaw);
     }
 
     @MavLinkOrder
@@ -94,9 +101,20 @@ public class MavLinkService {
         return messages;
     }
 
+    public void setDestination(float x, float y, float z, float yaw){
+        contextService.getRunningContext().stream()
+                .forEach(a -> {
+                    a.setDestination(new NedCoordinate(x, y, z));
+                    a.setDestYaw(yaw);
+                });
+    }
+
     public void setDestination(float x, float y, float z){
         contextService.getRunningContext().stream()
-                .forEach(a -> a.setDestination(new NedCoordinate(x, y, z)));
+                .forEach(a -> {
+                    a.setDestination(new NedCoordinate(x, y, z));
+                    a.setDestYaw(a.getYaw());
+                });
     }
 
     @MavLinkOrder
@@ -221,7 +239,7 @@ public class MavLinkService {
 
     private Collection<MAVLinkMessage> setPoint(){
         return contextService.getRunningContext().stream()
-                .map(a -> MavLinkMessageFactory.setPoint(a, a.getDestination()))
+                .map(a -> MavLinkMessageFactory.setPoint(a, a.getDestination(), a.getDestYaw()))
                 .collect(Collectors.toList());
     }
 }

@@ -20,6 +20,7 @@ const GcsDeployModal = ({showAutoSort}) => {
   const [gridY, setGridY] = useState(5);
   const [offSetX, setOffsetX] = useState(0);
   const [offSetY, setOffsetY] = useState(0);
+  const [offSetHead, setOffSetHead] = useState(0);
   const [gridInterval, setGridInterval] = useState(3);
   const [readyToStart, setReadyToStart] = useState(false);
   const [idIndex, setIdIndex] = useState({});
@@ -49,26 +50,30 @@ const GcsDeployModal = ({showAutoSort}) => {
 
   const handleTakeOffButton = (id, sysid) => {
     agentApi.globalDisarm();
-    console.log("fuck1")
 
     setTimeout(() => {
       agentApi.offboard(sysid);
-      console.log("fuck2")
 
       setTimeout(() => {
-        agentApi.globalDestination(0, 0, -1);
-        console.log("fuck3")
+        agentApi.globalDestination(0, 0, -1.5);
 
         setTimeout(() => {
           agentApi.arm(sysid);
-          console.log("fuck4")
         }, 1000);
       }, 1000);
     }, 1000);
   }
 
   const handleMoveButton = (id, sysid) => {
-    agentApi.globalDestination(0, 0, -1);
+    agentApi.globalDirectionDestination(
+      getLocalDestX(id, sysid),
+      getLocalDestY(id, sysid),
+      -1.5,
+      offSetHead);
+  }
+
+  const handleRebootButton = (id, sysid) => {
+    agentApi.reboot(sysid);
   }
 
   const handleLandButton = (id, sysid) => {
@@ -85,6 +90,7 @@ const GcsDeployModal = ({showAutoSort}) => {
         if(agent.id === 1){
           setOffsetX(agent.rtk.x);
           setOffsetY(agent.rtk.y);
+          setOffSetHead(agent.angle.yaw);
         }
       });
     }
@@ -102,7 +108,6 @@ const GcsDeployModal = ({showAutoSort}) => {
     const rtkDestX = getRTKDestinationX(id);
     const rtkCurrentX = context.agents[sysid].rtk.x;
 
-    console.log(`localDestition X -[${id}]: rtkDestX: ${rtkDestX}, rtkCurrentX: ${rtkCurrentX} -> ${context.agents[sysid].ned.x + (rtkDestX - rtkCurrentX)}`)
     return context.agents[sysid].ned.x + (rtkDestX - rtkCurrentX);
   }
 
@@ -172,25 +177,29 @@ const GcsDeployModal = ({showAutoSort}) => {
                   <DeployStatusTheadTr>
                     <DeployStatusTheadTd rowSpan={3}>id</DeployStatusTheadTd>
                     <DeployStatusTheadTd rowSpan={3}>sysid</DeployStatusTheadTd>
-                    <DeployStatusTheadTd colSpan={4}>RTK</DeployStatusTheadTd>
-                    <DeployStatusTheadTd colSpan={4}>LOCAL</DeployStatusTheadTd>
-                    <DeployStatusTheadTd colSpan={3} rowSpan={3}>Control</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={6}>RTK</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={6}>LOCAL</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={4} rowSpan={3}>Control</DeployStatusTheadTd>
                   </DeployStatusTheadTr>
                   <DeployStatusTheadTr>
-                    <DeployStatusTheadTd colSpan={2}>src</DeployStatusTheadTd>
-                    <DeployStatusTheadTd colSpan={2}>dest</DeployStatusTheadTd>
-                    <DeployStatusTheadTd colSpan={2}>src</DeployStatusTheadTd>
-                    <DeployStatusTheadTd colSpan={2}>dest</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={3}>src</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={3}>dest</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={3}>src</DeployStatusTheadTd>
+                    <DeployStatusTheadTd colSpan={3}>dest</DeployStatusTheadTd>
                   </DeployStatusTheadTr>
                   <DeployStatusTheadTr>
                     <DeployStatusTheadTd>X</DeployStatusTheadTd>
                     <DeployStatusTheadTd>Y</DeployStatusTheadTd>
+                    <DeployStatusTheadTd>Z</DeployStatusTheadTd>
                     <DeployStatusTheadTd>X</DeployStatusTheadTd>
                     <DeployStatusTheadTd>Y</DeployStatusTheadTd>
+                    <DeployStatusTheadTd>Z</DeployStatusTheadTd>
                     <DeployStatusTheadTd>X</DeployStatusTheadTd>
                     <DeployStatusTheadTd>Y</DeployStatusTheadTd>
+                    <DeployStatusTheadTd>Z</DeployStatusTheadTd>
                     <DeployStatusTheadTd>X</DeployStatusTheadTd>
                     <DeployStatusTheadTd>Y</DeployStatusTheadTd>
+                    <DeployStatusTheadTd>Z</DeployStatusTheadTd>
                   </DeployStatusTheadTr>
                 </DeployStatusThead>
                 <DeployStatusTbody>
@@ -203,25 +212,28 @@ const GcsDeployModal = ({showAutoSort}) => {
                         <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.rtk.x.toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.rtk.y.toFixed(2)}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>{agent.rtk.z.toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>-</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.ned.x.toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.ned.y.toFixed(2)}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>{agent.ned.z.toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{getLocalDestX(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{getLocalDestY(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
-                        {agent.id !== 1 && (
-                          <>
-                            <DeployStatusTbodyTd close={true}>
-                              <button onClick={() => handleTakeOffButton(agent.id, agent.sysid)}>takeoff</button>
-                            </DeployStatusTbodyTd>
-                            <DeployStatusTbodyTd close={true}>
-                              <button onClick={() => handleMoveButton(agent.id, agent.sysid)}>move</button>
-                            </DeployStatusTbodyTd>
-                            <DeployStatusTbodyTd close={true}>
-                              <button onClick={() => handleLandButton(agent.id, agent.sysid)}>land</button>
-                            </DeployStatusTbodyTd>
-                          </>
-                        )}
+                        <DeployStatusTbodyTd>-</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd close={true}>
+                          <button onClick={() => handleRebootButton(agent.id, agent.sysid)}>Reboot</button>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd close={true}>
+                          <button onClick={() => handleTakeOffButton(agent.id, agent.sysid)}>takeoff</button>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd close={true}>
+                          <button onClick={() => handleMoveButton(agent.id, agent.sysid)}>move</button>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd close={true}>
+                          <button onClick={() => handleLandButton(agent.id, agent.sysid)}>land</button>
+                        </DeployStatusTbodyTd>
                       </DeployStatusTbodyTr>
                     ))
                   }
@@ -297,7 +309,7 @@ const ModalHeadSub = React.memo(styled.div`
 `)
 
 const GcsDeployModalContainer = React.memo(styled(Modal)`
-  width: 100vh;
+  width: 130vh;
   min-height: 10vh;
   max-height: 75vh;
   top: 6vh;

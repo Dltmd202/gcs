@@ -146,12 +146,20 @@ public class MavLinkMessageFactory {
     }
 
     public static MAVLinkMessage setPoint(Agent agent, NedLocatable ned){
-        return setPoint(agent.getSysid(), ned.getX(), ned.getY(), ned.getZ());
+        return setPoint(agent.getSysid(), ned.getX(), ned.getY(), ned.getZ(), 0);
+    }
+
+    public static MAVLinkMessage setPoint(Agent agent, NedLocatable ned, float yaw){
+        return setPoint(agent.getSysid(), ned.getX(), ned.getY(), ned.getZ(), yaw);
+    }
+
+    public static MAVLinkMessage setPoint(int sysid, float x, float y, float z){
+        return setPoint(sysid, x, y, z, 0.F);
     }
 
 
 
-    public static MAVLinkMessage setPoint(int sysid, float x, float y, float z){
+    public static MAVLinkMessage setPoint(int sysid, float x, float y, float z, float yaw){
         msg_set_position_target_local_ned msg = new msg_set_position_target_local_ned();
 
         msg.sysid = sysid;
@@ -164,7 +172,7 @@ public class MavLinkMessageFactory {
         msg.y = y;
         msg.z = z;
 
-        msg.yaw = 0.F;
+        msg.yaw = yaw;
         msg.yaw_rate = 0;
 
         return msg;
