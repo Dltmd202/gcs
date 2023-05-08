@@ -6,7 +6,6 @@ import PrivateRouter from "./PrivateRoute";
 import UserPage from "../pages/user/UserPage";
 import JoinPage from "../pages/user/JoinPage";
 import ThreeDimensionGCSPage from "../pages/gcs/ThreeDimensionGCSPage";
-import PlayGround from "../pages/gcs/PlayGround";
 import ProtectRoute from "./ProtectRoute";
 import NotFoundPage from "../pages/error/NotFound";
 
@@ -21,7 +20,6 @@ const Routers = () => {
         </Route>
 
         <Route element={<PublicRoute restricted={false}/> }>
-          <Route path="/play" element={<PlayGround />} />
           <Route path="/mypage" element={<UserPage />} />
         </Route>
 

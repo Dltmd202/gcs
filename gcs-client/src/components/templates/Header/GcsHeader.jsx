@@ -6,7 +6,7 @@ import Colors from "../../../styles/colors";
 import {useSelector} from "react-redux";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBell} from "@fortawesome/free-regular-svg-icons";
-import { faChevronDown, faGamepad, faClapperboard, faGears } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faGamepad, faClapperboard, faGears, faGrip } from "@fortawesome/free-solid-svg-icons";
 import agentApi from "../../../api/agent";
 import HeaderButton from "../../atoms/Button/HeaderButton";
 import Modal, {
@@ -23,6 +23,7 @@ import GcsAlertModal from "./GcsAlertModal";
 import GcsUserModal from "./GcsUserModal";
 import GcsParameterModal from "./GcsParameterModal";
 import paramApi from "../../../api/param";
+import GcsDeployModal from "./GcsDeplyModal";
 
 const GcsHeader = () => {
   // TODO context selector 사용해도 될지 검토해야함
@@ -33,6 +34,7 @@ const GcsHeader = () => {
   const [showController, setShowController] = useState(false);
   const [showUserController, setShowUserController] = useState(false);
   const [showParamSet, setShowParamSet] = useState(false);
+  const [showDeploy, setShowDeploy] = useState(false);
   const [loadingParamSet, setLoadingParamSet] = useState(false);
 
 
@@ -46,18 +48,28 @@ const GcsHeader = () => {
     setShowController(!showController);
     setShowParamSet(false);
     setShowScenario(false);
+    setShowDeploy(false);
   }
 
   const handleScenarioToggle = () => {
     setShowController(false);
     setShowParamSet(false);
     setShowScenario(!showScenario);
+    setShowDeploy(false);
   }
 
   const handleParameterToggle = () => {
     setShowController(false);
     setShowParamSet(!showParamSet);
     setShowScenario(false);
+    setShowDeploy(false);
+  }
+
+  const handleDeployToggle = () => {
+    setShowController(false);
+    setShowParamSet(false);
+    setShowScenario(false);
+    setShowDeploy(!showDeploy);
   }
 
   const handleModalToggle = () => {
@@ -88,7 +100,7 @@ const GcsHeader = () => {
         <HeaderOrderContainer>
           <ModalDropDown onClick={handleControllerToggle} >
             <ModalDropDownName>
-              <GcsDropDownIcon icon={faGamepad} size={"lg"} color={Colors.point}/>
+              <GcsDropDownIcon icon={faGamepad} size={"2x"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
@@ -96,7 +108,7 @@ const GcsHeader = () => {
 
           <ModalDropDown onClick={handleScenarioToggle} >
             <ModalDropDownName>
-              <GcsDropDownIcon icon={faClapperboard} size={"lg"} color={Colors.point}/>
+              <GcsDropDownIcon icon={faClapperboard} size={"2x"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
@@ -104,13 +116,21 @@ const GcsHeader = () => {
 
           <ModalDropDown onClick={handleParameterToggle} >
             <ModalDropDownName>
-              <GcsDropDownIcon icon={faGears} size={"lg"} color={Colors.point}/>
+              <GcsDropDownIcon icon={faGears} size={"2x"} color={Colors.point}/>
             </ModalDropDownName>
             <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
           </ModalDropDown>
           {!loadingParamSet &&
             <GcsParameterModal showScenario={showParamSet} paramKeyList={paramKeyList}/>
           }
+
+          <ModalDropDown onClick={handleDeployToggle} >
+            <ModalDropDownName>
+              <GcsDropDownIcon icon={faGrip} size={"2x"} color={Colors.point}/>
+            </ModalDropDownName>
+            <GcsDropDownIcon icon={faChevronDown} size={"sm"} color={Colors.point}/>
+          </ModalDropDown>
+          <GcsDeployModal showAutoSort={showDeploy}/>
         </HeaderOrderContainer>
       </GcsControlContainer>
 

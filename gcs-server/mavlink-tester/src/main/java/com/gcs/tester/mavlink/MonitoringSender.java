@@ -23,16 +23,19 @@ public class MonitoringSender {
         MAVLinkMessage monitoring = new msg_monitoring();
         for (i = 0; i < 1; i++) {
             monitoring = MonitoringFactory.make(
-                    1,
-                    1.0F + 0.0F,
+                    104,
+                    30.4F,
+                    26.1F,
+                    0F,
                     0.0F + 0.0F,
-                    -3.0F - 0.5F,
+                    0.0F + 0.0F,
+                    0.0F,
                     -0.0F,
                     0.0F + 0.00F,
                     -45.00F,
                     1 << 9 | 1 << 17 | 1 << 18,
                     0x00,
-                    0xff,
+                    0x00,
                     0x00,
                     0x00
             );

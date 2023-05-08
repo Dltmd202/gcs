@@ -106,6 +106,7 @@ const GcsParameterModal = ({
     setFilterLoading(false);
   }, [context])
 
+
   useEffect(() => {
     if(filterType !== '0' && isNaN(context.agents[filterType]?.param['BAT1_CAPACITY']))
       paramApi.droneShowParamList(filterType);
@@ -113,7 +114,8 @@ const GcsParameterModal = ({
 
 
   const getParamValue = (key) => {
-    return context.agents[filterType].param[key];
+    const val = context.agents[filterType].param[key];
+    return !isNaN(val) ? val : "-";
   }
 
   return (

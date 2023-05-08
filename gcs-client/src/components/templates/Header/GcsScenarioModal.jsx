@@ -49,9 +49,10 @@ const GcsScenarioModal = ({showScenario}) => {
     error: contextError
   } = useSelector((state) => state.context);
 
+
   useEffect(() => {
-    if(!contextLoading && !contextError){
-      setTotalCount(Object.keys(context?.agents).length)
+    setTotalCount(Object.keys(context?.agents).length)
+    if(!contextLoading && !contextError && showScenario){
       let fixedCnt = 0;
       let configCnt = 0;
 
@@ -201,7 +202,7 @@ const GcsScenarioModal = ({showScenario}) => {
 
     iterateSort();
     agentApi.globalLand();
-    agentApi.gloablDisarm();
+    agentApi.globalDisarm();
 
   }
 

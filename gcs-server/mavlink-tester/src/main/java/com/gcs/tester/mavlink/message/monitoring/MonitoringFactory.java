@@ -45,4 +45,46 @@ public class MonitoringFactory {
         );
     }
 
+    public static msg_monitoring make(
+            int sysid,
+            float rtkx,
+            float rtky,
+            float rtkz,
+            float x,
+            float y,
+            float z,
+            float roll,
+            float pitch,
+            float yaw,
+            int status1,
+            int status2,
+            int r,
+            int g,
+            int b
+    ){
+        return new msg_monitoring(
+                1L,
+                x,
+                y,
+                z,
+                yaw,
+                roll,
+                pitch,
+                status1,
+                status2,
+                rtkx,
+                rtky,
+                rtkz,
+                (short) 0,
+                (short) 0,
+                (short) 99,
+                (short) r,
+                (short) g,
+                (short)b ,
+                sysid,
+                0,
+                true
+        );
+    }
+
 }

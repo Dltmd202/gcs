@@ -39,14 +39,21 @@ function SimpleDrone({
       onPointerOut={(event) => hover(false)}
       rotation={[angle.roll, angle.yaw, angle.pitch]}
     >
-      <mesh geometry={body} position={[0, 0.25, 0]}>
+      <mesh
+        geometry={body}
+        position={[0, 0.25, 0]}
+      >
         <meshPhongMaterial
           color={hovered || focused ? complementaryColor : getColor()}
           transparent={true}
           opacity={0.8}
         />
       </mesh>
-      <mesh geometry={head} position={[0.5, 0.25, 0]}>
+      <mesh
+        scale={0.4}
+        geometry={head}
+        position={[0.5, 0.25, 0]}
+      >
         <meshPhongMaterial
           color={hovered || focused ? complementaryColor : getColor()}
           emissive={hovered || focused ? getColor() : complementaryColor}

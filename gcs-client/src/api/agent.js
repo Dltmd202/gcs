@@ -4,7 +4,7 @@ const agentApi = {
     arm: (sysid) => authRequest.post(`/api/agent/${sysid}/arm`),
     globalArm: () => authRequest.post(`/api/agent/arm`),
     disarm: (sysid) => authRequest.post(`/api/agent/${sysid}/disarm`),
-    gloablDisarm: () => authRequest.post(`/api/agent/disarm`),
+    globalDisarm: () => authRequest.post(`/api/agent/disarm`),
     takeOff: (sysid, alt) => authRequest.post(`/api/agent/${sysid}/takeoff?alt=${alt}`),
     globalTakeOff: (alt) => authRequest.post(`/api/agent/takeoff?alt=${alt}`),
     land: (sysid) => authRequest.post(`/api/agent/${sysid}/land`),

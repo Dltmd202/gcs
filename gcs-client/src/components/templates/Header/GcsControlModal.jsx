@@ -71,7 +71,7 @@ const GcsControlModal = ({showController}) => {
   }
 
   const handleDisarmButton = () => {
-    agentApi.gloablDisarm();
+    agentApi.globalDisarm();
   }
 
   const handleReboot = () => {
@@ -189,7 +189,7 @@ const GcsControlModal = ({showController}) => {
               <ModalInputLabel>B</ModalInputLabel>
               <ModalInput
                 value={b || ''}
-                onChange={(e) => setG(e.target.value)}
+                onChange={(e) => setB(e.target.value)}
                 type={"number"}
                 ref={setLEDBReference}
               />
