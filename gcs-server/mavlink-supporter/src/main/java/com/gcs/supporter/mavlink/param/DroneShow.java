@@ -21,8 +21,8 @@ public enum DroneShow implements ParamameterKey {
             MAV_PARAM_TYPE_INT32,
             "us"
     ),
-    BAT_N_CELLS(
-            "BAT_N_CELLS",
+    BAT1_N_CELLS(
+            "BAT1_N_CELLS",
             "This parameter is deprecated. Please use BAT1_N_CELLS instead",
             3,
             MAV_PARAM_TYPE_INT32,
@@ -246,6 +246,13 @@ public enum DroneShow implements ParamameterKey {
             MAV_PARAM_TYPE_REAL32,
             ""
     ),
+    MC_PITCHRATE_MAX(
+            "MC_PITCHRATE_MAX",
+            "",
+            "90",
+            MAV_PARAM_TYPE_INT32,
+            ""
+    ),
     MC_PITCHRATE_D(
                   "MC_PITCHRATE_D",
                   "Pitch rate D gain",
@@ -378,6 +385,43 @@ public enum DroneShow implements ParamameterKey {
             0.3F,
             MAV_PARAM_TYPE_REAL32,
             "m/s"
+    ),
+    BAT1_V_DIV(
+            "BAT1_V_DIV",
+            "",
+            12.12273693F,
+            MAV_PARAM_TYPE_REAL32,
+            ""
+    ),
+    BAT1_V_CHARGED(
+            "BAT1_V_CHARGED",
+            "",
+            4.20F,
+            MAV_PARAM_TYPE_REAL32,
+            ""
+    ),
+    BAT1_V_EMPTY(
+            "BAT1_V_EMPTY",
+            "",
+            3.50F,
+            MAV_PARAM_TYPE_REAL32,
+            ""
+    ),
+
+    RC_MAP_OFFB_SW(
+            "RC_MAP_OFFB_SW",
+            "",
+            0,
+            MAV_PARAM_TYPE_INT32,
+            ""
+    ),
+
+    MAV_0_MODE(
+            "MAV_0_MODE",
+            "",
+            1,
+            MAV_PARAM_TYPE_INT32,
+            ""
     );
 
     private String value;

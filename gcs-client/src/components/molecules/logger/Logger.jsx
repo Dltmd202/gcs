@@ -3,22 +3,23 @@ import React from "react";
 import Colors from "../../../styles/colors";
 
 const Logger = ({
-                  time,
-                  category,
-                  content,
                   children,
                   ...props
 }) => {
+  console.log(children);
   return(
     <LoggerContainer {...props}>
-      <Log>
-        <LoggerCategory>
-          [{category}]
-        </LoggerCategory>
-        <LoggerBody>
-          {content}
-        </LoggerBody>
-      </Log>
+      {children && children.map((log, i) => (
+        <Log key={i}>
+          <LoggerCategory>
+            [SYSID - {log.sysid}] [{log.category}]
+          </LoggerCategory>
+          <LoggerBody>
+            {log.text}
+          </LoggerBody>
+        </Log>
+        )
+      )}
     </LoggerContainer>
   )
 }
@@ -54,6 +55,7 @@ const LoggerTimestamp = React.memo(styled(LoggerComponent)`
 `)
 
 export const LoggerCategory = React.memo(styled(LoggerComponent)`
+  margin-right: 3px;
 `)
 
 export const LoggerBody = React.memo(styled(LoggerComponent)`

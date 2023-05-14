@@ -42,13 +42,13 @@ const ThreeDimensionGCSPage = () => {
     heartbeatOutgoing: 4000,
   })
   const [focused, focus] = useState(null);
+  const [log, setLog] = useState([]);
 
 
   const wsSubscribe = () => {
     client.onConnect = () => {
       client.subscribe('/topic/monitoring', (msg) => {
         const parsedMessage = JSON.parse(msg.body);
-        console.log(parsedMessage);
         const agent = {
           sysid: parsedMessage.sysid,
           battery: parsedMessage.battery,
@@ -95,6 +95,12 @@ const ThreeDimensionGCSPage = () => {
           param: paramId,
           val: value
         }))
+      })
+
+      client.subscribe(`/topic/log`, (msg) => {
+        const m = JSON.parse(msg.body);
+        console.log(m);
+        setLog(prevLog => [...prevLog, m]);
       })
     }
   }
@@ -188,10 +194,9 @@ const ThreeDimensionGCSPage = () => {
                 />
               ))}
             </CanvasContainer>
-            <Logger
-              category={"ERROR"}
-              content={"[SYSID - 1] Battery Problem"}
-            />
+            <Logger>
+              {log}
+            </Logger>
           </MainGcsContainer>
         )}
       </MainContainer>

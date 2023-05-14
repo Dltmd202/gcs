@@ -73,7 +73,10 @@ const GcsDeployModal = ({showAutoSort}) => {
   }
 
   const handleRebootButton = (id, sysid) => {
-    agentApi.reboot(sysid);
+    const result = window.confirm(`SYSID - ${sysid} 을(를) Reboot 하겠습니까?`)
+    if(result){
+      agentApi.reboot(sysid);
+    }
   }
 
   const handleLandButton = (id, sysid) => {

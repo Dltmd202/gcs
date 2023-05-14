@@ -57,7 +57,7 @@ const GcsScenarioModal = ({showScenario}) => {
       let configCnt = 0;
 
       context.agents && Object.values(context.agents).map((agent, i) => {
-        if(agent.id === 1 && !hasSentConfig){
+        if(agent.id === 1){
           if(!hasSentConfig){
             setOffsetX(agent.rtk.x);
             setOffsetY(agent.rtk.y);

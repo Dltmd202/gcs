@@ -2,17 +2,17 @@ package com.gcs.core.udp.domain.mavlink.service;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.common.msg_param_value;
+import com.MAVLink.common.msg_statustext;
 import com.MAVLink.swarm.msg_monitoring;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gcs.domain.agent.service.AgentService;
 import com.gcs.supporter.error.exception.ApiException;
 import com.gcs.supporter.mavlink.message.adapter.MessageParamValueAdapter;
+import com.gcs.supporter.mavlink.message.adapter.MessageStatusTextAdapter;
 import com.gcs.supporter.mavlink.message.adapter.MoveableMonitoringAdapter;
 import com.gcs.supporter.mavlink.util.MAVLinkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.core.MessagePostProcessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -63,11 +62,14 @@ public class MavlinkGatewayService {
             }
             template.convertAndSend("/topic/monitoring", monitoring);
         }
-
         if(mavLinkMessage instanceof msg_param_value){
             msg_param_value paramValue = (msg_param_value) mavLinkMessage;
             log.info("{}", paramValue);
             template.convertAndSend("/topic/param", new MessageParamValueAdapter(paramValue));
+        } if(mavLinkMessage instanceof msg_statustext){
+            msg_statustext statustext = (msg_statustext) mavLinkMessage;
+            log.info("{} - {}", statustext, statustext.getText());
+            template.convertAndSend("/topic/log", new MessageStatusTextAdapter(statustext));
         }
     }
 
