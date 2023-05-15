@@ -20,10 +20,11 @@ public class MonitoringSender {
         StringBuilder sb = new StringBuilder();
 
         int i = 0;
+
         MAVLinkMessage monitoring = new msg_monitoring();
-        for (i = 0; i < 1; i++) {
+        for (i = 0; i < 100; i++) {
             monitoring = MonitoringFactory.make(
-                    104,
+                    1,
                     30.4F,
                     26.1F,
                     0F,
@@ -37,7 +38,8 @@ public class MonitoringSender {
                     0x00,
                     0x00,
                     0x00,
-                    0x00
+                    0x00,
+                    10000000 + i * 1000
             );
 
             byte[] data;
@@ -45,15 +47,30 @@ public class MonitoringSender {
             data = MAVLinkUtils.getPacketData(monitoring);
             packet = new DatagramPacket(data, data.length, dest);
             socket.send(packet);
-//            System.out.println(monitoring.toString());
-//
-//            for (byte b : data) {
-//                System.out.printf("%02x ", b);
-//            }
-//            System.out.println();
 
+            monitoring = MonitoringFactory.make(
+                    2,
+                    30.4F,
+                    26.1F,
+                    0F,
+                    0.0F + 0.0F,
+                    0.0F + 0.0F,
+                    0.0F,
+                    -0.0F,
+                    0.0F + 0.00F,
+                    -45.00F,
+                    1 << 9 | 1 << 17 | 1 << 18,
+                    0x00,
+                    0x00,
+                    0x00,
+                    0x00,
+                    10000000 + i * 1000
+            );
 
-//            Thread.sleep(15);
+            data = MAVLinkUtils.getPacketData(monitoring);
+            packet = new DatagramPacket(data, data.length, dest);
+            socket.send(packet);
+            Thread.sleep(1000);
         }
 
     }

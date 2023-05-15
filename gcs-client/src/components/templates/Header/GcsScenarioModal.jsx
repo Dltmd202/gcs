@@ -62,7 +62,7 @@ const GcsScenarioModal = ({showScenario}) => {
             setOffsetX(agent.rtk.x);
             setOffsetY(agent.rtk.y);
           }
-          if(!isWaiting){
+          if(!hasSentStart){
             setTow(agent.tow);
           }
         }
@@ -90,6 +90,11 @@ const GcsScenarioModal = ({showScenario}) => {
             setLeftTime(-1);
             return 0;
           } else{
+            if(prevTime % 3000 === 0) {
+              agentApi.scenarioSync(time + (tow / 1000));
+              console.log(time + (tow / 1000))
+            }
+
             return prevTime - 1000;
           }
         });
@@ -98,7 +103,9 @@ const GcsScenarioModal = ({showScenario}) => {
       clearInterval(interval)
     }
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+    }
   }, [isWaiting])
 
   const handleScenarioConfig = () => {
@@ -144,10 +151,12 @@ const GcsScenarioModal = ({showScenario}) => {
     }
 
     if(totalCount === configCount){
+      alert(`start 보냄 ${configCount / totalCount * 100}%`)
       agentApi.scenarioSync(time + (tow / 1000));
       setLeftTime(time * 1000);
       setWaiting(true);
-      alert(`start 보냄 ${configCount / totalCount * 100}%`)
+      sendStart(true);
+      console.log(time + (tow / 1000));
     } else{
       alert(`config 안됨 ${configCount / totalCount * 100}%`)
     }
@@ -160,6 +169,7 @@ const GcsScenarioModal = ({showScenario}) => {
   const handleScenarioReset = () => {
     sendConfig(false);
     sendStart(false);
+    setWaiting(false);
     agentApi.scenarioReset()
   }
 
@@ -219,7 +229,7 @@ const GcsScenarioModal = ({showScenario}) => {
               Scenario
             </ModalHeaderName>
             <div>
-              {leftTime >= 0 ? leftTime / 1000 : ""}
+              {isWaiting && leftTime >= 0 ? leftTime / 1000 : ""}
             </div>
           </ModalHeader>
           <ModalBody>
@@ -232,6 +242,16 @@ const GcsScenarioModal = ({showScenario}) => {
                 <StatusLabel>offsetY</StatusLabel>
                 <StatusValue>{offsetY}</StatusValue>
               </StatusRow>
+              <StatusRow>
+                <StatusLabel>Tow</StatusLabel>
+                <StatusValue>{tow}</StatusValue>
+              </StatusRow>
+              {hasSentStart && (
+                <StatusRow>
+                  <StatusLabel>Start</StatusLabel>
+                  <StatusValue>{tow + time * 1000}</StatusValue>
+                </StatusRow>
+              )}
               <StatusRow>
                 <StatusLabel>Fixed</StatusLabel>
                 <StatusValue>

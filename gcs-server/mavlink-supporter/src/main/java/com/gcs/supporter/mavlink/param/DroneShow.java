@@ -395,22 +395,22 @@ public enum DroneShow implements ParamameterKey {
     ),
     BAT1_V_CHARGED(
             "BAT1_V_CHARGED",
-            "",
+            "Full cell voltage (5c load)",
             4.20F,
             MAV_PARAM_TYPE_REAL32,
-            ""
+            "V"
     ),
     BAT1_V_EMPTY(
             "BAT1_V_EMPTY",
-            "",
+            "Empty cell voltage (5C load)",
             3.50F,
             MAV_PARAM_TYPE_REAL32,
-            ""
+            "V"
     ),
 
     RC_MAP_OFFB_SW(
             "RC_MAP_OFFB_SW",
-            "",
+            "Offboard switch channel",
             0,
             MAV_PARAM_TYPE_INT32,
             ""

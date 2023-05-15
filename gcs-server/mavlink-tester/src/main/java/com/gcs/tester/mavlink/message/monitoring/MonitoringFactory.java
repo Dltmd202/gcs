@@ -45,6 +45,7 @@ public class MonitoringFactory {
         );
     }
 
+
     public static msg_monitoring make(
             int sysid,
             float rtkx,
@@ -60,10 +61,11 @@ public class MonitoringFactory {
             int status2,
             int r,
             int g,
-            int b
+            int b,
+            int tow
     ){
         return new msg_monitoring(
-                1L,
+                tow,
                 x,
                 y,
                 z,
