@@ -90,10 +90,8 @@ const GcsScenarioModal = ({showScenario}) => {
             setLeftTime(-1);
             return 0;
           } else{
-            if(prevTime % 3000 === 0) {
-              agentApi.scenarioSync(time + (tow / 1000));
-              console.log(time + (tow / 1000))
-            }
+            agentApi.scenarioSync(time + (tow / 1000));
+            console.log(time + (tow / 1000))
 
             return prevTime - 1000;
           }

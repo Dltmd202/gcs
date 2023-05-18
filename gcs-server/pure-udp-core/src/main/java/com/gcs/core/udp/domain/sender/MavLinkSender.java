@@ -25,6 +25,7 @@ public class MavLinkSender {
     private void mavlinkOrder() { }
 
     public void send(MAVLinkMessage msg){
+        log.info("{}", msg);
         mavlinkService.sentToAgent(msg.sysid, MAVLinkUtils.getMessage(msg));
     }
 

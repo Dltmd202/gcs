@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class AgentContextResponse {
     private String connection;
     private Map<Integer, AgentResponse> agents;
+    private Float rotation;
 
     public AgentContextResponse(AgentContext agentContext){
         this.agents = agentContext.stream()
@@ -25,5 +26,6 @@ public class AgentContextResponse {
         } else {
             this.connection = agentContext.getConnection().getVar();
         }
+        this.rotation = agentContext.getRotation();
     }
 }

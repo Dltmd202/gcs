@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 public interface AgentContext {
     AgentContextConnection getConnection();
     Map<Integer, AgentDto> agentStore();
+    Float getRotation();
 
     default Iterable<AgentDto> agents(){
         return agentStore().values();

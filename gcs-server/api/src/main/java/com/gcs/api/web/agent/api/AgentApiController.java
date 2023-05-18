@@ -3,12 +3,14 @@ package com.gcs.api.web.agent.api;
 import com.gcs.api.domain.mavlink.service.MavLinkService;
 import com.gcs.supporter.util.api.ApiUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/agent")

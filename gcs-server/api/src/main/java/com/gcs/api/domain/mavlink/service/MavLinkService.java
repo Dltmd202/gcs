@@ -102,6 +102,7 @@ public class MavLinkService {
     }
 
     public void setDestination(float x, float y, float z, float yaw){
+        log.info("yaw = {}", yaw);
         contextService.getRunningContext().stream()
                 .forEach(a -> {
                     a.setDestination(new NedCoordinate(x, y, z));

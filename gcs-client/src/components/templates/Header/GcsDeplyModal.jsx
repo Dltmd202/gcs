@@ -180,6 +180,7 @@ const GcsDeployModal = ({showAutoSort}) => {
                   <DeployStatusTheadTr>
                     <DeployStatusTheadTd rowSpan={3}>id</DeployStatusTheadTd>
                     <DeployStatusTheadTd rowSpan={3}>sysid</DeployStatusTheadTd>
+                    <DeployStatusTheadTd rowSpan={3}>head</DeployStatusTheadTd>
                     <DeployStatusTheadTd colSpan={6}>RTK</DeployStatusTheadTd>
                     <DeployStatusTheadTd colSpan={6}>LOCAL</DeployStatusTheadTd>
                     <DeployStatusTheadTd colSpan={4} rowSpan={3}>Control</DeployStatusTheadTd>
@@ -213,18 +214,143 @@ const GcsDeployModal = ({showAutoSort}) => {
                       <DeployStatusTbodyTr key={id} fixed={(agent.status & agentStatusMask[9].mask) !== 0}>
                         <DeployStatusTbodyTd>{agent.id}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.rtk.x.toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.rtk.y.toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.rtk.z.toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>-</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.ned.x.toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.ned.y.toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.ned.z.toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{getLocalDestX(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{getLocalDestY(agent.id, agent.sysid).toFixed(2)}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>-</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>{agent.angle.yaw}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {agent.rtk.x.toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
+                                current={agent.rtk.x.toFixed(2)} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {agent.rtk.y.toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
+                                current={agent.rtk.y.toFixed(2)} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {agent.rtk.z.toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={0}
+                                current={0} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={0}
+                                current={0} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <div>
+                            {getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
+                          </div>
+                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
+                          }
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <div>
+                            -
+                          </div>
+                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
+                          }
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {agent.ned.x.toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={getLocalDestX(agent.id, agent.sysid).toFixed(2)}
+                                current={agent.ned.x.toFixed(2)} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {agent.ned.y.toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={getLocalDestY(agent.id, agent.sysid).toFixed(2)}
+                                current={agent.ned.y.toFixed(2)} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {agent.ned.z.toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={0}
+                                current={0} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <CurrentStatusContainer>
+                            <div>
+                              {getLocalDestX(agent.id, agent.sysid).toFixed(2)}
+                            </div>
+                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                              <DestinationErrorRange
+                                dest={0}
+                                current={0} />
+                            }
+                          </CurrentStatusContainer>
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <div>
+                            {getLocalDestY(agent.id, agent.sysid).toFixed(2)}
+                          </div>
+                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
+                          }
+                        </DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          <div>
+                            -
+                          </div>
+                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
+                          }
+                        </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd close={true}>
                           <button onClick={() => handleRebootButton(agent.id, agent.sysid)}>Reboot</button>
                         </DeployStatusTbodyTd>
@@ -248,6 +374,20 @@ const GcsDeployModal = ({showAutoSort}) => {
         </DeployrModalBody>
       </ModalContainer>
     </GcsDeployModalContainer>
+  )
+}
+
+const DestinationErrorRange = ({dest, current}) => {
+  if(dest === current) return (
+    <DestinationErrorRangeContainer isPositive={dest - current >= 0} isWhite={true}>
+      -
+    </DestinationErrorRangeContainer>
+  )
+  return (
+    <DestinationErrorRangeContainer isPositive={dest - current >= 0} isWhite={false}>
+      {dest - current >= 0 ? "+" : "-"}
+      {Math.abs(dest - current)}
+    </DestinationErrorRangeContainer>
   )
 }
 
@@ -328,6 +468,19 @@ const DeployrModalBody = React.memo(styled(ModalBody)`
   height: 90%;
   overflow: scroll;
 `)
+
+const CurrentStatusContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`
+
+
+const DestinationErrorRangeContainer = styled.div`
+  color: ${props => props.isWhite ? "white ! important" : "white"};
+  color: ${props => props.isPositive ? "#ff5151": "#00aaff"};
+  font-size: ${FontSize.micro};
+`
 
 
 const DeployGcsOrderButton = React.memo(styled.div`
