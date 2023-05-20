@@ -50,7 +50,7 @@ public class MonitoringSender {
 
             monitoring = MonitoringFactory.make(
                     2,
-                    30.4F,
+                    10.4F,
                     26.1F,
                     0F,
                     0.0F + 0.0F,

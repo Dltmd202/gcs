@@ -78,7 +78,6 @@ public class AgentContextService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NO_RUNNING_CONTEXT_CONF))
                 .getAgent(sysid)
                 .orElseThrow(() -> new ApiException(ErrorCode.NO_AGENT_FROM_CONTEXT_CONF));
-
     }
 
     public boolean isRunningContext(){

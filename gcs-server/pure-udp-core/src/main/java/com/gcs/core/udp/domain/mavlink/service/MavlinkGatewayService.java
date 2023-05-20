@@ -52,9 +52,11 @@ public class MavlinkGatewayService {
     public void publishToBrowser(byte[] payload){
         MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(payload, payload.length)
                 .orElse(null);
+//        log.info("{}", mavLinkMessage);
 
         if(mavLinkMessage instanceof msg_monitoring){
             msg_monitoring monitoring = (msg_monitoring) mavLinkMessage;
+//            log.info("{}", monitoring);
             try{
                 agentService.updateMove(monitoring.sysid, new MoveableMonitoringAdapter(monitoring));
             } catch (ApiException e){

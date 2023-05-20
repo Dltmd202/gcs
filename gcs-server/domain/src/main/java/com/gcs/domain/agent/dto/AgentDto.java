@@ -35,7 +35,6 @@ public class AgentDto implements RealTimeAgent {
     private LlhLocatable llh;
     private NedLocatable ned;
     private NedLocatable destination;
-
     public float getDestYaw() {
         return destYaw;
     }

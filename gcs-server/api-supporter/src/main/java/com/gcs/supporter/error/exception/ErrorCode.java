@@ -43,6 +43,7 @@ public enum ErrorCode {
     OAUTH_ERROR(500, "OAuth 인증과정에서 문제가 발생했습니다. (유효하지 않는 accessToken)"),
     REALTIME_INTERNAL_ERROR(500, "realtime 에서 session 에 대한 key 입력 과정에서 에러가 발생했습니다."),
     SESSION_REMOVE_ERROR(500, "realtime 에서 session 을 지우는 과정에서 에러가 발생했습니다."),
+    THREAD_SLEEP(500, "Thread sleep에서 에러가 발생했습니다."),
     ENTITY_PARAMETER_NOT_ACCEPT(500, "엔티티생성 과정에서 값이 누락되었습니다."),
     NOT_FOUND_RESOURCE_ERROR(HttpStatus.BAD_REQUEST.value(), "존재하지 않는 리소스입니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(),"서버 내부 에러입니다."),

@@ -136,7 +136,8 @@ public class MavLinkService {
         contextService.getRunningContext().stream()
                 .forEach(a -> {
                     a.setDestination(new NedCoordinate(x, y, z));
-                    a.setDestYaw(a.getYaw());
+                    log.info("{}", a.getYaw());
+                    a.setDestYaw(0);
                 });
     }
 

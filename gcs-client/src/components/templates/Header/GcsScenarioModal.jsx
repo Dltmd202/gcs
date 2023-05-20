@@ -90,8 +90,10 @@ const GcsScenarioModal = ({showScenario}) => {
             setLeftTime(-1);
             return 0;
           } else{
-            agentApi.scenarioSync(time + (tow / 1000));
-            console.log(time + (tow / 1000))
+            const numbericTime = Number(time);
+            const currentTime = isNaN(numbericTime) ? time : numbericTime;
+            agentApi.scenarioSync(currentTime + (tow / 1000));
+            console.log(currentTime + (tow / 1000))
 
             return prevTime - 1000;
           }
@@ -117,6 +119,15 @@ const GcsScenarioModal = ({showScenario}) => {
       alert("Set Configuration Name")
       return;
     }
+    context.agents && Object.values(context.agents).map((agent, i) => {
+      agentApi.scenarioConfiguration(
+          agent.sysid,
+          offsetX,
+          offsetY,
+          context.rotation,
+          `${scenario}/node_${agent.id}.txt`
+      )
+    });
 
     if(totalCount === fixedCount){
       alert(`config 세팅을 전송했습니다.`)
@@ -150,11 +161,15 @@ const GcsScenarioModal = ({showScenario}) => {
 
     if(totalCount === configCount){
       alert(`start 보냄 ${configCount / totalCount * 100}%`)
-      agentApi.scenarioSync(time + (tow / 1000));
-      setLeftTime(time * 1000);
+      const numbericTime = Number(time);
+      const currentTime = isNaN(numbericTime) ? time : numbericTime;
+      console.log(currentTime);
+      console.log(currentTime);
+      agentApi.scenarioSync(currentTime + (tow / 1000));
+      setLeftTime(currentTime * 1000);
       setWaiting(true);
       sendStart(true);
-      console.log(time + (tow / 1000));
+      console.log(currentTime + (tow / 1000));
     } else{
       alert(`config 안됨 ${configCount / totalCount * 100}%`)
     }

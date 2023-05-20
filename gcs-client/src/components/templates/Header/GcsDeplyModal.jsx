@@ -14,6 +14,8 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { agentStatusMask } from "../../../module/coordinate/agentStatus";
 import { FontSize } from "../../../styles/font";
+import radianToDegree from "../../../module/coordinate/RadToDgreeConverter";
+import deployApi from "../../../api/deploy";
 
 const GcsDeployModal = ({showAutoSort}) => {
   const [gridX, setGridX] = useState(5);
@@ -48,20 +50,19 @@ const GcsDeployModal = ({showAutoSort}) => {
     const agent = context
   }, [context])
 
-  const handleTakeOffButton = (id, sysid) => {
-    agentApi.globalDisarm();
-
+  const handleTakeOffButton = (id, sysid, x, y) => {
     setTimeout(() => {
       agentApi.offboard(sysid);
 
       setTimeout(() => {
-        agentApi.globalDestination(0, 0, -1.5);
+        agentApi.destination(sysid, x, y, -1.5);
 
         setTimeout(() => {
           agentApi.arm(sysid);
         }, 1000);
-      }, 1000);
-    }, 1000);
+      }, 300);
+    }, 300);
+    // deployApi.takeOff(sysid, x, y, -1.5, 0);
   }
 
   const handleMoveButton = (id, sysid) => {
@@ -70,12 +71,13 @@ const GcsDeployModal = ({showAutoSort}) => {
       getLocalDestX(id, sysid),
       getLocalDestY(id, sysid),
       -1.5,
-      offSetHead);
+      radianToDegree(offSetHead)
+    );
   }
 
   const handleRebootButton = (id, sysid) => {
     const result = window.confirm(`SYSID - ${sysid} 을(를) Reboot 하겠습니까?`)
-    if(result){
+    if (result) {
       agentApi.reboot(sysid);
     }
   }
@@ -83,8 +85,8 @@ const GcsDeployModal = ({showAutoSort}) => {
   const handleLandButton = (id, sysid) => {
     agentApi.land(sysid);
     agentApi.disarm(sysid);
+    // deployApi.land(sysid);
   }
-
 
   const preset = () => {
     setReadyToStart(!readyToStart);
@@ -101,11 +103,17 @@ const GcsDeployModal = ({showAutoSort}) => {
   }
 
   const getRTKDestinationX = (id, sysid) => {
-    return offSetX + (gridInterval * ((id - 1) % gridX));
+    const x = ((id - 1) % gridX) * gridInterval;
+    const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
+    // if(context.rotation === 0) return offSetX + x;
+    return offSetX + (x * Math.cos(context.rotation) - y * Math.sin(context.rotation));
   }
 
   const getRTKDestinationY = (id, sysid) => {
-    return offSetY + (gridInterval * (Math.floor((id - 1) / gridX)));
+    const x = ((id - 1) % gridX) * gridInterval;
+    const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
+    // if(context.rotation === 0) return offSetY - y;
+    return offSetY + (x * Math.sin(context.rotation) + y * Math.cos(context.rotation));
   }
 
   const getLocalDestX = (id, sysid) => {
@@ -215,7 +223,7 @@ const GcsDeployModal = ({showAutoSort}) => {
                       <DeployStatusTbodyTr key={id} fixed={(agent.status & agentStatusMask[9].mask) !== 0}>
                         <DeployStatusTbodyTd>{agent.id}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.angle.yaw.toFixed(2)}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>{radianToDegree(agent.angle.yaw).toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <CurrentStatusContainer>
                             <div>
@@ -356,7 +364,7 @@ const GcsDeployModal = ({showAutoSort}) => {
                           <button onClick={() => handleRebootButton(agent.id, agent.sysid)}>Reboot</button>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd close={true}>
-                          <button onClick={() => handleTakeOffButton(agent.id, agent.sysid)}>takeoff</button>
+                          <button onClick={() => handleTakeOffButton(agent.id, agent.sysid, agent.ned.x, agent.ned.y)}>takeoff</button>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd close={true}>
                           <button onClick={() => handleMoveButton(agent.id, agent.sysid)}>move</button>
