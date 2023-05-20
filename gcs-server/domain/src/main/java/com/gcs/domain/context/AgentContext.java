@@ -21,7 +21,7 @@ public interface AgentContext {
         return agentStore().values().stream();
     }
 
-    default Optional<Agent> getAgent(int sysid){
+    default Optional<? extends Agent> getAgent(int sysid){
         if(!agentStore().containsKey(sysid))
             return Optional.empty();
         return Optional.of(agentStore().get(sysid));

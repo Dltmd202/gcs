@@ -1,11 +1,13 @@
 package com.gcs.domain.context.dto;
 
+import com.gcs.domain.agent.Agent;
 import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.domain.context.AgentContext;
 import com.gcs.domain.context.constants.AgentContextConnection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class AgentContextDto implements AgentContext {
     private AgentContextConnection connection;
@@ -41,5 +43,10 @@ public class AgentContextDto implements AgentContext {
     @Override
     public Map<Integer, AgentDto> agentStore() {
         return agents;
+    }
+
+    @Override
+    public Optional<AgentDto> getAgent(int sysid) {
+        return Optional.ofNullable(agentStore().get(sysid));
     }
 }

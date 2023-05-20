@@ -1,10 +1,13 @@
 package com.gcs.api.domain.mavlink.service;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.gcs.domain.agent.Agent;
 import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.api.domain.context.service.AgentContextService;
 import com.gcs.domain.agent.service.AgentService;
 import com.gcs.domain.coordinate.ned.NedCoordinate;
+import com.gcs.supporter.error.exception.ApiException;
+import com.gcs.supporter.error.exception.ErrorCode;
 import com.gcs.supporter.mavlink.annotation.MavLinkOrder;
 import com.gcs.supporter.mavlink.message.factory.MavLinkMessageFactory;
 import lombok.RequiredArgsConstructor;
@@ -99,6 +102,25 @@ public class MavLinkService {
             messages.add(MavLinkMessageFactory.takeOffMessage(agent.getSysid(), alt));
         }
         return messages;
+    }
+
+    @MavLinkOrder
+    public void setDestination(int sysid, float x, float y, float z, float yaw){
+        log.info("yaw = {}", yaw);
+        Agent agent = contextService.getAgent(sysid);
+        if(!(agent instanceof AgentDto)) return;
+        AgentDto agentDto = (AgentDto) agent;
+        agentDto.setDestination(new NedCoordinate(x, y, z));
+        agentDto.setDestYaw(yaw);
+    }
+
+    public void setDestination(int sysid, float x, float y, float z){
+        contextService.getRunningContext().stream()
+                .filter(a -> a.getSysid() == sysid)
+                .forEach(a -> {
+                    a.setDestination(new NedCoordinate(x, y, z));
+                    a.setDestYaw(a.getYaw());
+                });
     }
 
     public void setDestination(float x, float y, float z, float yaw){

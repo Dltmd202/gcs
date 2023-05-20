@@ -1,5 +1,7 @@
 package com.gcs.api.domain.context.service;
 
+import com.gcs.domain.agent.Agent;
+import com.gcs.domain.agent.dto.AgentDto;
 import com.gcs.domain.context.AgentContext;
 import com.gcs.domain.context.exception.ConfigurationParseException;
 import com.gcs.domain.context.exception.DuplicateSysIdException;
@@ -20,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +70,15 @@ public class AgentContextService {
     public AgentContext getRunningContext(){
         return agentContextHolder.getRunningContext()
                 .orElseThrow(() -> new ApiException(ErrorCode.NO_RUNNING_CONTEXT_CONF));
+    }
+
+    public Agent getAgent(int sysid){
+        if(!isRunningContext()) throw new ApiException(ErrorCode.NO_RUNNING_CONTEXT_CONF);
+        return agentContextHolder.getRunningContext()
+                .orElseThrow(() -> new ApiException(ErrorCode.NO_RUNNING_CONTEXT_CONF))
+                .getAgent(sysid)
+                .orElseThrow(() -> new ApiException(ErrorCode.NO_AGENT_FROM_CONTEXT_CONF));
+
     }
 
     public boolean isRunningContext(){

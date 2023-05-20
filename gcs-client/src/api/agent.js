@@ -17,6 +17,8 @@ const agentApi = {
       `/api/agent/led?type=${type}&r=${r}&g=${g}&b=${b}&brightness=${brightness}&speed=${speed}`),
     destination: (sysid, x, y, z) => authRequest.post(
       `/api/agent/${sysid}/destination?x=${x}&y=${y}&z=${z}`),
+    derectionDestination: (sysid, x, y, z, yaw) => authRequest.post(
+      `/api/agent/${sysid}/destination?x=${x}&y=${y}&z=${z}&yaw=${yaw}`),
     globalDestination: (x, y, z) => authRequest.post(
       `/api/agent/destination?x=${x}&y=${y}&z=${z}`),
     globalDirectionDestination: (x, y, z, yaw) => authRequest.post(

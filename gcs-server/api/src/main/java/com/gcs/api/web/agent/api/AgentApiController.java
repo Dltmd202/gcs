@@ -92,6 +92,21 @@ public class AgentApiController {
                 .body(null);
     }
 
+    @PostMapping("/{sysid}/destination")
+    public ResponseEntity<Void> destination(
+            @PathVariable int sysid,
+            @RequestParam(name = "x") Float x,
+            @RequestParam(name = "y") Float y,
+            @RequestParam(name = "z") Float z,
+            @RequestParam(name = "yaw", required = false) Float yaw
+    ){
+        if(Objects.isNull(yaw)) mavLinkService.setDestination(sysid, x, y, z);
+        else mavLinkService.setDestination(sysid, x, y, z, yaw);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(null);
+    }
+
     @PostMapping("/arm")
     public ResponseEntity<ApiUtil.ApiResult<Boolean>> arm(){
         mavLinkService.arm();

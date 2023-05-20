@@ -65,7 +65,8 @@ const GcsDeployModal = ({showAutoSort}) => {
   }
 
   const handleMoveButton = (id, sysid) => {
-    agentApi.globalDirectionDestination(
+    agentApi.derectionDestination(
+      sysid,
       getLocalDestX(id, sysid),
       getLocalDestY(id, sysid),
       -1.5,
@@ -214,7 +215,7 @@ const GcsDeployModal = ({showAutoSort}) => {
                       <DeployStatusTbodyTr key={id} fixed={(agent.status & agentStatusMask[9].mask) !== 0}>
                         <DeployStatusTbodyTd>{agent.id}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.angle.yaw}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>{agent.angle.yaw.toFixed(2)}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <CurrentStatusContainer>
                             <div>
@@ -386,7 +387,7 @@ const DestinationErrorRange = ({dest, current}) => {
   return (
     <DestinationErrorRangeContainer isPositive={dest - current >= 0} isWhite={false}>
       {dest - current >= 0 ? "+" : "-"}
-      {Math.abs(dest - current)}
+      {Math.abs(dest - current).toFixed(2)}
     </DestinationErrorRangeContainer>
   )
 }
