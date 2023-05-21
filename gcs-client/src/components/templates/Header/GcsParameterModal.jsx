@@ -104,7 +104,7 @@ const GcsParameterModal = ({
     });
 
     setFilterLoading(false);
-  }, [context])
+  }, [contextLoading])
 
 
   useEffect(() => {

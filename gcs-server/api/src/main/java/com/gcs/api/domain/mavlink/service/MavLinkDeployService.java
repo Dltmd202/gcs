@@ -28,10 +28,11 @@ public class MavLinkDeployService {
     private final MavLinkService mavLinkService;
 
     public void takeOff(int sysid, float x, float y, float z, float yaw){
+        log.info("fuck you!!!");
         mavLinkService.setDestination(sysid, x, y, z, yaw);
-        sleep(500L);
+        sleep(1000L);
         mavLinkService.offboard(sysid);
-        sleep(500L);
+        sleep(1000L);
         mavLinkService.arm(sysid);
     }
 
@@ -43,6 +44,9 @@ public class MavLinkDeployService {
         mavLinkService.land(sysid);
         sleep(1000);
         mavLinkService.disarm(sysid);
+        sleep(1000L);
+        mavLinkService.reboot(sysid);
+        mavLinkService.setDestination(sysid, 0, 0, 0, 0);
     }
 
     public void reboot(int sysid){

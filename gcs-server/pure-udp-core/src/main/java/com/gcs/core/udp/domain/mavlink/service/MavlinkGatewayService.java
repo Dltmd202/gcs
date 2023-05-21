@@ -52,11 +52,10 @@ public class MavlinkGatewayService {
     public void publishToBrowser(byte[] payload){
         MAVLinkMessage mavLinkMessage = MAVLinkUtils.getMessage(payload, payload.length)
                 .orElse(null);
-//        log.info("{}", mavLinkMessage);
+        log.debug("{}", mavLinkMessage);
 
         if(mavLinkMessage instanceof msg_monitoring){
             msg_monitoring monitoring = (msg_monitoring) mavLinkMessage;
-//            log.info("{}", monitoring);
             try{
                 agentService.updateMove(monitoring.sysid, new MoveableMonitoringAdapter(monitoring));
             } catch (ApiException e){
@@ -66,11 +65,11 @@ public class MavlinkGatewayService {
         }
         if(mavLinkMessage instanceof msg_param_value){
             msg_param_value paramValue = (msg_param_value) mavLinkMessage;
-            log.info("{}", paramValue);
             template.convertAndSend("/topic/param", new MessageParamValueAdapter(paramValue));
         } if(mavLinkMessage instanceof msg_statustext){
             msg_statustext statustext = (msg_statustext) mavLinkMessage;
-            log.info("{} - {}", statustext, statustext.getText());
+            if(statustext.severity > 5) return;
+            MessageStatusTextAdapter status = new MessageStatusTextAdapter(statustext);
             template.convertAndSend("/topic/log", new MessageStatusTextAdapter(statustext));
         }
     }

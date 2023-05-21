@@ -6,7 +6,6 @@ const Logger = ({
                   children,
                   ...props
 }) => {
-  console.log(children);
   return(
     <LoggerContainer {...props}>
       {children && children.map((log, i) => (

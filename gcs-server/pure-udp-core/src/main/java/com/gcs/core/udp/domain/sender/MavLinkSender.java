@@ -25,7 +25,7 @@ public class MavLinkSender {
     private void mavlinkOrder() { }
 
     public void send(MAVLinkMessage msg){
-        log.info("{}", msg);
+        log.debug("{}", msg);
         mavlinkService.sentToAgent(msg.sysid, MAVLinkUtils.getMessage(msg));
     }
 
@@ -37,7 +37,6 @@ public class MavLinkSender {
             msg.forEach(this::send);
         } else if(res instanceof MAVLinkMessage){
             MAVLinkMessage msg = (MAVLinkMessage) res;
-            log.info("{}", msg);
             this.send(msg);
         }
         return res;

@@ -8,6 +8,7 @@ import agentApi from "../../../api/agent";
 import {TreeItem, TreeView} from "@mui/lab";
 import StyledTreeItem from "../../atoms/ThreeView/StyledTreeItem";
 import {agentStatusMask, agentStatusMasking} from "../../../module/coordinate/agentStatus";
+import HeaderButton from "../../atoms/Button/HeaderButton";
 
 const AgentDetailInfo = ({
                      agentObject,
@@ -56,6 +57,14 @@ const AgentDetailInfo = ({
     }
 
     return parsedStatus;
+  }
+
+  const handleReboot = (sysid) => {
+    agentApi.reboot(sysid);
+  }
+
+  const handleLand = (sysid) => {
+    agentApi.land(sysid);
   }
 
 
@@ -162,25 +171,6 @@ const AgentDetailInfo = ({
                       labelInfo={agentObject.llh.alt.toFixed(2)}
                     />
                   </StyledTreeItem>
-
-                  <StyledTreeItem
-                    nodeId={"6"}
-                    labelText={"Velocity"}
-                  >
-                    <StyledTreeItem
-                      nodeId={"17"} labelText={"VX"}
-                      labelInfo={agentObject.velocity.vx.toFixed(2)}
-                    />
-                    <StyledTreeItem
-                      nodeId={"18"} labelText={"VY"}
-                      labelInfo={agentObject.velocity.vy.toFixed(2)}
-                    />
-                    <StyledTreeItem
-                      nodeId={"19"} labelText={"VZ"}
-                      labelInfo={agentObject.velocity.vz.toFixed(2)}
-                    />
-                  </StyledTreeItem>
-
                   <StyledTreeItem nodeId={"7"} labelText={"Angle"}>
                     <StyledTreeItem
                       nodeId={"20"} labelText={"ROLL"}
@@ -211,6 +201,20 @@ const AgentDetailInfo = ({
           </StyledTreeItem>
         </TreeView>
       </AgentBodyContainer>
+      <EmergencyControl>
+        <EmergencyButton onClick={() => handleReboot(sysid)}>
+          reboot
+        </EmergencyButton>
+        <EmergencyButton onClick={() => handleLand(sysid)}>
+          land
+        </EmergencyButton>
+        <EmergencyButton onClick={() => agentApi.disarm(sysid)}>
+          disarm
+        </EmergencyButton>
+        <EmergencyButton onClick={() => agentApi.destination(sysid, 0, 0, 0)}>
+          ground
+        </EmergencyButton>
+      </EmergencyControl>
     </AgentInfoContainer>
   )
 }
@@ -302,6 +306,26 @@ const AgentHeadName = React.memo(styled.p`
 
 const AgentHeadBatteryContainer = React.memo(styled.div`
   
+`)
+
+export const EmergencyButton = React.memo(styled(HeaderButton)`
+  display: flex;
+  align-items: center;
+  border-radius: 0.3em;
+  height: 2.5em;
+  font-size: ${FontSize.small};
+  border: #ff5151 1px solid;
+  padding: 0 5px;
+  margin-right: 5px;
+
+  :hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`)
+
+const EmergencyControl = React.memo(styled.div`
+  display: flex;
+  padding: 10px;
 `)
 
 

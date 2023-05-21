@@ -51,22 +51,22 @@ const GcsDeployModal = ({showAutoSort}) => {
   }, [context])
 
   const handleTakeOffButton = (id, sysid, x, y) => {
-    setTimeout(() => {
-      agentApi.offboard(sysid);
-
-      setTimeout(() => {
-        agentApi.destination(sysid, x, y, -1.5);
-
-        setTimeout(() => {
-          agentApi.arm(sysid);
-        }, 1000);
-      }, 300);
-    }, 300);
-    // deployApi.takeOff(sysid, x, y, -1.5, 0);
+    // setTimeout(() => {
+    //   agentApi.offboard(sysid);
+    //
+    //   setTimeout(() => {
+    //     agentApi.destination(sysid, x, y, -1.5);
+    //
+    //     setTimeout(() => {
+    //       agentApi.arm(sysid);
+    //     }, 1000);
+    //   }, 300);
+    // }, 300);
+    deployApi.takeOff(sysid, x, y, -1.5, radianToDegree(offSetHead));
   }
 
   const handleMoveButton = (id, sysid) => {
-    agentApi.derectionDestination(
+    deployApi.move(
       sysid,
       getLocalDestX(id, sysid),
       getLocalDestY(id, sysid),
@@ -83,9 +83,9 @@ const GcsDeployModal = ({showAutoSort}) => {
   }
 
   const handleLandButton = (id, sysid) => {
-    agentApi.land(sysid);
-    agentApi.disarm(sysid);
-    // deployApi.land(sysid);
+    // agentApi.land(sysid);
+    // agentApi.disarm(sysid);
+    deployApi.land(sysid);
   }
 
   const preset = () => {
@@ -105,14 +105,14 @@ const GcsDeployModal = ({showAutoSort}) => {
   const getRTKDestinationX = (id, sysid) => {
     const x = ((id - 1) % gridX) * gridInterval;
     const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
-    // if(context.rotation === 0) return offSetX + x;
+    if(context.rotation === 0) return offSetX + x;
     return offSetX + (x * Math.cos(context.rotation) - y * Math.sin(context.rotation));
   }
 
   const getRTKDestinationY = (id, sysid) => {
     const x = ((id - 1) % gridX) * gridInterval;
     const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
-    // if(context.rotation === 0) return offSetY - y;
+    if(context.rotation === 0) return offSetY - y;
     return offSetY + (x * Math.sin(context.rotation) + y * Math.cos(context.rotation));
   }
 
@@ -462,15 +462,8 @@ const ModalHeadSub = React.memo(styled.div`
 
 const GcsDeployModalContainer = React.memo(styled(Modal)`
   width: 130vh;
-  min-height: 10vh;
-  max-height: 75vh;
+  height: 50vh;
   top: 6vh;
-`)
-
-const StyledGcsOrderContainer = React.memo(styled.div`
-  display: flex;
-  height: 100%;
-  align-items: center;
 `)
 
 const DeployrModalBody = React.memo(styled(ModalBody)`
