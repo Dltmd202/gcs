@@ -1,5 +1,5 @@
 import { SphereGeometry, BoxGeometry } from 'three';
-import React, {useEffect, useRef, useState} from "react";
+import React, {memo, useEffect, useMemo, useRef, useState} from "react";
 import { useFrame } from "@react-three/fiber";
 import { Euler } from 'three';
 import {OSphereGeometry} from "three/addons/libs/OimoPhysics";
@@ -9,16 +9,17 @@ function SimpleDrone({
                        onClick,
                        focused=false,
                        ...props
-                    }) {
-  const meshRef = useRef()
+                     }) {
+  const meshRef = useRef();
   const [hovered, hover] = useState(false);
-  const [clicked, click] = useState(false)
-  const {active, angle, rtk, color, complementaryColor, led} = agentObj
-  const head = new BoxGeometry(0.1, 0.4, 0.4);
-  const body = new SphereGeometry(0.5, 16, 16);
+  const [clicked, click] = useState(false);
+  const { active, angle, rtk, color, complementaryColor, led } = agentObj;
+
+  const head = useMemo(() => new BoxGeometry(0.1, 0.4, 0.4), []);
+  const body = useMemo(() => new SphereGeometry(0.5, 16, 16), []);
 
   const getColor = () => {
-    if(led.r !== -1){
+    if (led.r !== -1) {
       var hexR = led.r.toString(16).padStart(2, '0');
       var hexG = led.g.toString(16).padStart(2, '0');
       var hexB = led.b.toString(16).padStart(2, '0');
@@ -26,8 +27,9 @@ function SimpleDrone({
     } else {
       return "#000000";
     }
+  };
 
-  }
+  const eulerRotation = useMemo(() => new Euler(angle.roll, angle.yaw, angle.pitch), [angle]);
 
   return (
     <group
@@ -37,7 +39,7 @@ function SimpleDrone({
       onClick={onClick}
       onPointerOver={(event) => hover(true)}
       onPointerOut={(event) => hover(false)}
-      rotation={[angle.roll, angle.yaw, angle.pitch]}
+      rotation={eulerRotation}
     >
       <mesh
         geometry={body}
@@ -60,7 +62,7 @@ function SimpleDrone({
         />
       </mesh>
     </group>
-  )
+  );
 }
 
-export default SimpleDrone;
+export default memo(SimpleDrone);

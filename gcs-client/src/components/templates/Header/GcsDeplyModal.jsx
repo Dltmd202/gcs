@@ -22,6 +22,7 @@ const GcsDeployModal = ({showAutoSort}) => {
   const [gridY, setGridY] = useState(5);
   const [offSetX, setOffsetX] = useState(0);
   const [offSetY, setOffsetY] = useState(0);
+  const [rotation, setRotation] = useState(0);
   const [offSetHead, setOffSetHead] = useState(0);
   const [gridInterval, setGridInterval] = useState(3);
   const [readyToStart, setReadyToStart] = useState(false);
@@ -29,7 +30,7 @@ const GcsDeployModal = ({showAutoSort}) => {
 
 
   const gridXReference = useRef();
-  const gridYReference = useRef();
+  const rotationReference = useRef();
   const gridIntervalReference = useRef();
   const {
     loading: contextLoading,
@@ -51,17 +52,6 @@ const GcsDeployModal = ({showAutoSort}) => {
   }, [context])
 
   const handleTakeOffButton = (id, sysid, x, y) => {
-    // setTimeout(() => {
-    //   agentApi.offboard(sysid);
-    //
-    //   setTimeout(() => {
-    //     agentApi.destination(sysid, x, y, -1.5);
-    //
-    //     setTimeout(() => {
-    //       agentApi.arm(sysid);
-    //     }, 1000);
-    //   }, 300);
-    // }, 300);
     deployApi.takeOff(sysid, x, y, -1.5, radianToDegree(offSetHead));
   }
 
@@ -83,8 +73,6 @@ const GcsDeployModal = ({showAutoSort}) => {
   }
 
   const handleLandButton = (id, sysid) => {
-    // agentApi.land(sysid);
-    // agentApi.disarm(sysid);
     deployApi.land(sysid);
   }
 
@@ -105,15 +93,15 @@ const GcsDeployModal = ({showAutoSort}) => {
   const getRTKDestinationX = (id, sysid) => {
     const x = ((id - 1) % gridX) * gridInterval;
     const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
-    if(context.rotation === 0) return offSetX + x;
-    return offSetX + (x * Math.cos(context.rotation) - y * Math.sin(context.rotation));
+    if(rotation === 0) return offSetX + x;
+    return offSetX + (x * Math.cos(rotation) - y * Math.sin(rotation));
   }
 
   const getRTKDestinationY = (id, sysid) => {
     const x = ((id - 1) % gridX) * gridInterval;
     const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
-    if(context.rotation === 0) return offSetY - y;
-    return offSetY + (x * Math.sin(context.rotation) + y * Math.cos(context.rotation));
+    if(rotation === 0) return offSetY - y;
+    return offSetY + (x * Math.sin(rotation) + y * Math.cos(rotation));
   }
 
   const getLocalDestX = (id, sysid) => {
@@ -155,12 +143,12 @@ const GcsDeployModal = ({showAutoSort}) => {
                 />
               </DeployModalInputPair>
               <DeployModalInputPair>
-                <ModalInputLabel>Y Grid</ModalInputLabel>
+                <ModalInputLabel>Rotation</ModalInputLabel>
                 <ModalInput
-                  value={gridY}
+                  value={rotation}
                   type={"number"}
-                  onChange={(e) => setGridY(e.target.value)}
-                  ref={gridYReference}
+                  onChange={(e) => setRotation(e.target.value)}
+                  ref={rotationReference}
                   disabled={readyToStart}
                   disable={readyToStart}
                 />
@@ -464,11 +452,11 @@ const GcsDeployModalContainer = React.memo(styled(Modal)`
   width: 130vh;
   height: 50vh;
   top: 6vh;
+  overflow: scroll;
 `)
 
 const DeployrModalBody = React.memo(styled(ModalBody)`
   height: 90%;
-  overflow: scroll;
 `)
 
 const CurrentStatusContainer = styled.div`

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {OrbitControls, PerspectiveCamera, Sky} from "@react-three/drei";
-import React from "react";
+import React, {useEffect} from "react";
 import {Canvas} from "@react-three/fiber";
 import {Physics} from "@react-three/cannon";
 
@@ -10,6 +10,19 @@ const CanvasContainer = ({
                            controlRef,
                            ...props
 }) => {
+  let frameId = null;
+
+  useEffect(() => {
+    const animate = () => {
+      frameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, []);
 
   return (
     <ThreeContainer>
@@ -30,7 +43,7 @@ const CanvasContainer = ({
           minDistance={2}
           maxDistance={200}
           maxPolarAngle={Math.PI / 2 + 0.1}
-          args={[cameraRef.current]}
+          args={[cameraRef.current, undefined]}
         />
         <Sky
           distance={1000} // 하늘과 지표면 사이의 거리

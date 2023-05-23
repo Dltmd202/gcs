@@ -10,6 +10,7 @@ import {ExpandMoreSharp} from "@mui/icons-material";
 import {ChevronRight} from "@mui/icons-material";
 import StyledTreeItem from "../../atoms/ThreeView/StyledTreeItem";
 import radianToDegree from "../../../module/coordinate/RadToDgreeConverter";
+import {agentStatusMask} from "../../../module/coordinate/agentStatus";
 
 const AgentInfo = ({
                      agentObject,
@@ -24,10 +25,20 @@ const AgentInfo = ({
     color,
     battery,
     complementaryColor,
-    angle
+    angle,
+    status
   } = agentObject;
 
   const [drop, isDrop] = useState(true);
+
+  let containerColor = Colors.textPrimary;
+  if ((status & agentStatusMask[25].mask) !== 0) {
+    containerColor = Colors.warning;
+  } else if ((status & agentStatusMask[26].mask) !== 0) {
+    containerColor = Colors.orange;
+  } else if ((status & agentStatusMask[9].mask) === 0){
+    containerColor = Colors.red;
+  }
 
   const handleFocus = () => {
     if(active)
@@ -55,6 +66,7 @@ const AgentInfo = ({
     <AgentInfoContainer
       active={active}
       color={color}
+      textColor={containerColor}
       onClick={handleFocus}
       {...props}
     >
@@ -171,19 +183,6 @@ const AgentInfo = ({
   )
 }
 
-const AgentAttributeCol = ({attribute, val}) => {
-  return (
-    <div style={{display: 'flex'}}>
-      <div>
-        {attribute}
-      </div>
-      <div>
-        {val}
-      </div>
-    </div>
-  )
-}
-
 const AgentBodyContainer = React.memo(styled.div`
 `)
 
@@ -215,7 +214,7 @@ const AgentOrderButton = React.memo(styled(Button)`
 
 const AgentInfoContainer = React.memo(styled.div`
   background: #2e3c43;
-  color: ${props => props.active ? Colors.textPrimary: Colors.textQuaternary};
+  color: ${props => props.textColor};
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 0.3em;
   border: 1px solid ${props => props.active ? props.color: Colors.backgroundDisabled};
