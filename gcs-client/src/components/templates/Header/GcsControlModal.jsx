@@ -109,7 +109,7 @@ const GcsControlModal = ({showController}) => {
       setLEDDetail(true);
       return;
     }
-    agentApi.globalLED(0, r, g, b, 0, 1);
+    agentApi.globalLED(0, r, g, b, bright, 1);
   }
 
   const toggleRepeatedSetPoint = async () => {
