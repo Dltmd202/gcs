@@ -26,8 +26,6 @@ const GcsDeployModal = ({showAutoSort}) => {
   const [offSetHead, setOffSetHead] = useState(0);
   const [gridInterval, setGridInterval] = useState(3);
   const [readyToStart, setReadyToStart] = useState(false);
-  const [idIndex, setIdIndex] = useState({});
-
 
   const gridXReference = useRef();
   const rotationReference = useRef();
@@ -38,18 +36,6 @@ const GcsDeployModal = ({showAutoSort}) => {
     error: contextError
   } = useSelector((state) => state.context);
 
-  useEffect(() => {
-    const idx = {};
-    Object.values(context.agents).map((agent, i) => {
-      idx[agent.id] = agent;
-    });
-    setIdIndex(idx);
-  }, [Object.keys(context?.agents).length])
-
-
-  useEffect(() => {
-    const agent = context
-  }, [context])
 
   const handleTakeOffButton = (id, sysid, x, y) => {
     deployApi.takeOff(sysid, x, y, -1.5, radianToDegree(offSetHead));
