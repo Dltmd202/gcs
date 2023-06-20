@@ -1,5 +1,5 @@
 import agentApi from "../../../api/agent";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import Modal, {
   ModalBody,
   ModalContainer,
@@ -26,22 +26,32 @@ const GcsDeployModal = ({showAutoSort}) => {
   const [offSetHead, setOffSetHead] = useState(0);
   const [gridInterval, setGridInterval] = useState(3);
   const [readyToStart, setReadyToStart] = useState(false);
+  const [context, setContext] = useState();
 
   const gridXReference = useRef();
   const rotationReference = useRef();
   const gridIntervalReference = useRef();
   const {
     loading: contextLoading,
-    data: context,
+    data: realTimeContext,
     error: contextError
   } = useSelector((state) => state.context);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setContext(realTimeContext)
+      console.log(realTimeContext);
+    }, 5000);
 
-  const handleTakeOffButton = (id, sysid, x, y) => {
+    return () => clearTimeout(timer);
+  }, [realTimeContext])
+
+
+  const handleTakeOffButton = useCallback((id, sysid, x, y) => {
     deployApi.takeOff(sysid, x, y, -1.5, radianToDegree(offSetHead));
-  }
+  }, [offSetHead]);
 
-  const handleMoveButton = (id, sysid) => {
+  const handleMoveButton = useCallback((id, sysid) => {
     deployApi.move(
       sysid,
       getLocalDestX(id, sysid),
@@ -49,7 +59,7 @@ const GcsDeployModal = ({showAutoSort}) => {
       -1.5,
       radianToDegree(offSetHead)
     );
-  }
+  }, [offSetHead]);
 
   const handleRebootButton = (id, sysid) => {
     const result = window.confirm(`SYSID - ${sysid} 을(를) Reboot 하겠습니까?`)
@@ -63,8 +73,8 @@ const GcsDeployModal = ({showAutoSort}) => {
   }
 
   const preset = () => {
-    setReadyToStart(!readyToStart);
 
+    setContext(realTimeContext);
     if(!contextLoading && !contextError){
       context.agents && Object.values(context.agents).map((agent, i) => {
         if(agent.id === 1){
@@ -74,21 +84,22 @@ const GcsDeployModal = ({showAutoSort}) => {
         }
       });
     }
+
+    setReadyToStart(!readyToStart);
   }
 
-  const getRTKDestinationX = (id, sysid) => {
+  const getRTKDestinationX = useCallback((id, sysid) => {
     const x = ((id - 1) % gridX) * gridInterval;
     const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
     if(rotation === 0) return offSetX + x;
     return offSetX + (x * Math.cos(rotation) - y * Math.sin(rotation));
-  }
+  }, [gridX, gridInterval, rotation, offSetX]);
 
-  const getRTKDestinationY = (id, sysid) => {
+  const getRTKDestinationY = useCallback((id, sysid) => {
     const x = ((id - 1) % gridX) * gridInterval;
     const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
     if(rotation === 0) return offSetY - y;
-    return offSetY + (x * Math.sin(rotation) + y * Math.cos(rotation));
-  }
+  }, [gridX, gridInterval, rotation, offSetY]);
 
   const getLocalDestX = (id, sysid) => {
     const rtkDestX = getRTKDestinationX(id);
@@ -190,24 +201,24 @@ const GcsDeployModal = ({showAutoSort}) => {
                   </DeployStatusTheadTr>
                 </DeployStatusThead>
                 <DeployStatusTbody>
-                  {!contextLoading &&
+                  { context.agents &&
                     Object.entries(context.agents)
-                      .sort(([key1, agent1], [key2, agent2]) => agent1.id - agent2.id)
+                      // .sort(([key1, agent1], [key2, agent2]) => agent1.id - agent2.id)
                       .map(([key, agent], id) => (
                       <DeployStatusTbodyTr key={id} fixed={(agent.status & agentStatusMask[9].mask) !== 0}>
                         <DeployStatusTbodyTd>{agent.id}</DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{radianToDegree(agent.angle.yaw).toFixed(2)}</DeployStatusTbodyTd>
+                        <DeployStatusTbodyTd>
+                          {radianToDegree(agent.angle.yaw).toFixed(2)}
+                        </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <CurrentStatusContainer>
                             <div>
                               {agent.rtk.x.toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
-                                current={agent.rtk.x.toFixed(2)} />
-                            }
+                            <DestinationErrorRange
+                              dest={getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
+                              current={agent.rtk.x.toFixed(2)} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
@@ -215,11 +226,9 @@ const GcsDeployModal = ({showAutoSort}) => {
                             <div>
                               {agent.rtk.y.toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
-                                current={agent.rtk.y.toFixed(2)} />
-                            }
+                            <DestinationErrorRange
+                              dest={getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
+                              current={agent.rtk.y.toFixed(2)} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
@@ -227,11 +236,9 @@ const GcsDeployModal = ({showAutoSort}) => {
                             <div>
                               {agent.rtk.z.toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={0}
-                                current={0} />
-                            }
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
@@ -239,43 +246,35 @@ const GcsDeployModal = ({showAutoSort}) => {
                             <div>
                               {getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={0}
-                                current={0} />
-                            }
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <div>
                             {getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
                           </div>
-                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          }
+                          <DestinationErrorRange
+                            dest={0}
+                            current={0} />
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <div>
                             -
                           </div>
-                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          }
+                          <DestinationErrorRange
+                            dest={0}
+                            current={0} />
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <CurrentStatusContainer>
                             <div>
                               {agent.ned.x.toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={getLocalDestX(agent.id, agent.sysid).toFixed(2)}
-                                current={agent.ned.x.toFixed(2)} />
-                            }
+                            <DestinationErrorRange
+                              dest={getLocalDestX(agent.id, agent.sysid).toFixed(2)}
+                              current={agent.ned.x.toFixed(2)} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
@@ -283,11 +282,9 @@ const GcsDeployModal = ({showAutoSort}) => {
                             <div>
                               {agent.ned.y.toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={getLocalDestY(agent.id, agent.sysid).toFixed(2)}
-                                current={agent.ned.y.toFixed(2)} />
-                            }
+                            <DestinationErrorRange
+                              dest={getLocalDestY(agent.id, agent.sysid).toFixed(2)}
+                              current={agent.ned.y.toFixed(2)} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
@@ -295,11 +292,9 @@ const GcsDeployModal = ({showAutoSort}) => {
                             <div>
                               {agent.ned.z.toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={0}
-                                current={0} />
-                            }
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
@@ -307,32 +302,26 @@ const GcsDeployModal = ({showAutoSort}) => {
                             <div>
                               {getLocalDestX(agent.id, agent.sysid).toFixed(2)}
                             </div>
-                            {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                              <DestinationErrorRange
-                                dest={0}
-                                current={0} />
-                            }
+                            <DestinationErrorRange
+                              dest={0}
+                              current={0} />
                           </CurrentStatusContainer>
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <div>
                             {getLocalDestY(agent.id, agent.sysid).toFixed(2)}
                           </div>
-                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          }
+                          <DestinationErrorRange
+                            dest={0}
+                            current={0} />
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd>
                           <div>
                             -
                           </div>
-                          {((agent.status & agentStatusMask[9].mask) !== 0) &&
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          }
+                          <DestinationErrorRange
+                            dest={0}
+                            current={0} />
                         </DeployStatusTbodyTd>
                         <DeployStatusTbodyTd close={true}>
                           <button onClick={() => handleRebootButton(agent.id, agent.sysid)}>Reboot</button>

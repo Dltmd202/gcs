@@ -1,8 +1,8 @@
-import { SphereGeometry, BoxGeometry } from 'three';
+import {SphereGeometry, BoxGeometry, BufferGeometry, BufferAttribute, TetrahedronGeometry, ConeGeometry} from 'three';
 import React, {memo, useEffect, useMemo, useRef, useState} from "react";
-import { useFrame } from "@react-three/fiber";
 import { Euler } from 'three';
-import {OSphereGeometry} from "three/addons/libs/OimoPhysics";
+import {agentStatusMask} from "../../../module/coordinate/agentStatus";
+import Colors from "../../../styles/colors";
 
 function SimpleDrone({
                        agentObj,
@@ -12,20 +12,39 @@ function SimpleDrone({
                      }) {
   const meshRef = useRef();
   const [hovered, hover] = useState(false);
-  const [clicked, click] = useState(false);
-  const { active, angle, rtk, color, complementaryColor, led } = agentObj;
+  const { active, angle, rtk, color, complementaryColor, led, status, sysid } = agentObj;
+  const [abnormal, setAbnormal] = useState(false);
 
-  const head = useMemo(() => new BoxGeometry(0.1, 0.4, 0.4), []);
-  const body = useMemo(() => new SphereGeometry(0.5, 16, 16), []);
+  const [unFixed, setUnFixed] = useState(false);
+  const [age1, setAge1] = useState(false);
+  const [age2, setAge2] = useState(false);
+
+  const normalBody = useMemo(() => new SphereGeometry(0.5, 16, 16), []);
+  const triangleBody = useMemo(() => new ConeGeometry(0.5, 1, 3), []);
+
+
+  useEffect(() => {
+    setUnFixed((status & agentStatusMask[9].mask) === 0);
+    setAge1((status & agentStatusMask[25].mask) !== 0);
+    setAge2((status & agentStatusMask[26].mask) !== 0);
+  }, [status]);
+
+  useEffect(() => {
+    setAbnormal(unFixed || age2);
+    console.log(sysid, unFixed, age2, abnormal)
+  }, [unFixed, age2]);
 
   const getColor = () => {
+    if(focused || hovered){
+      return complementaryColor;
+    }
     if (led.r !== -1) {
       var hexR = led.r.toString(16).padStart(2, '0');
       var hexG = led.g.toString(16).padStart(2, '0');
       var hexB = led.b.toString(16).padStart(2, '0');
       return '#' + hexR + hexG + hexB;
     } else {
-      return "#000000";
+      return Colors.black;
     }
   };
 
@@ -42,23 +61,14 @@ function SimpleDrone({
       rotation={eulerRotation}
     >
       <mesh
-        geometry={body}
+        geometry={abnormal ? triangleBody : normalBody}
+        rotation={abnormal ? [Math.PI, 0, 0] : [0, 0, 0]}
         position={[0, 0.25, 0]}
       >
         <meshPhongMaterial
           color={hovered || focused ? complementaryColor : getColor()}
           transparent={true}
           opacity={0.8}
-        />
-      </mesh>
-      <mesh
-        scale={0.4}
-        geometry={head}
-        position={[0.5, 0.25, 0]}
-      >
-        <meshPhongMaterial
-          color={hovered || focused ? complementaryColor : getColor()}
-          emissive={hovered || focused ? getColor() : complementaryColor}
         />
       </mesh>
     </group>

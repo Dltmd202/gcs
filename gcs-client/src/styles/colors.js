@@ -4,7 +4,7 @@ export default Object.freeze({
 
   red: '#E8587B',
   pink: '#FFABC7',
-  orange: '#FE925C',
+  orange: '#FF9A2F',
   yellow: '#FCCC5B',
   lime: '#D4E157',
   green: '#66CE92',

@@ -1,9 +1,0 @@
-
-coordinate:
-  initial:
-    lat: 36.766689
-    lng: 127.281952
-    alt: 95.75
-
-session:
-  fileLoader: conf_load

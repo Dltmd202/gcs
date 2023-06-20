@@ -1,6 +1,0 @@
-jwt:
-  token:
-    header: Authorization
-    issuer: gcs
-    client-secret: Rel3Bjce2MajBo09qgkNgYaTuzvJe8iwnBFhsDS5
-    expiry-seconds: 0

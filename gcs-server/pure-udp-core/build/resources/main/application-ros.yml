@@ -1,6 +1,0 @@
-ros2:
-  ros2-web-bridge:
-    web-socket:
-      schema: ws
-      ip: 218.150.182.119
-      port: 10081

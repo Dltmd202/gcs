@@ -40,6 +40,13 @@ const AgentInfo = ({
     containerColor = Colors.red;
   }
 
+  const getColor = () => {
+    if((status & agentStatusMask[9].mask) === 0) return Colors.red;
+    if((status & agentStatusMask[26].mask) !== 0) return Colors.orange;
+    if((status & agentStatusMask[25].mask) !== 0) return Colors.warning;
+    return Colors.textPrimary;
+  }
+
   const handleFocus = () => {
     if(active)
       focus(sysid);
@@ -66,7 +73,7 @@ const AgentInfo = ({
     <AgentInfoContainer
       active={active}
       color={color}
-      textColor={containerColor}
+      textColor={getColor()}
       onClick={handleFocus}
       {...props}
     >

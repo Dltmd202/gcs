@@ -13,6 +13,7 @@ import {GcsOrderButton} from "./GcsHeader";
 import {agentStatusMask} from "../../../module/coordinate/agentStatus";
 import ProgressBar from "../../atoms/progress/ProgressBar";
 import Colors from "../../../styles/colors";
+import {degreeToRadian} from "../../../module/coordinate/RadToDgreeConverter";
 
 const GcsScenarioModal = ({showScenario}) => {
   const [scenario, setScenario] = useState("");
@@ -119,15 +120,6 @@ const GcsScenarioModal = ({showScenario}) => {
       alert("Set Configuration Name")
       return;
     }
-    context.agents && Object.values(context.agents).map((agent, i) => {
-      agentApi.scenarioConfiguration(
-          agent.sysid,
-          offsetX,
-          offsetY,
-          context.rotation,
-          `${scenario}/node_${agent.id}.txt`
-      )
-    });
 
     if(totalCount === fixedCount){
       alert(`config 세팅을 전송했습니다.`)
@@ -136,7 +128,7 @@ const GcsScenarioModal = ({showScenario}) => {
           agent.sysid,
           offsetX,
           offsetY,
-          0,
+          context.rotation,
           `${scenario}/node_${agent.id}.txt`
         )
       });

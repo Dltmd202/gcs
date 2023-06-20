@@ -2,10 +2,12 @@ package com.gcs.api.web.agent.api;
 
 import com.gcs.api.domain.mavlink.service.MavLinkService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/scenario")
@@ -20,6 +22,7 @@ public class AgentScenarioApiController {
             @RequestParam float rot,
             @RequestParam String path
     ){
+        log.info("{}", rot);
         mavLinkService.setScenarioConfigs(sysid, x, y, rot, path);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
