@@ -4,6 +4,7 @@ import com.gcs.core.udp.domain.mavlink.service.MavlinkGatewayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 
 
 @Configuration

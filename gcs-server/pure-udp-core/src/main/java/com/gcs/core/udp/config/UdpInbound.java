@@ -2,6 +2,7 @@ package com.gcs.core.udp.config;
 
 import com.gcs.core.udp.domain.mavlink.service.MavlinkGatewayService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.task.TaskExecutor;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -36,7 +37,9 @@ public class UdpInbound {
                 try {
                     reciver.receive(recivePacket);
                     byte[] data = recivePacket.getData();
+
                     mavlinkGatewayService.publishToBrowser(data);
+                    log.info("{}", data);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

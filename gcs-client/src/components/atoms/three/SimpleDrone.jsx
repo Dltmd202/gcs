@@ -31,7 +31,6 @@ function SimpleDrone({
 
   useEffect(() => {
     setAbnormal(unFixed || age2);
-    console.log(sysid, unFixed, age2, abnormal)
   }, [unFixed, age2]);
 
   const getColor = () => {

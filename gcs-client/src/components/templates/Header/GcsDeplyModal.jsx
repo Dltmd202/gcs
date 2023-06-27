@@ -17,104 +17,247 @@ import { FontSize } from "../../../styles/font";
 import radianToDegree from "../../../module/coordinate/RadToDgreeConverter";
 import deployApi from "../../../api/deploy";
 
+const DeployAgentAreEqual = (prev, next) => {
+  let res = prev.agent.ned.x === next.agent.ned.x;
+  res = res && prev.agent.ned.y === next.agent.ned.y;
+  res = res && prev.agent.rtk.x === next.agent.rtk.x;
+  res = res && prev.agent.rtk.y === next.agent.rtk.y;
+  return res;
+}
+
+const DeployAgentStatus = React.memo(({
+                             agent,
+                             rotation,
+                             offsetHead,
+                             gridX,
+                             gridInterval,
+                             offSetX,
+                             offSetY
+}) => {
+  const [rtkDestX, setRTKDestX] = useState(0);
+  const [rtkDestY, setRTKDestY] = useState(0);
+  const [localDestX, setLocalDestX] = useState(0);
+  const [localDestY, setLocalDestY] = useState(0);
+
+
+  useEffect(() => {
+    const x = ((agent.id - 1) % gridX) * gridInterval;
+    const y = -1 * (Math.floor((agent.id - 1) / gridX)) * gridInterval;
+    if(rotation === 0) {
+      setRTKDestX(offSetX + x);
+      setRTKDestY(offSetY - y);
+    } else {
+      setRTKDestX(offSetX + (x * Math.cos(rotation) - y * Math.sin(rotation)));
+      setRTKDestY(offSetY + (x * Math.sin(rotation) + y * Math.cos(rotation)));
+    }
+  }, [gridX, gridInterval, rotation, offSetX, offSetY]);
+
+  useEffect(() => {
+    setLocalDestX(agent.ned.x + rtkDestX - agent.rtk.x);
+    setLocalDestY(agent.ned.y + rtkDestY - agent.rtk.y);
+  }, [agent.ned]);
+
+
+  const handleTakeOffButton = useCallback(() => {
+    deployApi.takeOff(
+      agent.sysid,
+      agent.ned.x,
+      agent.ned.y,
+      -1.5,
+      radianToDegree(offsetHead)
+    );
+  }, [agent.ned]);
+
+
+  const handleMoveButton = useCallback(() => {
+    deployApi.move(
+      agent.sysid,
+      localDestX,
+      localDestY,
+      -1.5,
+      radianToDegree(offsetHead)
+    );
+  }, [localDestX, localDestY, offsetHead]);
+
+
+  const handleRebootButton = useCallback(() => {
+    const result = window.confirm(`SYSID - ${agent.sysid} 을(를) Reboot 하겠습니까?`)
+    if (result) {
+      agentApi.reboot(agent.sysid);
+    }
+  }, [agent.sysid]);
+
+  const handleLandButton = useCallback(() => {
+    deployApi.land(agent.sysid);
+  }, [agent.sysid]);
+
+  return (
+    <DeployStatusTbodyTr key={agent.id} fixed={(agent.status & agentStatusMask[9].mask) !== 0}>
+      <DeployStatusTbodyTd>{agent.id}</DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        {radianToDegree(agent.angle.yaw).toFixed(2)}
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {agent.rtk.x.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={rtkDestX.toFixed(2)}
+            current={agent.rtk.x.toFixed(2)} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {agent.rtk.y.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={rtkDestY.toFixed(2)}
+            current={agent.rtk.y.toFixed(2)} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {agent.rtk.z.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={0}
+            current={0} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {rtkDestX.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={0}
+            current={0} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <div>
+          {rtkDestY.toFixed(2)}
+        </div>
+        <DestinationErrorRange
+          dest={0}
+          current={0} />
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <div>
+          -
+        </div>
+        <DestinationErrorRange
+          dest={0}
+          current={0} />
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {agent.ned.x.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={localDestX.toFixed(2)}
+            current={agent.ned.x.toFixed(2)} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {agent.ned.y.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={localDestY.toFixed(2)}
+            current={agent.ned.y.toFixed(2)} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {agent.ned.z.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={0}
+            current={0} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <CurrentStatusContainer>
+          <div>
+            {localDestX.toFixed(2)}
+          </div>
+          <DestinationErrorRange
+            dest={0}
+            current={0} />
+        </CurrentStatusContainer>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <div>
+          {localDestY.toFixed(2)}
+        </div>
+        <DestinationErrorRange
+          dest={0}
+          current={0} />
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd>
+        <div>
+          -
+        </div>
+        <DestinationErrorRange
+          dest={0}
+          current={0} />
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd close={true}>
+        <button onClick={handleRebootButton}>Reboot</button>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd close={true}>
+        <button onClick={handleTakeOffButton}>takeoff</button>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd close={true}>
+        <button onClick={handleMoveButton}>move</button>
+      </DeployStatusTbodyTd>
+      <DeployStatusTbodyTd close={true}>
+        <button onClick={handleLandButton}>land</button>
+      </DeployStatusTbodyTd>
+    </DeployStatusTbodyTr>
+  )
+}, DeployAgentAreEqual);
+
 const GcsDeployModal = ({showAutoSort}) => {
   const [gridX, setGridX] = useState(5);
   const [gridY, setGridY] = useState(5);
   const [offSetX, setOffsetX] = useState(0);
   const [offSetY, setOffsetY] = useState(0);
   const [rotation, setRotation] = useState(0);
-  const [offSetHead, setOffSetHead] = useState(0);
+  const [offsetHead, setOffsetHead] = useState(0);
   const [gridInterval, setGridInterval] = useState(3);
   const [readyToStart, setReadyToStart] = useState(false);
-  const [context, setContext] = useState();
 
   const gridXReference = useRef();
   const rotationReference = useRef();
   const gridIntervalReference = useRef();
   const {
     loading: contextLoading,
-    data: realTimeContext,
+    data: context,
     error: contextError
   } = useSelector((state) => state.context);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setContext(realTimeContext)
-      console.log(realTimeContext);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [realTimeContext])
-
-
-  const handleTakeOffButton = useCallback((id, sysid, x, y) => {
-    deployApi.takeOff(sysid, x, y, -1.5, radianToDegree(offSetHead));
-  }, [offSetHead]);
-
-  const handleMoveButton = useCallback((id, sysid) => {
-    deployApi.move(
-      sysid,
-      getLocalDestX(id, sysid),
-      getLocalDestY(id, sysid),
-      -1.5,
-      radianToDegree(offSetHead)
-    );
-  }, [offSetHead]);
-
-  const handleRebootButton = (id, sysid) => {
-    const result = window.confirm(`SYSID - ${sysid} 을(를) Reboot 하겠습니까?`)
-    if (result) {
-      agentApi.reboot(sysid);
-    }
-  }
-
-  const handleLandButton = (id, sysid) => {
-    deployApi.land(sysid);
-  }
-
   const preset = () => {
-
-    setContext(realTimeContext);
     if(!contextLoading && !contextError){
       context.agents && Object.values(context.agents).map((agent, i) => {
         if(agent.id === 1){
           setOffsetX(agent.rtk.x);
           setOffsetY(agent.rtk.y);
-          setOffSetHead(agent.angle.yaw);
+          setOffsetHead(agent.angle.yaw);
         }
       });
     }
 
     setReadyToStart(!readyToStart);
-  }
-
-  const getRTKDestinationX = useCallback((id, sysid) => {
-    const x = ((id - 1) % gridX) * gridInterval;
-    const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
-    if(rotation === 0) return offSetX + x;
-    return offSetX + (x * Math.cos(rotation) - y * Math.sin(rotation));
-  }, [gridX, gridInterval, rotation, offSetX]);
-
-  const getRTKDestinationY = useCallback((id, sysid) => {
-    const x = ((id - 1) % gridX) * gridInterval;
-    const y = -1 * (Math.floor((id - 1) / gridX)) * gridInterval;
-    if(rotation === 0) return offSetY - y;
-  }, [gridX, gridInterval, rotation, offSetY]);
-
-  const getLocalDestX = (id, sysid) => {
-    const rtkDestX = getRTKDestinationX(id);
-    const rtkCurrentX = context.agents[sysid].rtk.x;
-
-    return context.agents[sysid].ned.x + (rtkDestX - rtkCurrentX);
-  }
-
-  const getLocalDestY = (id, sysid) => {
-    const rtkDestY = getRTKDestinationY(id);
-    const rtkCurrentY = context.agents[sysid].rtk.y;
-
-    return context.agents[sysid].ned.y + (rtkDestY - rtkCurrentY);
-  }
-
+  };
 
   return (
     showAutoSort &&
@@ -203,140 +346,18 @@ const GcsDeployModal = ({showAutoSort}) => {
                 <DeployStatusTbody>
                   { context.agents &&
                     Object.entries(context.agents)
-                      // .sort(([key1, agent1], [key2, agent2]) => agent1.id - agent2.id)
+                      .sort(([key1, agent1], [key2, agent2]) => agent1.id - agent2.id)
                       .map(([key, agent], id) => (
-                      <DeployStatusTbodyTr key={id} fixed={(agent.status & agentStatusMask[9].mask) !== 0}>
-                        <DeployStatusTbodyTd>{agent.id}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>{agent.sysid}</DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          {radianToDegree(agent.angle.yaw).toFixed(2)}
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {agent.rtk.x.toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
-                              current={agent.rtk.x.toFixed(2)} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {agent.rtk.y.toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
-                              current={agent.rtk.y.toFixed(2)} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {agent.rtk.z.toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {getRTKDestinationX(agent.id, agent.sysid).toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <div>
-                            {getRTKDestinationY(agent.id, agent.sysid).toFixed(2)}
-                          </div>
-                          <DestinationErrorRange
-                            dest={0}
-                            current={0} />
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <div>
-                            -
-                          </div>
-                          <DestinationErrorRange
-                            dest={0}
-                            current={0} />
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {agent.ned.x.toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={getLocalDestX(agent.id, agent.sysid).toFixed(2)}
-                              current={agent.ned.x.toFixed(2)} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {agent.ned.y.toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={getLocalDestY(agent.id, agent.sysid).toFixed(2)}
-                              current={agent.ned.y.toFixed(2)} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {agent.ned.z.toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <CurrentStatusContainer>
-                            <div>
-                              {getLocalDestX(agent.id, agent.sysid).toFixed(2)}
-                            </div>
-                            <DestinationErrorRange
-                              dest={0}
-                              current={0} />
-                          </CurrentStatusContainer>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <div>
-                            {getLocalDestY(agent.id, agent.sysid).toFixed(2)}
-                          </div>
-                          <DestinationErrorRange
-                            dest={0}
-                            current={0} />
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd>
-                          <div>
-                            -
-                          </div>
-                          <DestinationErrorRange
-                            dest={0}
-                            current={0} />
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd close={true}>
-                          <button onClick={() => handleRebootButton(agent.id, agent.sysid)}>Reboot</button>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd close={true}>
-                          <button onClick={() => handleTakeOffButton(agent.id, agent.sysid, agent.ned.x, agent.ned.y)}>takeoff</button>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd close={true}>
-                          <button onClick={() => handleMoveButton(agent.id, agent.sysid)}>move</button>
-                        </DeployStatusTbodyTd>
-                        <DeployStatusTbodyTd close={true}>
-                          <button onClick={() => handleLandButton(agent.id, agent.sysid)}>land</button>
-                        </DeployStatusTbodyTd>
-                      </DeployStatusTbodyTr>
-                    ))
+                        <DeployAgentStatus
+                          agent={agent}
+                          rotation={rotation}
+                          offsetHead={offsetHead}
+                          gridX={gridX}
+                          gridInterval={gridInterval}
+                          offSetX={offSetX}
+                          offSetY={offSetY}
+                        />
+                      ))
                   }
                 </DeployStatusTbody>
               </DeployStatusTable>

@@ -87,7 +87,7 @@ public class MavlinkGatewayService {
                     socket.send(packet);
             } catch (IOException e) {
                 //TODO java.net.SocketException: Host is down handling
-                log.error("error", e);
+                //log.error("error", e);
             }
         }
     }

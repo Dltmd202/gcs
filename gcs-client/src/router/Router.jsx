@@ -6,6 +6,7 @@ import PrivateRouter from "./PrivateRoute";
 import UserPage from "../pages/user/UserPage";
 import JoinPage from "../pages/user/JoinPage";
 import ThreeDimensionGCSPage from "../pages/gcs/ThreeDimensionGCSPage";
+import ThreeDimensionGCSPage2 from "../pages/gcs/ThreeDimensionGCSPage2";
 import ProtectRoute from "./ProtectRoute";
 import NotFoundPage from "../pages/error/NotFound";
 import WhiteGCSPage from "../pages/gcs/WhiteGCSPage";
@@ -27,6 +28,7 @@ const Routers = () => {
 
         <Route element={<PrivateRouter/>}>
           <Route path="/gcs/three" element={<ThreeDimensionGCSPage/>} />
+          <Route path="/gcs/three2" element={<ThreeDimensionGCSPage2/>} />
           <Route path="/gcs/white" element={<WhiteGCSPage/>} />
         </Route>
 
