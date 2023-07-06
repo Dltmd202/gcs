@@ -23,15 +23,22 @@ public class MonitoringSender {
         int i = 0;
 
         MAVLinkMessage monitoring = new msg_monitoring();
-        for (i = 0; i < 1000; i++) {
-            System.out.print(i * 1000 + " ");
+        int cnt = 0;
+        for (i = 0; i < 100; i++) {
+            System.out.print(i * 1 + " ");
             long start = System.currentTimeMillis();
-            for (int j = 1; j <= 10; j++) {
+            for (int j = 2; j <= 200; j++) {
                 monitoring = MonitoringFactory.make(
                         j,
-                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
-                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
-                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+//                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+//                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+//                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+//                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+//                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+//                        0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
+                        j,
+                        0.5F * i,
+                        0,
                         0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
                         0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
                         0.0F + 0.1F * (ThreadLocalRandom.current().nextInt() % 100),
@@ -53,9 +60,10 @@ public class MonitoringSender {
                 data = MAVLinkUtils.getPacketData(monitoring);
                 packet = new DatagramPacket(data, data.length, dest);
                 socket.send(packet);
+                cnt++;
             }
             long end = System.currentTimeMillis();
-            System.out.println("Waiting " + (1000 - (end - start)));
+            System.out.println("Waiting " + (1000 - (end - start)) + " cnt = " + cnt);
             Thread.sleep(Math.max(0, 1000 - (end - start)));
         }
 

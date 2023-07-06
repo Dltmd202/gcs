@@ -1,13 +1,11 @@
 import {useSelector} from "react-redux";
-import agentApi from "../../../api/agent";
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import Modal, {
   ModalBody,
   ModalContainer,
   ModalHeader,
-  ModalHeaderName, ModalInput,
-  ModalInputContainer, ModalInputLabel, ModalInputPair
+  ModalHeaderName,
 } from "../../atoms/modal/Modal";
 import paramApi from "../../../api/param";
 
@@ -53,9 +51,6 @@ const EditableParamValue = ({
     setIsEditing(false)
     if(filterKey === '0') paramApi.globalSetParam(paramKey, text);
     else {
-      console.log(filterKey)
-      console.log(paramKey)
-      console.log(text)
       paramApi.setParam(filterKey, paramKey, text);
     }
   };
@@ -92,10 +87,11 @@ const GcsParameterModal = ({
   } = useSelector((state) => state.context);
   const [agentFilter, setAgentFilter] = useState({"0": {id: "0", name: "all" }});
   const [filterType, setFilterType] = useState("0");
-  const [filterLoading, setFilterLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [currentParam, setCurrentParam] = useState(null);
 
   useEffect(() => {
-    setFilterLoading(true);
+    setLoading(true);
     Object.values(context.agents)?.map((agent, i) => {
       setAgentFilter(agentFilter => ({
         ...agentFilter,
@@ -103,19 +99,34 @@ const GcsParameterModal = ({
       }));
     });
 
-    setFilterLoading(false);
+    setLoading(false);
   }, [contextLoading])
 
 
   useEffect(() => {
-    if(filterType !== '0' && isNaN(context.agents[filterType]?.param['BAT1_CAPACITY']))
-      paramApi.droneShowParamList(filterType);
+    const handleParameterSet = async () => {
+      console.log("fuck")
+      const param = await paramApi.getDroneShowParamList(filterType);
+      if(param.status === 200){
+        console.log(param.data.response);
+        setCurrentParam(param.data.response.params);
+      }
+    }
+
+    setLoading(true);
+    if(filterType !== '0'){
+      paramApi.queryDroneShowParamList(filterType);
+      handleParameterSet();
+    }
+    setLoading(false);
+
   }, [filterType])
 
 
   const getParamValue = (key) => {
-    const val = context.agents[filterType].param[key];
-    return !isNaN(val) ? val : "-";
+    if(currentParam === null) return "-";
+    if(! key in currentParam) return "-";
+    return currentParam[key];
   }
 
   return (
@@ -126,7 +137,7 @@ const GcsParameterModal = ({
             <ModalHeaderName>
               Parameter
             </ModalHeaderName>
-            {!filterLoading && (
+            {!loading && (
               <FilterMenu
                 value={filterType}
                 onChange={setFilterType}
@@ -137,7 +148,7 @@ const GcsParameterModal = ({
           </ModalHeader>
           <ParameterModalBody>
             <ModalStatusTable>
-            {paramKeyList.map((param, i) => (
+            {loading || paramKeyList.map((param, i) => (
               <ModalStatusTableRow key={i}>
                 <ModalStatusTableName>
                   {param.value}
@@ -164,50 +175,51 @@ const GcsParameterModal = ({
 
 export default React.memo(GcsParameterModal);
 
-const ParameterModal = React.memo(styled(Modal)`
+const ParameterModal = styled(Modal)`
   width: 100vh;
   height: 75vh;
   top: 6vh;
-`)
+`
 
-const AgentSelector = React.memo(styled.select`
+const AgentSelector = styled.select`
 
-`)
+`
 
-const AgentOption = React.memo(styled.option`
+const AgentOption = styled.option`
 
-`)
+`
 
-const ParameterModalContainer = React.memo(styled(ModalContainer)`
+const ParameterModalContainer = styled(ModalContainer)`
   height: 100%;
-`)
+`
 
-const ParameterModalHeader = React.memo(styled(ModalHeader)`
+const ParameterModalHeader = styled(ModalHeader)`
   
-`)
+`
 
-const ParameterModalBody = React.memo(styled(ModalBody)`
+const ParameterModalBody = styled(ModalBody)`
   height: 90%;
   overflow: scroll;
-`)
+`
 
-const ModalStatusTable = React.memo(styled.table`
+const ModalStatusTable = styled.table`
   width:100%;
-`)
+`
 
-const ModalStatusTableRow = React.memo(styled.tr`
+const ModalStatusTableRow = styled.tr`
   line-height: 1.5;
   width: 100%;
-`)
+`
 
-const ModalStatusTableName = React.memo(styled.td`
+const ModalStatusTableName = styled.td`
   width: 30%;
-`)
+`
 
-const ModalStatusTableValue = React.memo(styled.td`
+const ModalStatusTableValue = styled.td`
   width: 30%;
-`)
-const ModalStatusTableInfo = React.memo(styled.td`
+`
+
+const ModalStatusTableInfo = styled.td`
   font-size: x-small;
   width: 40%;
-`)
+`

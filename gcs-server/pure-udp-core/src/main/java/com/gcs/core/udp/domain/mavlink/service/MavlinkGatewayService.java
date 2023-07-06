@@ -56,17 +56,15 @@ public class MavlinkGatewayService {
 
         if(mavLinkMessage instanceof msg_monitoring){
             msg_monitoring monitoring = (msg_monitoring) mavLinkMessage;
-            try{
-                agentService.updateMove(monitoring.sysid, new MoveableMonitoringAdapter(monitoring));
-            } catch (ApiException e){
-                log.debug("error", e);
-            }
+            agentService.updateMove(monitoring.sysid, new MoveableMonitoringAdapter(monitoring));
             template.convertAndSend("/topic/monitoring", monitoring);
         }
         if(mavLinkMessage instanceof msg_param_value){
             msg_param_value paramValue = (msg_param_value) mavLinkMessage;
-            template.convertAndSend("/topic/param", new MessageParamValueAdapter(paramValue));
-        } if(mavLinkMessage instanceof msg_statustext){
+            MessageParamValueAdapter parameter = new MessageParamValueAdapter(paramValue);
+            agentService.updateParameter(parameter.getSysid(), parameter);
+        }
+        if(mavLinkMessage instanceof msg_statustext){
             msg_statustext statustext = (msg_statustext) mavLinkMessage;
             if(statustext.severity > 5) return;
             MessageStatusTextAdapter status = new MessageStatusTextAdapter(statustext);

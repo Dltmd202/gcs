@@ -1,4 +1,4 @@
-package com.gcs.domain.agent.dto;
+package com.gcs.domain.agent.model;
 
 import com.gcs.domain.agent.Flyable;
 import com.gcs.domain.coordinate.Locateable;

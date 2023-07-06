@@ -8,6 +8,7 @@ function SimpleDrone({
                        agentObj,
                        onClick,
                        focused=false,
+                       setFlyable,
                        ...props
                      }) {
   const meshRef = useRef();
@@ -18,9 +19,11 @@ function SimpleDrone({
   const [unFixed, setUnFixed] = useState(false);
   const [age1, setAge1] = useState(false);
   const [age2, setAge2] = useState(false);
+  const [ledColor, setLedColor] = useState(Colors.black);
 
   const normalBody = useMemo(() => new SphereGeometry(0.5, 16, 16), []);
   const triangleBody = useMemo(() => new ConeGeometry(0.5, 1, 3), []);
+  const selector = useMemo(() => new ConeGeometry(0.15, 0.3, 30), []);
 
 
   useEffect(() => {
@@ -31,21 +34,22 @@ function SimpleDrone({
 
   useEffect(() => {
     setAbnormal(unFixed || age2);
+    setFlyable(!(unFixed || age2 || age1));
   }, [unFixed, age2]);
 
-  const getColor = () => {
-    if(focused || hovered){
-      return complementaryColor;
-    }
-    if (led.r !== -1) {
+  useEffect(() => {
+    if(abnormal){
+      setLedColor(Colors.red);
+    } else if (led.r !== -1) {
       var hexR = led.r.toString(16).padStart(2, '0');
       var hexG = led.g.toString(16).padStart(2, '0');
       var hexB = led.b.toString(16).padStart(2, '0');
-      return '#' + hexR + hexG + hexB;
+      var c = '#' + hexR + hexG + hexB;
+      setLedColor(c);
     } else {
-      return Colors.black;
+      setLedColor(Colors.black);
     }
-  };
+  }, [led, abnormal])
 
   const eulerRotation = useMemo(() => new Euler(angle.roll, angle.yaw, angle.pitch), [angle]);
 
@@ -59,13 +63,25 @@ function SimpleDrone({
       onPointerOut={(event) => hover(false)}
       rotation={eulerRotation}
     >
+      {focused && (
+        <mesh
+          geometry={selector}
+          rotation={[Math.PI, 0, 0]}
+          position={[0, 1.1, 0]}
+        >
+          <meshPhongMaterial
+            color={Colors.red}
+            transparent={true}
+          />
+        </mesh>
+      )}
       <mesh
         geometry={abnormal ? triangleBody : normalBody}
         rotation={abnormal ? [Math.PI, 0, 0] : [0, 0, 0]}
         position={[0, 0.25, 0]}
       >
         <meshPhongMaterial
-          color={hovered || focused ? complementaryColor : getColor()}
+          color={ledColor}
           transparent={true}
           opacity={0.8}
         />

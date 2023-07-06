@@ -1,9 +1,7 @@
 package com.gcs.api.util.confparser;
 
-import com.gcs.domain.agent.dto.AgentDto;
-import com.gcs.domain.agent.dto.RealTimeAgentDto;
-import com.gcs.domain.context.AgentContext;
-import com.gcs.domain.context.dto.AgentContextDto;
+import com.gcs.domain.agent.model.Agent;
+import com.gcs.domain.context.model.AgentContext;
 import com.gcs.domain.context.exception.ConfigurationParseException;
 import com.gcs.domain.context.exception.DuplicateSysIdException;
 import com.gcs.api.constants.InitialCoordinateConstants;
@@ -51,16 +49,16 @@ public class AgentContextXMLParser {
     @TimeTracker
     public AgentContext parseConfiguration(MultipartFile confFile){
         InputStream confFileInputStream = extractInputStream(confFile);
-        AgentContextDto scenarioDto = parseConfiguration(confFileInputStream);
+        AgentContext scenarioDto = parseConfiguration(confFileInputStream);
 
         log.debug("{}", scenarioDto.agentStore());
         return scenarioDto;
     }
 
-    public AgentContextDto parseConfiguration(InputStream inputStream) {
+    public AgentContext parseConfiguration(InputStream inputStream) {
         Document confDocument = parse(inputStream);
         Element confElement = confDocument.getDocumentElement();
-        AgentContextDto agentContext = new AgentContextDto();
+        AgentContext agentContext = new AgentContext();
 
         String connection = confElement.getAttribute("connection").toLowerCase().trim();
         int rotation = Integer.parseInt(confElement.getAttribute("rotation").toLowerCase().trim());
@@ -79,16 +77,16 @@ public class AgentContextXMLParser {
             NodeList agentsChildNodes = agentsNode.getChildNodes();
 
             for (int agentSeq = 0; agentSeq < agentsChildNodes.getLength(); agentSeq++) {
-                Node agent = agentsChildNodes.item(agentSeq);
-                if(!agent.getNodeName().toLowerCase().trim().equals("agent")) continue;
+                Node agentNode = agentsChildNodes.item(agentSeq);
+                if(!agentNode.getNodeName().toLowerCase().trim().equals("agent")) continue;
 
-                RealTimeAgentDto agentDto = new RealTimeAgentDto();
+                Agent agent = new Agent();
                 Set<Integer> sysidValidator = new HashSet<>();
-                NodeList agentChildNodes = agent.getChildNodes();
+                NodeList agentChildNodes = agentNode.getChildNodes();
 
-                NamedNodeMap attributes = agent.getAttributes();
+                NamedNodeMap attributes = agentNode.getAttributes();
                 String id = attributes.getNamedItem("id").getNodeValue();
-                agentDto.setId(Integer.parseInt(id));
+                agent.setId(Integer.parseInt(id));
 
                 for (int agentChild = 0; agentChild < agentChildNodes.getLength(); agentChild++) {
                     Node agentProperty = agentChildNodes.item(agentChild);
@@ -99,39 +97,39 @@ public class AgentContextXMLParser {
                         if(sysidValidator.contains(sysid))
                             throw new DuplicateSysIdException();
                         sysidValidator.add(sysid);
-                        agentDto.setSysid(
+                        agent.setSysid(
                                 Integer.parseInt(agentProperty.getTextContent().trim()));
                     } else if(MODE.getVar().equals(agentProperty.getNodeName().toLowerCase())){
-                        agentDto.setMode(
+                        agent.setMode(
                                 agentProperty.getTextContent().trim()
                         );
                     } else if(TYPE.getVar().equals(agentProperty.getNodeName().toLowerCase())){
-                        agentDto.setType(
+                        agent.setType(
                                 agentProperty.getTextContent().trim()
                         );
                     } else if(GROUP.getVar().equals(agentProperty.getNodeName().toLowerCase())){
-                        agentDto.setGroup(
+                        agent.setGroup(
                                 Integer.parseInt(agentProperty.getTextContent().trim())
                         );
                     } else if(VEHICLE.getVar().equals(agentProperty.getNodeName().toLowerCase())){
-                        agentDto.setVehicle(
+                        agent.setVehicle(
                                 agentProperty.getTextContent().trim()
                         );
                     } else if(IP.getVar().equals(agentProperty.getNodeName().toLowerCase())){
-                        agentDto.setIp(
+                        agent.setIp(
                                 agentProperty.getTextContent().trim()
                         );
                     } else if(PORT.getVar().equals(agentProperty.getNodeName().toLowerCase())){
-                        agentDto.setPort(
+                        agent.setPort(
                                 Integer.parseInt(agentProperty.getTextContent().trim())
                         );
                     }
                     // TODO unknown 프로퍼티에 대한 정책
                 }
 
-                if(agentContext.agentStore().containsKey(agentDto.getSysid()))
+                if(agentContext.agentStore().containsKey(agent.getSysid()))
                     throw new ConfigurationParseException("sysid가 중복되었습니다.");
-                agentContext.agentStore().put(agentDto.getSysid(), agentDto);
+                agentContext.agentStore().put(agent.getSysid(), agent);
             }
 
         }

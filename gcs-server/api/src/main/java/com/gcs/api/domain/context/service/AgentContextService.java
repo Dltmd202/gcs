@@ -1,8 +1,7 @@
 package com.gcs.api.domain.context.service;
 
-import com.gcs.domain.agent.Agent;
-import com.gcs.domain.agent.dto.AgentDto;
-import com.gcs.domain.context.AgentContext;
+import com.gcs.domain.agent.model.Agent;
+import com.gcs.domain.context.model.AgentContext;
 import com.gcs.domain.context.exception.ConfigurationParseException;
 import com.gcs.domain.context.exception.DuplicateSysIdException;
 import com.gcs.api.domain.context.configuration.repository.AgentContextRepository;
@@ -22,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -86,20 +84,20 @@ public class AgentContextService {
 
     private AgentContext getContextDtoByContextFile(AgentContextEntity context){
         InputStream stream = null;
-        AgentContext scenarioDto = null;
+        AgentContext contextDto = null;
 
         try {
             stream = new FileInputStream(
                     fileStore.getFullPath(context.getStoreFileName())
             );
-            scenarioDto = parser.parseConfiguration(stream);
+            contextDto = parser.parseConfiguration(stream);
 
         } catch (FileNotFoundException e) {
             throw new ApiException(ErrorCode.FILE_NOT_FOUND);
         } catch (DuplicateSysIdException | ConfigurationParseException e){
             throw new ApiException(ErrorCode.NO_AGENT_FROM_CONTEXT_CONF);
         }
-        return scenarioDto;
+        return contextDto;
     }
 
     public Boolean cleanContext() {

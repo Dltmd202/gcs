@@ -1,5 +1,5 @@
 import agentApi from "../../../api/agent";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import Modal, {
   ModalBody,
   ModalContainer,
@@ -10,6 +10,11 @@ import Modal, {
 import { GcsOrderButton } from "./GcsHeader";
 import styled from "styled-components";
 import contextApi from "../../../api/context";
+
+const areEqual = (prev, next) => {
+  return prev.showController === next.showController;
+}
+
 
 const GcsControlModal = ({showController}) => {
   const [x, setX] = useState(0);
@@ -32,20 +37,21 @@ const GcsControlModal = ({showController}) => {
   const setLEDBReference = useRef();
   const setLEDBrightReference = useRef();
 
-  const fetchRepeatPoint = async () => {
-    try{
-      const res = await contextApi.isRepeatSetPoint();
-      return res.data.response;
-    } catch (e){
-
-    }
-  }
 
   useEffect(() => {
+    const fetchRepeatPoint = async () => {
+      try{
+        const res = await contextApi.isRepeatSetPoint();
+        return res.data.response;
+      } catch (e){
+
+      }
+    }
+
     setRepeatedSetPoint(fetchRepeatPoint())
   }, []);
 
-  const handleTakeOffButton = () => {
+  const handleTakeOffButton = useCallback(() => {
     if(!showTakeoffDetail){
       setTakeoffDetail(true);
       setShowPointDetail(false);
@@ -57,30 +63,30 @@ const GcsControlModal = ({showController}) => {
       return;
     }
     agentApi.globalTakeOff(z);
-  }
+  }, [showTakeoffDetail, z]);
 
 
-  const handleLandButton = () => {
+  const handleLandButton = useCallback(() => {
     agentApi.globalLand();
-  }
+  }, []);
 
-  const handleOffboardButton = () => {
+  const handleOffboardButton = useCallback(() => {
     agentApi.globalOffboard();
-  }
+  }, []);
 
-  const handleArmButton = () => {
+  const handleArmButton = useCallback(() => {
     agentApi.globalArm();
-  }
+  }, []);
 
-  const handleDisarmButton = () => {
+  const handleDisarmButton = useCallback(() => {
     agentApi.globalDisarm();
-  }
+  }, []);
 
-  const handleReboot = () => {
+  const handleReboot = useCallback(() => {
     agentApi.globalReboot();
-  }
+  }, []);
 
-  const handleSetPoint = () => {
+  const handleSetPoint = useCallback(() => {
     if(!showPointDetail){
       setShowPointDetail(true);
       setTakeoffDetail(false);
@@ -100,9 +106,9 @@ const GcsControlModal = ({showController}) => {
       return;
     }
     agentApi.globalDestination(x, y, z);
-  }
+  }, [showPointDetail, x, y, z]);
 
-  const handleGlobalLED = () => {
+  const handleGlobalLED = useCallback(() => {
     if(!showLEDDetail){
       setShowPointDetail(false);
       setTakeoffDetail(false);
@@ -110,16 +116,16 @@ const GcsControlModal = ({showController}) => {
       return;
     }
     agentApi.globalLED(0, r, g, b, bright, 1);
-  }
+  }, [r, g, b, bright]);
 
-  const toggleRepeatedSetPoint = async () => {
+  const toggleRepeatedSetPoint = useCallback(async () => {
     try{
       const res = await contextApi.toggleSetPoint();
       setRepeatedSetPoint(res.data.response);
     } catch (e){
 
     }
-  }
+  }, [isRepeatedSetPoint]);
 
   return (
     showController &&
@@ -248,7 +254,7 @@ const GcsControlModal = ({showController}) => {
   )
 }
 
-export default React.memo(GcsControlModal);
+export default React.memo(GcsControlModal, areEqual);
 
 const ModalHeadSub = React.memo(styled.div`
   

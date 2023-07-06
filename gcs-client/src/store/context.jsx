@@ -30,25 +30,6 @@ export const context = createSlice({
         state.data.agents[key].position = pos;
       }
     },
-    updateParams: {
-      reducer: (state, action) => {
-        if(state.loading) return;
-
-        const params = action.payload.params;
-        const key = action.payload.key;
-        state.data.agents[key].param = params;
-      }
-    },
-    updateParam: {
-      reducer: (state, action) => {
-        if(state.loading) return;
-
-        const param = action.payload.param;
-        const val = action.payload.val;
-        const key = action.payload.key;
-        state.data.agents[key].param[param] = val;
-      }
-    },
     update: {
       reducer: (state, action) => {
         if(state.loading) return;
@@ -59,7 +40,6 @@ export const context = createSlice({
         state.data.agents[key].tow = agent.tow;
         state.data.agents[key].battery = agent.battery;
         state.data.agents[key].angle = agent.angle;
-        state.data.agents[key].velocity = agent.velocity;
         state.data.agents[key].status = agent.status;
         state.data.agents[key].rtk = agent.rtk;
         state.data.agents[key].ned = agent.ned;

@@ -43,7 +43,7 @@ const ThreeDimensionGCSPage = () => {
   })
   const [focused, focus] = useState(null);
   const [log, setLog] = useState([]);
-
+  const [flyable, setFlyable] = useState(true);
 
   const wsSubscribe = () => {
     client.onConnect = () => {
@@ -63,11 +63,6 @@ const ThreeDimensionGCSPage = () => {
             y: parsedMessage.pos_y,
             z: parsedMessage.pos_z,
           },
-          velocity: {
-            vx: 0,
-            vy: 0,
-            vz: 0
-          },
           rtk: {
             x: parsedMessage.rtk_n,
             y: parsedMessage.rtk_e,
@@ -81,6 +76,7 @@ const ThreeDimensionGCSPage = () => {
           tow: parsedMessage.tow,
           param: {}
         }
+        setFlyable(true);
 
         dispatch(contextStore.actions.update({
           key: parsedMessage.sysid,
@@ -135,6 +131,8 @@ const ThreeDimensionGCSPage = () => {
     client.activate();
     wsSubscribe();
 
+    console.log(context);
+
     isSocketLoading(false);
   }, []);
 
@@ -152,14 +150,6 @@ const ThreeDimensionGCSPage = () => {
   }, [contextError])
 
 
-  const handleCenterChange = useCallback((e) => {
-    setCenter((c) => ({
-      ...center,
-      [e.target.name]: e.target.value,
-    }));
-  })
-
-
   return(
     <ApplicationContainer>
       <MapSidebar>
@@ -171,6 +161,7 @@ const ThreeDimensionGCSPage = () => {
                   key={i}
                   agentObject={agent}
                   focus={focus}
+                  focused={focused === agent.sysid}
                 />
               ))}
             </GcsSidebarAgentListContainer>
@@ -180,7 +171,9 @@ const ThreeDimensionGCSPage = () => {
           </>
         )}
       </MapSidebar>
-      <GcsHeader/>
+      <GcsHeader
+        flyable={flyable}
+      />
       <MainContainer>
         {(contextLoading || socketLoading) ? null : (
           <MainGcsContainer>
@@ -191,6 +184,7 @@ const ThreeDimensionGCSPage = () => {
                   agentObj={agent}
                   onClick={handleMeshClick}
                   focused={focused === agent.sysid}
+                  setFlyable={setFlyable}
                 />
               ))}
             </CanvasContainer>

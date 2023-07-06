@@ -2,6 +2,7 @@ package com.gcs.domain.agent.service;
 
 import com.gcs.domain.agent.Flyable;
 import com.gcs.domain.agent.Moveable;
+import com.gcs.domain.agent.model.Parameter;
 import com.gcs.domain.coordinate.llh.LlhLocatable;
 import com.gcs.domain.coordinate.ned.NedLocatable;
 import com.gcs.domain.rotation.Rotationable;
@@ -14,5 +15,5 @@ public interface AgentOperationService {
     void updateMove(int sysid, Moveable move);
     void updateAngle(int sysid, Rotationable angle);
     void updateVelocity(int sysid, Velociterable velocity);
-
+    void updateParameter(int sysid, Parameter parameter);
 }

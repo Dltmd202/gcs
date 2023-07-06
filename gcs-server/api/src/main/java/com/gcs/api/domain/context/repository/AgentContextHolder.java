@@ -1,6 +1,9 @@
 package com.gcs.api.domain.context.repository;
 
-import com.gcs.domain.context.AgentContext;
+import com.gcs.domain.agent.model.Agent;
+import com.gcs.domain.context.model.AgentContext;
+import com.gcs.supporter.error.exception.ApiException;
+import com.gcs.supporter.error.exception.ErrorCode;
 import org.springframework.stereotype.Repository;
 
 import java.util.Objects;
@@ -9,23 +12,17 @@ import java.util.Optional;
 @Repository
 public class AgentContextHolder {
     private AgentContext currentAgentContext;
-    private boolean repeatedHeartbeat;
-    private boolean repeatedSetPoint;
 
     public void saveContext(AgentContext agentContext){
         currentAgentContext = agentContext;
-        repeatedHeartbeat = true;
-        repeatedSetPoint = true;
     }
 
     public boolean toggleRepeatedHeartbeat(){
-        this.repeatedSetPoint = !this.repeatedHeartbeat;
-        return this.repeatedHeartbeat;
+        return currentAgentContext.toggleRepeatedHeartbeat();
     }
 
     public boolean toggleRepeatedSetPoint(){
-        this.repeatedSetPoint = !this.repeatedSetPoint;
-        return this.repeatedSetPoint;
+        return currentAgentContext.toggleRepeatedSetPoint();
     }
 
     public void cleanContext(){
@@ -39,11 +36,12 @@ public class AgentContextHolder {
         return Optional.ofNullable(currentAgentContext);
     }
 
-    public boolean isRepeatedHeartbeat() {
-        return repeatedHeartbeat;
+    public Agent getAgent(int sysid){
+        return currentAgentContext.getAgent(sysid)
+                .orElseThrow(() -> new ApiException(ErrorCode.NO_AGENT_FROM_CONTEXT_CONF));
     }
 
     public boolean isRepeatedSetPoint() {
-        return repeatedSetPoint;
+        return currentAgentContext.isRepeatedSetPoint();
     }
 }

@@ -1,4 +1,6 @@
-
+spring:
+  profiles:
+    active:
 coordinate:
   initial:
     lat: 36.766689

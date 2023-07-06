@@ -1,25 +1,10 @@
 package com.gcs.api.domain.mavlink.service;
 
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.gcs.api.domain.context.service.AgentContextService;
-import com.gcs.domain.agent.Agent;
-import com.gcs.domain.agent.dto.AgentDto;
-import com.gcs.domain.agent.service.AgentService;
-import com.gcs.domain.coordinate.ned.NedCoordinate;
-import com.gcs.error.exception.GcsException;
 import com.gcs.supporter.error.exception.ApiException;
 import com.gcs.supporter.error.exception.ErrorCode;
-import com.gcs.supporter.mavlink.annotation.MavLinkOrder;
-import com.gcs.supporter.mavlink.message.factory.MavLinkMessageFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

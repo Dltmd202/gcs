@@ -1,8 +1,8 @@
 package com.gcs.api.web.context.dto;
 
-import com.gcs.domain.context.AgentContext;
 import com.gcs.domain.context.constants.AgentContextConnection;
 import com.gcs.api.web.agent.dto.AgentResponse;
+import com.gcs.domain.context.model.AgentContext;
 import lombok.Getter;
 import lombok.Setter;
 

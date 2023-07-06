@@ -1,13 +1,10 @@
 package com.gcs.api.domain.mavlink.service;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.gcs.domain.agent.Agent;
-import com.gcs.domain.agent.dto.AgentDto;
+import com.gcs.domain.agent.model.Agent;
 import com.gcs.api.domain.context.service.AgentContextService;
 import com.gcs.domain.agent.service.AgentService;
 import com.gcs.domain.coordinate.ned.NedCoordinate;
-import com.gcs.supporter.error.exception.ApiException;
-import com.gcs.supporter.error.exception.ErrorCode;
 import com.gcs.supporter.mavlink.annotation.MavLinkOrder;
 import com.gcs.supporter.mavlink.message.factory.MavLinkMessageFactory;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MavLinkService {
     private final AgentContextService contextService;
-    private final AgentService agentService;
 
     @MavLinkOrder
     public MAVLinkMessage arm(int sysid){
@@ -98,9 +94,8 @@ public class MavLinkService {
     @MavLinkOrder
     public Collection<MAVLinkMessage> takeOff(Float alt){
         List<MAVLinkMessage> messages = new ArrayList<>();
-        for (AgentDto agent : contextService.getRunningContext().agents()) {
-            messages.add(MavLinkMessageFactory.takeOffMessage(agent.getSysid(), alt));
-        }
+        contextService.getRunningContext().stream()
+                .forEach(a -> messages.add(MavLinkMessageFactory.takeOffMessage(a.getSysid(), alt)));
         return messages;
     }
 
@@ -108,10 +103,8 @@ public class MavLinkService {
     public void setDestination(int sysid, float x, float y, float z, float yaw){
         log.info("yaw = {}", yaw);
         Agent agent = contextService.getAgent(sysid);
-        if(!(agent instanceof AgentDto)) return;
-        AgentDto agentDto = (AgentDto) agent;
-        agentDto.setDestination(new NedCoordinate(x, y, z));
-        agentDto.setDestYaw(yaw);
+        agent.setDestination(new NedCoordinate(x, y, z));
+        agent.setDestYaw(yaw);
     }
 
     public void setDestination(int sysid, float x, float y, float z){
@@ -119,7 +112,7 @@ public class MavLinkService {
                 .filter(a -> a.getSysid() == sysid)
                 .forEach(a -> {
                     a.setDestination(new NedCoordinate(x, y, z));
-                    a.setDestYaw(a.getYaw());
+                    a.setDestYaw(a.getAngle().getYaw());
                 });
     }
 
@@ -136,7 +129,7 @@ public class MavLinkService {
         contextService.getRunningContext().stream()
                 .forEach(a -> {
                     a.setDestination(new NedCoordinate(x, y, z));
-                    log.info("{}", a.getYaw());
+                    log.info("{}", a.getAngle().getYaw());
                     a.setDestYaw(0);
                 });
     }
@@ -158,7 +151,7 @@ public class MavLinkService {
     }
 
     @MavLinkOrder
-    @Scheduled(fixedRate = 400)
+    @Scheduled(fixedRate = 500)
     public Collection<MAVLinkMessage> scheduledSetPoint(){
         if(contextService.isRepeatedSetPoint() && contextService.isRunningContext())
             return setPoint();

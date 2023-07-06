@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import Header from "./Header";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {FontSize, FontWeight} from "../../../styles/font";
 import Colors from "../../../styles/colors";
 import {useSelector} from "react-redux";
@@ -25,7 +25,13 @@ import GcsParameterModal from "./GcsParameterModal";
 import paramApi from "../../../api/param";
 import GcsDeployModal from "./GcsDeplyModal";
 
-const GcsHeader = () => {
+const GcsHeadersAreEqual = (prev, next) => {
+  return prev.flyable === next.flyable;
+}
+
+const GcsHeader = ({
+                     flyable=true
+}) => {
   // TODO context selector 사용해도 될지 검토해야함
   const {loading, data: user} = useSelector((state) => state.user);
   const [paramKeyList, setParamKeyList] = useState([]);
@@ -38,59 +44,59 @@ const GcsHeader = () => {
   const [loadingParamSet, setLoadingParamSet] = useState(false);
 
 
-  const handleUserToggle = () => {
+  const handleUserToggle = useCallback(() => {
     if(showAlert)
       setShowAlert(!showAlert)
     setShowUserController(!showUserController);
-  }
+  }, [showAlert, showUserController]);
 
-  const handleControllerToggle = () => {
+  const handleControllerToggle = useCallback(() => {
     setShowController(!showController);
     setShowParamSet(false);
     setShowScenario(false);
     setShowDeploy(false);
-  }
+  }, [showController]);
 
-  const handleScenarioToggle = () => {
+  const handleScenarioToggle = useCallback(() => {
     setShowController(false);
     setShowParamSet(false);
     setShowScenario(!showScenario);
     setShowDeploy(false);
-  }
+  }, [showScenario]);
 
-  const handleParameterToggle = () => {
+  const handleParameterToggle = useCallback(() => {
     setShowController(false);
     setShowParamSet(!showParamSet);
     setShowScenario(false);
     setShowDeploy(false);
-  }
+  }, [showParamSet]);
 
-  const handleDeployToggle = () => {
+  const handleDeployToggle = useCallback(() => {
     setShowController(false);
     setShowParamSet(false);
     setShowScenario(false);
     setShowDeploy(!showDeploy);
-  }
+  }, [showDeploy]);
 
-  const handleModalToggle = () => {
+  const handleModalToggle = useCallback(() => {
     if(showUserController)
       setShowUserController(!showUserController)
     setShowAlert(!showAlert);
-  };
-
-  const getParamKeyList = async () => {
-    setLoadingParamSet(true);
-    try{
-      const paramKey = await paramApi.paramKeyList();
-      setParamKeyList(paramKey.data.response);
-    }catch (e){
-
-    }
-    setLoadingParamSet(false);
-  }
+  }, [showUserController, showAlert]);
 
 
   useEffect(() => {
+    const getParamKeyList = async () => {
+      setLoadingParamSet(true);
+      try{
+        const paramKey = await paramApi.paramKeyList();
+        setParamKeyList(paramKey.data.response);
+      }catch (e){
+
+      }
+      setLoadingParamSet(false);
+    }
+
     getParamKeyList();
   }, [])
 
@@ -135,6 +141,7 @@ const GcsHeader = () => {
       </GcsControlContainer>
 
       <HeaderUserContainer>
+        <FlyableIndication flyable={flyable}/>
         <GcsHeaderUserAlert onClick={handleModalToggle}>
           <GcsHeaderBellIcon icon={faBell} size={"lg"}/>
         </GcsHeaderUserAlert>
@@ -154,22 +161,40 @@ const GcsHeader = () => {
   )
 }
 
-export default React.memo(GcsHeader);
+export default React.memo(GcsHeader, GcsHeadersAreEqual);
 
-const GcsControlContainer = React.memo(styled.div`
+const FlyableIndication = React.memo(styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 20px;
+  
+  ${props =>
+          props.flyable &&
+          css`
+            background-color: green;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+          `}
+  ${props =>
+          !props.flyable &&
+          css`
+            background-color: red;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+          `}
+`)
+
+const GcsControlContainer = styled.div`
   display: flex;
   height: 100%;
-`)
+`
 
-const GcsDropDownIcon = React.memo(styled(FontAwesomeIcon)`
-  
-`)
+const GcsDropDownIcon = styled(FontAwesomeIcon)``
 
-export const ModalDropDownName = React.memo(styled.div`
+export const ModalDropDownName = styled.div`
   margin-right: 0.5em;
-`)
+`
 
-export const ModalDropDown = React.memo(styled.div`
+export const ModalDropDown = styled.div`
   display: flex;
   align-items: center;
   font-size: ${FontSize.micro};
@@ -180,9 +205,9 @@ export const ModalDropDown = React.memo(styled.div`
   &:hover {
     background-color: ${Colors.backgroundHover};
   }
-`)
+`
 
-export const GcsOrderButton = React.memo(styled(HeaderButton)`
+export const GcsOrderButton = styled(HeaderButton)`
   display: flex;
   align-items: center;
   border-radius: 0.3em;
@@ -192,14 +217,12 @@ export const GcsOrderButton = React.memo(styled(HeaderButton)`
   :hover {
     background: rgba(255, 255, 255, 0.2);
   }
-`)
+`
 
 
-const GcsHeaderBellIcon = React.memo(styled(FontAwesomeIcon)`
-  
-`)
+const GcsHeaderBellIcon = styled(FontAwesomeIcon)``
 
-const GcsHeaderUserAlert = React.memo(styled.div`
+const GcsHeaderUserAlert = styled.div`
   width: 4vh;
   height: 4vh;
   display: flex;
@@ -213,29 +236,29 @@ const GcsHeaderUserAlert = React.memo(styled.div`
     border-radius: 50%;
     background: ${Colors.backgroundModal};
   }
-`)
+`
 
-const GcsHeaderUserInfo = React.memo(styled.div`
+const GcsHeaderUserInfo = styled.div`
   font-weight: ${FontWeight.bold};
   font-size: ${FontSize.small};
   line-height: 100%;
-`)
+`
 
-const StyledGcsHeader = React.memo(styled(Header)`
+const StyledGcsHeader = styled(Header)`
   background-color: ${Colors.background};
   color: ${Colors.textPrimary};
   
   justify-content: space-between;
-`)
+`
 
-const HeaderOrderContainer = React.memo(styled.div`
+const HeaderOrderContainer = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-`)
+`
 
-const HeaderUserContainer = React.memo(styled.div`
+const HeaderUserContainer = styled.div`
   display: flex;
   align-items: center;
   height: 100%;
-`)
+`

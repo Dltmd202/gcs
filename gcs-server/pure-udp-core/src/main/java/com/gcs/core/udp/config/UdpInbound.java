@@ -3,6 +3,7 @@ package com.gcs.core.udp.config;
 import com.gcs.core.udp.domain.mavlink.service.MavlinkGatewayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.config.Task;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -17,9 +18,10 @@ public class UdpInbound {
     private final DatagramSocket reciver;
     private final DatagramPacket recivePacket;
     private final MavlinkGatewayService mavlinkGatewayService;
+    private final TaskExecutor taskExecutor;
     private final byte[] buffer;
 
-    public UdpInbound(MavlinkGatewayService mavlinkGatewayService) {
+    public UdpInbound(MavlinkGatewayService mavlinkGatewayService, TaskExecutor taskExecutor) {
         try{
             reciver = new DatagramSocket(PORT);
         } catch (SocketException e){
@@ -27,6 +29,7 @@ public class UdpInbound {
         }
         buffer = new byte[BUFFER_SIZE];
         recivePacket = new DatagramPacket(buffer, BUFFER_SIZE);
+        this.taskExecutor = taskExecutor;
         this.mavlinkGatewayService = mavlinkGatewayService;
     }
 
@@ -39,7 +42,9 @@ public class UdpInbound {
                     byte[] data = recivePacket.getData();
 
                     mavlinkGatewayService.publishToBrowser(data);
-                    log.info("{}", data);
+//                    taskExecutor.execute(() -> {
+//                        mavlinkGatewayService.publishToBrowser(data);
+//                    });
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

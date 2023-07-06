@@ -6,7 +6,7 @@ import com.MAVLink.enums.MAV_PARAM_TYPE;
 import com.MAVLink.minimal.msg_heartbeat;
 import com.MAVLink.swarm.msg_led_control;
 import com.MAVLink.swarm.msg_scenario_cmd;
-import com.gcs.domain.agent.Agent;
+import com.gcs.domain.agent.model.Agent;
 import com.gcs.domain.coordinate.ned.NedLocatable;
 import com.gcs.error.exception.GcsException;
 
@@ -22,8 +22,8 @@ import static com.gcs.supporter.mavlink.message.factory.MavLinkPositionMask.*;
 
 public class MavLinkMessageFactory {
 
-    public static MAVLinkMessage armMessage(Agent agent){
-        return armMessage(agent.getSysid());
+    public static MAVLinkMessage armMessage(Agent agentState){
+        return armMessage(agentState.getSysid());
     }
 
     /**
@@ -47,11 +47,11 @@ public class MavLinkMessageFactory {
 
     /**
      * disArm - 시동 끄기
-     * @param agent
+     * @param agentState
      * @return
      */
-    public static MAVLinkMessage disarmMessage(Agent agent){
-        return disarmMessage(agent.getSysid());
+    public static MAVLinkMessage disarmMessage(Agent agentState){
+        return disarmMessage(agentState.getSysid());
     }
 
     public static MAVLinkMessage disarmMessage(int sysid){
@@ -68,8 +68,8 @@ public class MavLinkMessageFactory {
         return msg;
     }
 
-    public static MAVLinkMessage landMessage(Agent agent){
-        return landMessage(agent.getSysid());
+    public static MAVLinkMessage landMessage(Agent agentState){
+        return landMessage(agentState.getSysid());
     }
 
     public static MAVLinkMessage landMessage(int sysid){
@@ -88,8 +88,8 @@ public class MavLinkMessageFactory {
         return msg;
     }
 
-    public static MAVLinkMessage rebootMessage(Agent agent){
-        return rebootMessage(agent.getSysid());
+    public static MAVLinkMessage rebootMessage(Agent agentState){
+        return rebootMessage(agentState.getSysid());
     }
 
     public static MAVLinkMessage rebootMessage(int sysid){
@@ -125,8 +125,8 @@ public class MavLinkMessageFactory {
         return msg;
     }
 
-    public static MAVLinkMessage offBoardMessage(Agent agent){
-        return offBoardMessage(agent.getSysid());
+    public static MAVLinkMessage offBoardMessage(Agent agentState){
+        return offBoardMessage(agentState.getSysid());
     }
 
     public static MAVLinkMessage offBoardMessage(int sysid){
@@ -145,19 +145,17 @@ public class MavLinkMessageFactory {
         return msg;
     }
 
-    public static MAVLinkMessage setPoint(Agent agent, NedLocatable ned){
-        return setPoint(agent.getSysid(), ned.getX(), ned.getY(), ned.getZ(), 0);
+    public static MAVLinkMessage setPoint(Agent agentState, NedLocatable ned){
+        return setPoint(agentState.getSysid(), ned.getX(), ned.getY(), ned.getZ(), 0);
     }
 
-    public static MAVLinkMessage setPoint(Agent agent, NedLocatable ned, float yaw){
-        return setPoint(agent.getSysid(), ned.getX(), ned.getY(), ned.getZ(), yaw);
+    public static MAVLinkMessage setPoint(Agent agentState, NedLocatable ned, float yaw){
+        return setPoint(agentState.getSysid(), ned.getX(), ned.getY(), ned.getZ(), yaw);
     }
 
     public static MAVLinkMessage setPoint(int sysid, float x, float y, float z){
         return setPoint(sysid, x, y, z, 0.F);
     }
-
-
 
     public static MAVLinkMessage setPoint(int sysid, float x, float y, float z, float yaw){
         msg_set_position_target_local_ned msg = new msg_set_position_target_local_ned();

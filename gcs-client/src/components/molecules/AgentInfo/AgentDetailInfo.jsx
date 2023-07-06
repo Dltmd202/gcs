@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import Colors from "../../../styles/colors";
 import Button from "../../atoms/Button/Button";
 import {FontSize, FontWeight} from "../../../styles/font";
 import {Media} from "../../../styles/media";
 import agentApi from "../../../api/agent";
-import {TreeItem, TreeView} from "@mui/lab";
+import {TreeView} from "@mui/lab";
 import StyledTreeItem from "../../atoms/ThreeView/StyledTreeItem";
-import {agentStatusMask, agentStatusMasking} from "../../../module/coordinate/agentStatus";
+import {agentStatusMask} from "../../../module/coordinate/agentStatus";
 import HeaderButton from "../../atoms/Button/HeaderButton";
 
 const AgentDetailInfo = ({
@@ -22,32 +22,16 @@ const AgentDetailInfo = ({
     ned,
     color,
     battery,
-    complementaryColor,
     angle,
     status
   } = agentObject;
 
   const [drop, isDrop] = useState(true);
+  const [statusColor, setStatusColor] = useState(Colors.textPrimary);
 
-  const handleDropDown = () => {
-    isDrop(!drop);
-  }
+  const defualtExpaneded = useMemo(() => ["1", "2", "3", "4", "5", "6", "7", "23", "25"], []);
 
-  const handleTakeOff = () => {
-    agentApi.takeOff(sysid, 255);
-  }
-
-  const handleArm = () => {
-    agentApi.arm(sysid);
-  }
-
-  const handleDisArm = () => {
-    agentApi.disarm(sysid);
-  }
-
-  const defualtExpaneded = ["1", "2", "3", "4", "5", "6", "7", "23", "25"]
-
-  const parseStatusDetail = (status) => {
+  const parseStatusDetail = useCallback(() => {
     const parsedStatus = [];
 
     for (const mask of agentStatusMask) {
@@ -57,24 +41,47 @@ const AgentDetailInfo = ({
     }
 
     return parsedStatus;
-  }
+  }, [status]);
 
-  const handleReboot = (sysid) => {
+  useEffect(() => {
+    if((status & agentStatusMask[9].mask) === 0) {
+      setStatusColor(Colors.red);
+    }
+    else if((status & agentStatusMask[26].mask) !== 0){
+      setStatusColor(Colors.orange);
+    }
+    else if((status & agentStatusMask[25].mask) !== 0) {
+      setStatusColor(Colors.warning);
+    }
+    else {
+      setStatusColor(Colors.textPrimary);
+    }
+  }, [status]);
+
+  const handleReboot = useCallback(() => {
     const result = window.confirm(`SYSID - ${sysid} 을(를) Reboot 하겠습니까?`)
     if (result) {
       agentApi.reboot(sysid);
     }
-  }
+  },[sysid]);
 
-  const handleLand = (sysid) => {
+  const handleLand = useCallback(() => {
     agentApi.land(sysid);
-  }
+  }, [sysid]);
+
+  const handleDisarm = useCallback(() => {
+    agentApi.disarm(sysid);
+  }, [sysid]);
+
+  const handleGround = useCallback(() => {
+    agentApi.destination(sysid, 0, 0, 0);
+  }, [sysid]);
 
 
   return (
     <AgentInfoContainer
       active={active}
-      color={color}
+      color={statusColor}
       {...props}
     >
       <AgentBodyContainer>
@@ -193,7 +200,7 @@ const AgentDetailInfo = ({
                     labelInfo={agentObject.status}
                   >
                     <StyledTreeItem nodeId={"24"} labelText={
-                        parseStatusDetail(agentObject.status).map((st, i) => (
+                        parseStatusDetail().map((st, i) => (
                           <PlanStatus key={st}>{st}</PlanStatus>
                         ))}
                     />
@@ -205,16 +212,16 @@ const AgentDetailInfo = ({
         </TreeView>
       </AgentBodyContainer>
       <EmergencyControl>
-        <EmergencyButton onClick={() => handleReboot(sysid)}>
+        <EmergencyButton onClick={handleReboot}>
           reboot
         </EmergencyButton>
-        <EmergencyButton onClick={() => handleLand(sysid)}>
+        <EmergencyButton onClick={handleLand}>
           land
         </EmergencyButton>
-        <EmergencyButton onClick={() => agentApi.disarm(sysid)}>
+        <EmergencyButton onClick={handleDisarm}>
           disarm
         </EmergencyButton>
-        <EmergencyButton onClick={() => agentApi.destination(sysid, 0, 0, 0)}>
+        <EmergencyButton onClick={handleGround}>
           ground
         </EmergencyButton>
       </EmergencyControl>

@@ -37,7 +37,7 @@ const GcsCalibrationModal = ({
 
   useEffect(() => {
     if(filterType !== '0' && isNaN(context.agents[filterType]?.param['BAT1_CAPACITY']))
-      paramApi.droneShowParamList(filterType);
+      paramApi.queryDroneShowParamList(filterType);
   }, [filterType])
 
 

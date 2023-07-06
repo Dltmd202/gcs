@@ -1,7 +1,7 @@
 package com.gcs.supporter.mavlink.message.adapter;
 
 import com.MAVLink.common.msg_param_value;
-import com.MAVLink.enums.MAV_PARAM_TYPE;
+import com.gcs.domain.agent.model.Parameter;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 import static com.MAVLink.enums.MAV_PARAM_TYPE.*;
 
 @Getter
-public class MessageParamValueAdapter implements Serializable {
+public class MessageParamValueAdapter implements Serializable, Parameter {
     private Integer sysid;
     private String paramId;
     private Object value;

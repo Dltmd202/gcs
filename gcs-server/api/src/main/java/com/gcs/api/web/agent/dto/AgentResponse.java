@@ -1,7 +1,7 @@
 package com.gcs.api.web.agent.dto;
 
 import com.gcs.api.web.agent.led.LedResponse;
-import com.gcs.domain.agent.dto.AgentDto;
+import com.gcs.domain.agent.model.Agent;
 import com.gcs.api.web.agent.coordinate.llh.dto.LlhResponse;
 import com.gcs.api.web.agent.coordinate.ned.dto.NedResponse;
 import com.gcs.api.web.agent.rotation.RotationResponse;
@@ -10,7 +10,6 @@ import com.gcs.supporter.mavlink.param.DroneShow;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,16 +26,12 @@ public class AgentResponse {
     private NedResponse ned;
     private LlhResponse llh;
     private NedResponse rtk;
-    private VelocityResponse velocity;
     private RotationResponse angle;
     private LedResponse led;
-    private String color;
-    private String complementaryColor;
     private Long tow;
-    private Boolean active = false;
-    private Map<String, Object> param = new HashMap<>();
+    private Boolean active = true;
 
-    public AgentResponse(AgentDto agent){
+    public AgentResponse(Agent agent){
         this.id = agent.getId();
         this.sysid = agent.getSysid();
         this.mode = agent.getMode();
@@ -51,25 +46,13 @@ public class AgentResponse {
         this.rtk = NedResponse.defaultInstance;
         this.llh = Objects.nonNull(agent.getLlh()) ? new LlhResponse(agent.getLlh()) : LlhResponse.defaultInstance;
         this.led = new LedResponse(-1, -1, -1);
-        this.velocity = Objects.nonNull(agent.getVelocity()) ?
-                new VelocityResponse(agent.getVelocity()) :
-                VelocityResponse.defaultInstance;
 
         this.angle = Objects.nonNull(agent.getAngle()) ?
                 new RotationResponse(agent.getAngle()) :
                 RotationResponse.defualtInstance;
 
-        this.color = agent.getColor();
-        this.complementaryColor = agent.getComplementaryColor();
-
         if(Objects.nonNull(agent.getNed()) || Objects.nonNull(agent.getLlh())){
             this.active = true;
-        }
-
-        param = new HashMap<>();
-
-        for (DroneShow value : DroneShow.values()) {
-            param.put(value.getValue(), Float.NaN);
         }
     }
 

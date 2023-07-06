@@ -52,8 +52,6 @@ const ConfigurationLoadPage = () => {
   }
 
   const onClickContextFile = async (e, id) => {
-    console.log("fuck");
-    console.log(id);
     await dispatch(holdContext(id));
 
     navigate(`/gcs/three`)

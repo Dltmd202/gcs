@@ -42,7 +42,7 @@ const ThreeDimensionGCSPage2 = () => {
   })
   const [focused, focus] = useState(null);
   const [log, setLog] = useState([]);
-
+  const [cnt, setCnt] = useState(0);
 
   const wsSubscribe = () => {
     client.onConnect = () => {
@@ -90,7 +90,8 @@ const ThreeDimensionGCSPage2 = () => {
         context.agents[key].status = agent.status;
         context.agents[key].rtk = agent.rtk;
         context.agents[key].ned = agent.ned;
-
+        setCnt(cnt + 1);
+        console.log(cnt);
       }, {id: "user"})
 
       client.subscribe(`/topic/param`, (msg) => {

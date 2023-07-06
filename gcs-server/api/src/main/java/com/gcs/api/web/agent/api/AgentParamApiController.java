@@ -1,26 +1,29 @@
 package com.gcs.api.web.agent.api;
 
 import com.gcs.api.domain.mavlink.service.MavLinkParamService;
-import com.gcs.api.domain.mavlink.service.MavLinkService;
-import com.gcs.supporter.mavlink.param.DroneShow;
+import com.gcs.api.web.agent.dto.AgentParamResponse;
+import com.gcs.api.web.agent.dto.AgentParamsResponse;
+import com.gcs.domain.agent.service.AgentService;
 import com.gcs.supporter.mavlink.param.ParameterKeyDto;
 import com.gcs.supporter.util.api.ApiUtil;
+import com.gcs.supporter.util.api.ApiUtil.ApiResult;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/param")
 public class AgentParamApiController {
     private final MavLinkParamService mavLinkParamService;
+    private final AgentService agentService;
 
     @GetMapping("/key")
-    public ResponseEntity<ApiUtil.ApiResult<List<ParameterKeyDto>>> droneShowParamList(){
+    public ResponseEntity<ApiResult<List<ParameterKeyDto>>> droneShowParamList(){
         return ResponseEntity.ok(
                 ApiUtil.success(
                         mavLinkParamService.droneShowParamKeyList()
@@ -37,13 +40,25 @@ public class AgentParamApiController {
                 .body(null);
     }
 
-    @GetMapping("/ds/{sysid}")
+    @PostMapping("/ds/{sysid}")
     public ResponseEntity<Void> requestDroneShowParam(@PathVariable int sysid){
         mavLinkParamService.droneShowParamList(sysid);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(null);
+    }
+
+    @GetMapping("/ds/{sysid}")
+    public ResponseEntity<ApiResult<AgentParamsResponse>> getParams(@PathVariable int sysid){
+        return ResponseEntity
+                .ok(ApiUtil.success(
+                        new AgentParamsResponse(sysid,
+                            agentService.readParameter(sysid).stream()
+                                    .map(AgentParamResponse::new)
+                                    .collect(Collectors.toList())
+                        )
+                ));
     }
 
     @GetMapping
